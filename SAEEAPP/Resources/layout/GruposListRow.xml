@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="10-10"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="62.9dp"
+        android:layout_height="32.4dp"
+        android:layout_alignParentLeft = "true"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewGrupo"
+        android:layout_marginBottom="20.1dp"
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="20.0dp"
+        android:textSize="20sp"
+        android:layout_marginTop="8.0dp" />
+         />
+    
+    
+    
+    <TextView
+        android:text="2019"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="49.9dp"
+        android:layout_height="30.1dp"
+        android:layout_toRightOf = "@id/textViewGrupo"
+        android:layout_alignBaseline = "@id/textViewGrupo"
+        android:layout_marginLeft="35.0dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewAnio"
+        android:layout_marginBottom="20.1dp"
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:textSize="20sp" />
+    <Button
+        android:text="Editar"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="180.0dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/btEditar"
+        android:layout_toLeftOf="@id/btBorrar"  />
+ 
+    <Button
+        android:text="Borrar"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+      
+        android:id="@+id/btBorrar" />
+    <Button
+        android:text="Estudiantes"
+        android:layout_width="119.6dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="240dp"
+        android:layout_below ="@id/btEditar"
+        android:id="@+id/btEstudiantes"
+        android:layout_marginRight="43.4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
+    
+   
+</RelativeLayout>
+      
