@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class EstudiantesXgrupos
+    public partial class EstudiantesXgrupos
     {
         public int Id { get; set; }
         public int IdProfesor { get; set; }

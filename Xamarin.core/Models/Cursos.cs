@@ -12,7 +12,8 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class Cursos
+
+    public partial class Cursos
     {
         public Cursos()
         {

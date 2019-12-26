@@ -12,9 +12,8 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class CursosGrupos
+    public partial class CursosGrupos
     {
-
         public int Id { get; set; }
         public int IdCurso { get; set; }
         public int IdGrupo { get; set; }

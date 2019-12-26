@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -12,7 +13,7 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class Estudiantes
+    public partial class Estudiantes
     {
         public Estudiantes()
         {
@@ -27,6 +28,7 @@ namespace Xamarin.core.Models
         public string PrimerApellido { get; set; }
         public string SegundoApellido { get; set; }
         public string Pin { get; set; }
+
         public virtual Profesores IdProfesorNavigation { get; set; }
         public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
     }

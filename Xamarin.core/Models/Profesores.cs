@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class Profesores
+    public partial class Profesores
     {
         public Profesores()
         {
@@ -35,6 +35,5 @@ namespace Xamarin.core.Models
         public virtual ICollection<Estudiantes> Estudiantes { get; set; }
         public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
         public virtual ICollection<Grupos> Grupos { get; set; }
-
     }
 }
