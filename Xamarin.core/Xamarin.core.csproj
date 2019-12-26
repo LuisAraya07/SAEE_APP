@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Data\GruposRepositorio.cs" />
+    <Compile Include="Data\ProfesoresRepositorio.cs" />
     <Compile Include="Models\Cursos.cs" />
     <Compile Include="Models\CursosGrupos.cs" />
     <Compile Include="Models\Estudiantes.cs" />
