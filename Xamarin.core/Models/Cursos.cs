@@ -12,21 +12,19 @@ using Android.Widget;
 
 namespace Xamarin.core.Models
 {
-    public class Grupos
+    public class Cursos
     {
-        public Grupos()
+        public Cursos()
         {
             CursosGrupos = new HashSet<CursosGrupos>();
-            EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
         }
 
         public int Id { get; set; }
         public int IdProfesor { get; set; }
-        public string Grupo { get; set; }
-        public int Anio { get; set; }
+        public string Nombre { get; set; }
+        public int CantidadPeriodos { get; set; }
 
         public virtual Profesores IdProfesorNavigation { get; set; }
         public virtual ICollection<CursosGrupos> CursosGrupos { get; set; }
-        public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
     }
 }
