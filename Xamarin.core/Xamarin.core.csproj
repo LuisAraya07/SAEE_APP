@@ -48,11 +48,17 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Data\GruposRepositorio.cs" />
+    <Compile Include="Models\Cursos.cs" />
+    <Compile Include="Models\CursosGrupos.cs" />
+    <Compile Include="Models\Estudiantes.cs" />
+    <Compile Include="Models\EstudiantesXgrupos.cs" />
     <Compile Include="Models\Grupos.cs" />
     <Compile Include="Models\HttpResponse.cs" />
+    <Compile Include="Models\Profesores.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GruposServices.cs" />
+    <Compile Include="Services\ProfesoresServices.cs" />
     <Compile Include="Services\ValuesServices.cs" />
     <Compile Include="Services\WebServices.cs" />
   </ItemGroup>
