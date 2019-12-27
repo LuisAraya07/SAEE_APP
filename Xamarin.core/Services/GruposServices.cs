@@ -24,9 +24,9 @@ namespace Xamarin.core.Services
 
         }
 
-        public List<Grupos> Get() {
+        public List<Grupos> Get(int id) {
         
-            return _gruposR.Get();
+            return _gruposR.Get(id);
 
         
         }

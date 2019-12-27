@@ -20,6 +20,7 @@ namespace Xamarin.core.Services
         public HttpResponse Get(string url) {
             var request = WebRequest.Create(url);
             request.ContentType = "application/json";
+            
             using (HttpWebResponse httpResponse = request.GetResponse() as HttpWebResponse) {
                 return BuildResponse(httpResponse);
             

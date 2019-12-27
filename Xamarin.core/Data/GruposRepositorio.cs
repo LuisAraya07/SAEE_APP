@@ -22,9 +22,8 @@ namespace Xamarin.core.Data
             ws = new WebServices();
         }
 
-        public List<Grupos> Get() {
-            var response = ws.Get(ValuesServices.url+"Grupos");
-
+        public List<Grupos> Get(int id) {
+            var response = ws.Get(ValuesServices.url+"Grupos/GetGrupos?id="+id);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Grupos>>(response.Content);
             
         }

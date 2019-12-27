@@ -15,8 +15,8 @@ namespace SAEEAPP.Adaptadores
 {
     class ProfesoresListAdapter : BaseAdapter<Profesores>
     {
-        private Activity _context;
-        private List<Profesores> _profesores;
+        private readonly Activity _context;
+        private readonly List<Profesores> _profesores;
 
         public ProfesoresListAdapter(Activity context, List<Profesores> profesores)
         {
