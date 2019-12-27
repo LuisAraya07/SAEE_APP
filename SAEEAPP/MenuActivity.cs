@@ -25,6 +25,8 @@ namespace SAEEAPP
             btGrupos.Click += OnClick_Grupos;
             Button btProfesores = FindViewById<Button>(Resource.Id.btProfesores);
             btProfesores.Click += OnClick_Profesores;
+            Button btEstudiantes = FindViewById<Button>(Resource.Id.btEstudiantes);
+            btEstudiantes.Click += OnClick_Estudiantes;
         }
 
         public void OnClick_Grupos(object sender, EventArgs e)
@@ -37,6 +39,12 @@ namespace SAEEAPP
         {
             Intent profesores = new Intent(this, typeof(ProfesoresActivity));
             StartActivity(profesores);
+        }
+
+        public void OnClick_Estudiantes(object sender, EventArgs e)
+        {
+            Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+            StartActivity(estudiantes);
         }
     }
 }

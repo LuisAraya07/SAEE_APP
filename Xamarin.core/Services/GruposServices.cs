@@ -31,7 +31,7 @@ namespace Xamarin.core.Services
         
         }
 
-        public Grupos GetGrupo(int id) {
+        public List<Estudiantes> GetGrupo(int id) {
             return _gruposR.GetGrupo(id);
         
         }

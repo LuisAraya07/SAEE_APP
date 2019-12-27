@@ -40,7 +40,6 @@ namespace SAEEAPP
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar",delegate {
                     Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
-
                 })
                 .SetNegativeButton("Cancelar",delegate {
                     alertDialogBuilder.Dispose();

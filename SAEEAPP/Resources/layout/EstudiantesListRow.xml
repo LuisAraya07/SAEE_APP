@@ -1,0 +1,67 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Luis Araya Aragón"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="124.6dp"
+        android:layout_height="72.0dp"
+        android:layout_alignParentLeft = "true"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewNombreE"
+        android:layout_marginBottom="20.1dp"
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="20.0dp"
+        android:textSize="20sp"
+        android:layout_marginTop="8.0dp" />
+         />
+    
+    
+    
+    
+    
+    <TextView
+        android:text="702550708"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="120.8dp"
+        android:layout_height="30.1dp"
+        android:layout_toRightOf = "@id/textViewNombreE"
+        android:layout_alignBaseline = "@id/textViewNombreE"
+        android:layout_marginLeft="12.9dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewCedE"
+        android:layout_marginBottom="20.1dp"
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:textSize="20sp" />
+
+    <Button
+        android:text="Editar"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:id="@+id/btEditarE"
+        android:layout_toRightOf="@id/textViewCedE"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="7.2dp"  />
+
+
+    <Button
+        android:text="Borrar"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="7.2dp"
+        android:layout_marginBottom="2dp"
+        android:id="@+id/btBorrarE"
+        android:layout_marginTop="1.5dp"
+        android:layout_below="@id/btEditarE"
+        android:layout_toRightOf="@id/textViewCedE"  />
+
+</RelativeLayout>

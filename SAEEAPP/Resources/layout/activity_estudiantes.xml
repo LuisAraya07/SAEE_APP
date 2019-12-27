@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ListView
+        android:id="@+id/listViewEstudiantes"
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:cacheColorHint="#4A97D3"
+        android:divider="@color/colorAccent"
+        android:dividerHeight="1dp"
+        android:headerDividersEnabled="true"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        />
+
+    <TextView
+        android:id="@+id/txtSeccionEstudiantes"
+        android:layout_width="310.5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/seccionEstudiantes"
+        android:textSize="24sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="20.0dp"
+        android:layout_marginTop="37.7dp"
+        android:text="@string/estudiante"
+        android:textSize="20sp"
+        android:id="@+id/textViewEstudiantes2"
+        android:layout_marginRight="0.0dp"
+        android:layout_marginBottom="9.6dp"
+        android:layout_below="@id/txtSeccionEstudiantes"
+        android:layout_alignParentLeft="true" />
+    <TextView
+        android:id="@+id/textViewCedula2"
+        android:layout_width="84.2dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf = "@id/textViewEstudiantes2"
+        android:layout_alignBaseline = "@id/textViewEstudiantes2"
+        android:text="@string/cedula"
+        android:textSize="20sp"
+        android:layout_marginLeft="58.8dp"
+        android:layout_marginTop="85dp"
+        android:layout_below="@id/txtSeccionEstudiantes" />
+    <TextView
+        android:id="@+id/textViewOpcionesE"
+        android:layout_width="91.0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:text="@string/opciones"
+        android:layout_toRightOf = "@id/textViewCedula2"
+        android:layout_alignBaseline = "@id/textViewEstudiantes2"
+        android:textSize="20sp"
+        android:layout_marginLeft="41.8dp"
+        android:layout_below="@id/txtSeccionEstudiantes" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabEstudiante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/account_plus"
+        android:layout_marginLeft="337.9dp"
+        android:layout_marginRight="18.3dp"
+        app:backgroundTint="@color/design_default_color_primary_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8.4dp" 
+        />
+
+</RelativeLayout>

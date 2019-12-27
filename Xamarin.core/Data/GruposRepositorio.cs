@@ -28,13 +28,13 @@ namespace Xamarin.core.Data
             
         }
 
-        public Grupos GetGrupo(int id)
+        public List<Estudiantes> GetGrupo(int id)
         {
-            var response = ws.Get(ValuesServices.url + "Grupos/"+id);
+            var response = ws.Get(ValuesServices.url + "Grupos/GetEstudiantes?id=" + id);
             if (response.HttpStatusCode != System.Net.HttpStatusCode.OK) {
                 throw new ApplicationException("Grupo no encontrado");
             }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Grupos>(response.Content);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Estudiantes>>(response.Content);
 
         }
 
