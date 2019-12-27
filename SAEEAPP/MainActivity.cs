@@ -36,13 +36,8 @@ namespace SAEEAPP
             etContrasenia = FindViewById<EditText>(Resource.Id.txtContrasenia);
             string cuenta = etCuenta.Text.ToString();
             string contrasenia = etContrasenia.Text.ToString();
-            Intent siguiente = new Intent(this, typeof(GruposActivity));
+            Intent siguiente = new Intent(this, typeof(MenuActivity));
             StartActivity(siguiente);
         }
     }
-
-
-
-
-    
 }

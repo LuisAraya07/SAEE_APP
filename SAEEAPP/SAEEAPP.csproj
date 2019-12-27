@@ -64,6 +64,7 @@
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
     <Compile Include="GruposActivity.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MenuActivity.cs" />
     <Compile Include="ProfesoresActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,6 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\ProfesoresListRow.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_Menu.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
