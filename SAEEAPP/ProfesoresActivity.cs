@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
@@ -15,8 +16,8 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "ProfesoresActivity")]
-    public class ProfesoresActivity : Activity
+    [Activity(Label = "Profesores", Theme = "@style/AppTheme")]
+    public class ProfesoresActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
