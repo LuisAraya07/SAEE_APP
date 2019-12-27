@@ -23,7 +23,6 @@ namespace Xamarin.core.Services
             
             using (HttpWebResponse httpResponse = request.GetResponse() as HttpWebResponse) {
                 return BuildResponse(httpResponse);
-            
             }
         }
 
@@ -35,23 +34,16 @@ namespace Xamarin.core.Services
                 response.HttpStatusCode = httpResponse.StatusCode;
                 return response;
             }
-        
-        
         }
 
-        private async Task<HttpResponse> GetAsync(string url) {
+        public async Task<HttpResponse> GetAsync(string url) {
             var request = WebRequest.Create(url);
             request.ContentType = "application/json";
             request.Method = "GET";
             using (HttpWebResponse httpResponse = await request.GetResponseAsync() as HttpWebResponse )
             {
                 return BuildResponse(httpResponse);
-
             }
-
         }
-
-
-
     }
 }

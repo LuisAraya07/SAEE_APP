@@ -12,8 +12,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="50.5dp"
-        android:id="@+id/textView1"
+        android:id="@+id/tvTitulo"
         android:layout_margin="14.0dp" />
+    <TextView
+        android:text="Cargando..."
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCargando"
+        android:layout_marginLeft="14.0dp" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

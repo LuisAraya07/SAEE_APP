@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -27,9 +27,14 @@ namespace Xamarin.core.Services
             return _profesoresR.Get();
         }
 
-        public Profesores GetGrupo(int id)
+        public async Task<List<Profesores>> GetAsync()
         {
-            return _profesoresR.GetGrupo(id);
+            return await _profesoresR.GetAsync();
+        }
+
+        public Profesores GetProfesor(int id)
+        {
+            return _profesoresR.GetProfesor(id);
         }
     }
 }

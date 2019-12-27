@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -29,7 +29,14 @@ namespace Xamarin.core.Data
             return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Profesores>>(response.Content);
         }
 
-        public Profesores GetGrupo(int id)
+        public async Task<List<Profesores>> GetAsync()
+        {
+            var response = await ws.GetAsync(ValuesServices.url + "Profesores");
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Profesores>>(response.Content);
+        }
+
+        public Profesores GetProfesor(int id)
         {
             var response = ws.Get(ValuesServices.url + "Profesores/" + id);
             if (response.HttpStatusCode != System.Net.HttpStatusCode.OK)

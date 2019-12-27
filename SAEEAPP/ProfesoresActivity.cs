@@ -24,11 +24,24 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_profesores);
-            ListView lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
-            ProfesoresServices servicioProfesores = new ProfesoresServices();
-            List<Profesores> profesores = servicioProfesores.Get();
-            lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
+        }
 
+        protected override async void OnStart()
+        {
+            base.OnStart();
+            ListView lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
+            TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
+            ProfesoresServices servicioProfesores = new ProfesoresServices();
+            List<Profesores> profesores = await servicioProfesores.GetAsync();
+            if(profesores.Count == 0)
+            {
+                tvCargando.Text = "No hay datos";
+            }
+            else
+            {
+                tvCargando.Visibility = ViewStates.Gone;
+                lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
+            }
         }
     }
 }
