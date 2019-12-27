@@ -41,7 +41,9 @@ namespace SAEEAPP.Adaptadores
             {
                 convertView = _context.LayoutInflater.Inflate(Resource.Layout.GruposListRow, null);
             }
+            //item.EstudiantesXgrupos.ElementAt(0).IdEstudianteNavigation.Nombre
             convertView.FindViewById<TextView>(Resource.Id.textViewGrupo).Text = item.Grupo;
+            convertView.FindViewById<TextView>(Resource.Id.textViewAnio).Text = item.Anio.ToString();
             return convertView;
         }
     }

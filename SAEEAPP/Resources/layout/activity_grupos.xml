@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,7 +39,7 @@
         android:layout_marginTop="37.7dp"
         android:text="@string/seccionGrupos"
         android:textSize="20sp"
-        android:id="@+id/textViewGrupos"
+        android:id="@+id/textViewGrupos2"
         android:layout_marginRight="0.0dp"
         android:layout_marginBottom="9.6dp"
         android:layout_below="@id/txtSecciones" />
@@ -49,20 +49,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
         android:text="@string/opciones"
-        android:layout_toRightOf = "@id/textViewOpciones"
-        android:layout_alignBaseline = "@id/textViewGrupos"
+        android:layout_toRightOf = "@id/textViewAnio2"
+        android:layout_alignBaseline = "@id/textViewGrupos2"
         android:textSize="20sp"
         android:layout_marginLeft="115.0dp"
         android:layout_below="@id/txtSecciones" />
     <TextView
-        android:id="@+id/textViewOpciones"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewAnio2"
+        android:layout_width="46.5dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf = "@id/textViewGrupos"
-        android:layout_alignBaseline = "@id/textViewGrupos"
+        android:layout_toRightOf = "@id/textViewGrupos2"
+        android:layout_alignBaseline = "@id/textViewOpciones"
         android:text="@string/anio"
         android:textSize="20sp"
-        android:layout_marginLeft="46.9dp" 
+        android:layout_marginLeft="46.9dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/plus"
+        android:layout_marginLeft="337.9dp"
+        android:layout_marginRight="18.3dp"
+        app:backgroundTint="@color/design_default_color_primary_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8.4dp" 
         />
 
 </RelativeLayout>
