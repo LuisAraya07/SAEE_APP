@@ -23,11 +23,6 @@ namespace Xamarin.core.Services
 
         }
 
-        public async Task<bool> PostAsync(Estudiantes estudiante)
-        {
-            return await _estudiantesR.PostAsync(estudiante);
-        }
-
         public async Task<List<Estudiantes>> GetAsync(int id)
         {
             return await _estudiantesR.GetAsync(id);
@@ -39,5 +34,22 @@ namespace Xamarin.core.Services
             return await _estudiantesR.GetEstudianteAsync(id);
 
         }
+        //Agregar estudiantes
+        public async Task<bool> PostAsync(Estudiantes estudiante)
+        {
+            return await _estudiantesR.PostAsync(estudiante);
+        }
+
+        //Modificar grupo
+        public async Task<bool> PutAsync(Estudiantes estudiante)
+        {
+            return await _estudiantesR.PutAsync(estudiante);
+        }
+        public async Task<bool> DeleteEstudiantesAsync(Estudiantes estudiante)
+        {
+            return await _estudiantesR.DeleteEstudiantesAsync(estudiante);
+        }
+
+
     }
 }

@@ -21,6 +21,7 @@ namespace SAEEAPP
     public class GruposActivity : AppCompatActivity
     {
         private FloatingActionButton fab;
+        private List<Grupos> listaGrupos = new List<Grupos>();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -36,8 +37,8 @@ namespace SAEEAPP
                 var txtGrupo = mView.FindViewById<EditText>(Resource.Id.etGrupo);
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar",delegate {
-                    Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
-                   // Onclick();
+                   // Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
+                    Onclick();
                 })
                 .SetNegativeButton("Cancelar",delegate {
                     alertDialogBuilder.Dispose();
@@ -69,7 +70,7 @@ namespace SAEEAPP
 
             };
             grupo.EstudiantesXgrupos.Add (EG);
-            gruposServices.PostAsync( grupo);
+            gruposServices.DeleteGruposAsync( listaGrupos.ElementAt(0));
 
         }
 
@@ -79,6 +80,7 @@ namespace SAEEAPP
             var grupoServicio = new GruposServices();
             var grupoListView = FindViewById<ListView>(Resource.Id.listView);
             var grupos = await grupoServicio.GetAsync(1);
+            listaGrupos = grupos;
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             TextView tvAnio = FindViewById<TextView>(Resource.Id.textViewAnio2);
             TextView tvGrupo = FindViewById<TextView>(Resource.Id.textViewGrupos2);
