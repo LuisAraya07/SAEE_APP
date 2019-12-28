@@ -37,7 +37,7 @@ namespace SAEEAPP
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar",delegate {
                     Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
-                   // onclick();
+                   // Onclick();
                 })
                 .SetNegativeButton("Cancelar",delegate {
                     alertDialogBuilder.Dispose();
@@ -50,7 +50,7 @@ namespace SAEEAPP
             };
         }
 
-        private void onclick()
+        private void Onclick()
         {
             GruposServices gruposServices = new GruposServices();
             Grupos grupo =
