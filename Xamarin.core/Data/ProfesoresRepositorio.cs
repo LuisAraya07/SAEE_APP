@@ -44,8 +44,26 @@ namespace Xamarin.core.Data
 
         public async Task<Profesores> GetProfesorAsync(int id)
         {
-            var json = await client.GetStringAsync($"api/item/{id}");
-            return await Task.Run(() => JsonConvert.DeserializeObject<Profesores>(json));
+            var json = await client.GetStringAsync($"Profesores/{id}");
+            return JsonConvert.DeserializeObject<Profesores>(json);
+        }
+
+        public async Task<bool> UpdateProfesorAsync(Profesores profesor)
+        {
+            var serializedProfesor = JsonConvert.SerializeObject(profesor);
+            var buffer = Encoding.UTF8.GetBytes(serializedProfesor);
+            var byteContent = new ByteArrayContent(buffer);
+
+            var response = await client.PutAsync(new Uri($"Profesores/{profesor.Id}"), byteContent);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteItemAsync(int id)
+        {
+            var response = await client.DeleteAsync($"Profesores/{id}");
+
+            return response.IsSuccessStatusCode;
         }
     }
 }
