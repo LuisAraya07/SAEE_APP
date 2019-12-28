@@ -24,6 +24,7 @@ namespace Xamarin.core.Data
             client = new HttpClient
             {
                 BaseAddress = new Uri($"{ValuesServices.url}/")
+                
             };
         }
 
@@ -39,21 +40,37 @@ namespace Xamarin.core.Data
             return await Task.Run(() => JsonConvert.DeserializeObject<List<Estudiantes>>(json));
         }
 
+        //Agregar Grupo
         public async Task<bool> PostAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
-
             var response = await client.PostAsync($"Grupos/PostGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
         }
 
+        //Modificar grupo
         public async Task<bool> PutAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
+            var buffer = Encoding.UTF8.GetBytes(serializedGrupo);
+            var byteContent = new ByteArrayContent(buffer);
+            var response = await client.PutAsync($"Grupos/PutGrupos", byteContent);
+            return response.IsSuccessStatusCode;
+        }
 
-            var response = await client.PutAsync($"Grupos/PutGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
-
+        public async Task<bool> DeleteGrupoAsync(Grupos grupo)
+        {
+            var serializedGrupo = JsonConvert.SerializeObject(grupo);
+            var buffer = Encoding.UTF8.GetBytes(serializedGrupo);
+            var byteContent = new ByteArrayContent(buffer);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Grupos/DeleteGrupos"),
+                Content = new StringContent(serializedGrupo, Encoding.UTF8, "application/json")
+            };
+            var response = await client.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
 

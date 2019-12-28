@@ -42,13 +42,37 @@ namespace Xamarin.core.Data
             return await Task.Run(() => JsonConvert.DeserializeObject<Estudiantes>(json));
 
         }
-
+        //Agregar estudiante
         public async Task<bool> PostAsync(Estudiantes estudiante)
         {
             var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
 
             var response = await client.PostAsync($"Estudiantes/PostEstudiantes", new StringContent(serializedEstudiante, Encoding.UTF8, "application/json"));
 
+            return response.IsSuccessStatusCode;
+        }
+
+        //Modificar estudiante
+        public async Task<bool> PutAsync(Estudiantes estudiante)
+        {
+            var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
+            var buffer = Encoding.UTF8.GetBytes(serializedEstudiante);
+            var byteContent = new ByteArrayContent(buffer);
+            var response = await client.PutAsync($"Estudiantes/PutEstudiantes", byteContent);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteEstudiantesAsync(Estudiantes estudiante)
+        {
+            var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
+            var buffer = Encoding.UTF8.GetBytes(serializedEstudiante);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Estudiantes/DeleteEstudiantes"),
+                Content = new StringContent(serializedEstudiante, Encoding.UTF8, "application/json")
+            };
+            var response = await client.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
 

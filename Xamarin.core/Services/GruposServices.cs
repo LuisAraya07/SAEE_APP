@@ -33,9 +33,19 @@ namespace Xamarin.core.Services
             return await _gruposR.GetGrupoAsync(id);
         
         }
+        //Agregar grupo
         public async Task<bool> PostAsync(Grupos grupo)
         {
             return await _gruposR.PostAsync(grupo);
+        }
+        //Modificar grupo
+        public async Task<bool> PutAsync(Grupos grupo)
+        {
+            return await _gruposR.PutAsync(grupo);
+        }
+        public async Task<bool> DeleteGruposAsync(Grupos grupo)
+        {
+            return await _gruposR.DeleteGrupoAsync(grupo);
         }
 
     }
