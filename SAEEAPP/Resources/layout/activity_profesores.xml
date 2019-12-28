@@ -14,11 +14,6 @@
         android:layout_height="50.5dp"
         android:id="@+id/tvTitulo"
         android:layout_margin="14.0dp" />
-    <Button
-        android:text="Agregar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btAgregar" />
     <TextView
         android:text="Cargando..."
         android:textAppearance="?android:attr/textAppearanceSmall"

@@ -24,8 +24,8 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_profesores);
-            Button btAgregar = FindViewById<Button>(Resource.Id.btAgregar);
-            btAgregar.Click += AgregarProfesor;
+            //Button btAgregar = FindViewById<Button>(Resource.Id.btAgregar);
+            //btAgregar.Click += AgregarProfesor;
         }
 
         protected override async void OnStart()

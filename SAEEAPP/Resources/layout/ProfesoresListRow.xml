@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
@@ -8,26 +7,46 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:minWidth="25px"
         android:minHeight="25px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
         android:id="@+id/tvNombre" />
     <TextView
         android:text="Cédula"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tvNombre"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/tvCedula" />
     <TextView
         android:text="Correo"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tvCedula"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/tvCorreo" />
-    <TextView
-        android:text="Opciones"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+    <Button
+        android:text="Editar"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/tvOpciones" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/btEditar" />
+    <Button
+        android:text="Borrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_below="@id/btEditar"
+        android:id="@+id/btBorrar" />
 
-</LinearLayout>
+</RelativeLayout>
