@@ -24,6 +24,8 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_profesores);
+            Button btAgregar = FindViewById<Button>(Resource.Id.btAgregar);
+            btAgregar.Click += AgregarProfesor;
         }
 
         protected override async void OnStart()
@@ -42,6 +44,22 @@ namespace SAEEAPP
                 tvCargando.Visibility = ViewStates.Gone;
                 lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
             }
+        }
+
+        private void AgregarProfesor(object sender, EventArgs e)
+        {
+            ProfesoresServices servicioProfesores = new ProfesoresServices();
+            servicioProfesores.PostAsync(new Profesores()
+            {
+                Cedula = "000000000",
+                Administrador = false,
+                Contrasenia = "123",
+                Correo = "post@post.com",
+                Nombre = "nombrePost",
+                PrimerApellido = "ApellidoPost",
+                SegundoApellido = "SegundoPost"
+            });
+
         }
     }
 }

@@ -22,9 +22,9 @@ namespace Xamarin.core.Services
             _profesoresR = new ProfesoresRepositorio();
         }
 
-        public List<Profesores> Get()
+        public async Task<bool> PostAsync(Profesores profesor)
         {
-            return _profesoresR.Get();
+            return await _profesoresR.PostAsync(profesor);
         }
 
         public async Task<List<Profesores>> GetAsync()
@@ -32,9 +32,9 @@ namespace Xamarin.core.Services
             return await _profesoresR.GetAsync();
         }
 
-        public Profesores GetProfesor(int id)
+        public async Task<Profesores> GetProfesorAsync(int id)
         {
-            return _profesoresR.GetProfesor(id);
+            return await _profesoresR.GetProfesorAsync(id);
         }
     }
 }

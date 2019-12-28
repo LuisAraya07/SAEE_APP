@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -9,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -16,34 +18,34 @@ namespace Xamarin.core.Data
 {
     public class ProfesoresRepositorio
     {
-        private readonly WebServices ws;
+
+        private readonly HttpClient client;
+
         public ProfesoresRepositorio()
         {
-            ws = new WebServices();
+            client = new HttpClient();
+            client.BaseAddress = new Uri($"{ValuesServices.url}/");
         }
 
-        public List<Profesores> Get()
+        public async Task<bool> PostAsync(Profesores profesor)
         {
-            var response = ws.Get(ValuesServices.url + "Profesores");
+            var serializedProfesor = JsonConvert.SerializeObject(profesor);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Profesores>>(response.Content);
+            var response = await client.PostAsync($"Profesores", new StringContent(serializedProfesor, Encoding.UTF8, "application/json"));
+
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<List<Profesores>> GetAsync()
         {
-            var response = await ws.GetAsync(ValuesServices.url + "Profesores");
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Profesores>>(response.Content);
+            var json = await client.GetStringAsync($"Profesores");
+            return JsonConvert.DeserializeObject<List<Profesores>>(json);
         }
 
-        public Profesores GetProfesor(int id)
+        public async Task<Profesores> GetProfesorAsync(int id)
         {
-            var response = ws.Get(ValuesServices.url + "Profesores/" + id);
-            if (response.HttpStatusCode != System.Net.HttpStatusCode.OK)
-            {
-                throw new ApplicationException("Profesor no encontrado");
-            }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Profesores>(response.Content);
+            var json = await client.GetStringAsync($"api/item/{id}");
+            return await Task.Run(() => JsonConvert.DeserializeObject<Profesores>(json));
         }
     }
 }
