@@ -36,5 +36,15 @@ namespace Xamarin.core.Services
         {
             return await _profesoresR.GetProfesorAsync(id);
         }
+
+        public async Task<bool> UpdateProfesorAsync(Profesores profesor)
+        {
+            return await _profesoresR.UpdateProfesorAsync(profesor);
+        }
+
+        public async Task<bool> DeleteItemAsync(int id)
+        {
+            return await _profesoresR.DeleteItemAsync(id);
+        }
     }
 }
