@@ -5488,58 +5488,64 @@ namespace SAEEAPP
 			public const int tvCargando = 2131230931;
 			
 			// aapt resource value: 0x7F0800D4
-			public const int tvCedula = 2131230932;
+			public const int tvCargandoE = 2131230932;
 			
 			// aapt resource value: 0x7F0800D5
-			public const int tvCorreo = 2131230933;
+			public const int tvCargandoG = 2131230933;
 			
 			// aapt resource value: 0x7F0800D6
-			public const int tvNombre = 2131230934;
+			public const int tvCedula = 2131230934;
 			
 			// aapt resource value: 0x7F0800D7
-			public const int tvOpciones = 2131230935;
+			public const int tvCorreo = 2131230935;
 			
 			// aapt resource value: 0x7F0800D8
-			public const int tvTitulo = 2131230936;
+			public const int tvNombre = 2131230936;
 			
 			// aapt resource value: 0x7F0800D9
-			public const int txtAgregarGrupo = 2131230937;
+			public const int tvOpciones = 2131230937;
 			
 			// aapt resource value: 0x7F0800DA
-			public const int txtContrasenia = 2131230938;
+			public const int tvTitulo = 2131230938;
 			
 			// aapt resource value: 0x7F0800DB
-			public const int txtCuenta = 2131230939;
-			
-			// aapt resource value: 0x7F0800DD
-			public const int txtSecciones = 2131230941;
+			public const int txtAgregarGrupo = 2131230939;
 			
 			// aapt resource value: 0x7F0800DC
-			public const int txtSeccionEstudiantes = 2131230940;
+			public const int txtContrasenia = 2131230940;
 			
-			// aapt resource value: 0x7F0800DE
-			public const int uniform = 2131230942;
+			// aapt resource value: 0x7F0800DD
+			public const int txtCuenta = 2131230941;
 			
 			// aapt resource value: 0x7F0800DF
-			public const int unlabeled = 2131230943;
+			public const int txtSecciones = 2131230943;
+			
+			// aapt resource value: 0x7F0800DE
+			public const int txtSeccionEstudiantes = 2131230942;
 			
 			// aapt resource value: 0x7F0800E0
-			public const int up = 2131230944;
+			public const int uniform = 2131230944;
 			
 			// aapt resource value: 0x7F0800E1
-			public const int useLogo = 2131230945;
+			public const int unlabeled = 2131230945;
 			
 			// aapt resource value: 0x7F0800E2
-			public const int view_offset_helper = 2131230946;
+			public const int up = 2131230946;
 			
 			// aapt resource value: 0x7F0800E3
-			public const int visible = 2131230947;
+			public const int useLogo = 2131230947;
 			
 			// aapt resource value: 0x7F0800E4
-			public const int withText = 2131230948;
+			public const int view_offset_helper = 2131230948;
 			
 			// aapt resource value: 0x7F0800E5
-			public const int wrap_content = 2131230949;
+			public const int visible = 2131230949;
+			
+			// aapt resource value: 0x7F0800E6
+			public const int withText = 2131230950;
+			
+			// aapt resource value: 0x7F0800E7
+			public const int wrap_content = 2131230951;
 			
 			static Id()
 			{

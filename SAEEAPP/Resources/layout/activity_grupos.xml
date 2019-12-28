@@ -21,6 +21,17 @@
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         />
+    <TextView
+        android:text="Cargando..."
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="40.8dp"
+        android:id="@+id/tvCargandoG"
+        android:layout_marginLeft="20.1dp"
+        android:textSize="24sp"
+        android:layout_marginTop="4.5dp"
+        android:layout_marginBottom="0.0dp"
+        android:layout_below="@id/txtSecciones" />
 
     <TextView
         android:id="@+id/txtSecciones"

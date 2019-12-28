@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Menú Principal", MainLauncher = true, Theme = "@style/AppTheme")]
+    [Activity(Label = "Menú Principal", Theme = "@style/AppTheme")]
     public class MenuActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

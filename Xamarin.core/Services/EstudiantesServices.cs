@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -16,24 +16,27 @@ namespace Xamarin.core.Services
 {
     public class EstudiantesServices
     {
-        private EstudiantesRepositorio _estudiantesR;
+        private readonly EstudiantesRepositorio _estudiantesR;
         public EstudiantesServices()
         {
             _estudiantesR = new EstudiantesRepositorio();
 
         }
 
-        public List<Estudiantes> Get(int id)
+        public async Task<bool> PostAsync(Estudiantes estudiante)
         {
-
-            return _estudiantesR.Get(id);
-
-
+            return await _estudiantesR.PostAsync(estudiante);
         }
 
-        public Estudiantes GetEstudiante(int id)
+        public async Task<List<Estudiantes>> GetAsync(int id)
         {
-            return _estudiantesR.GetEstudiante(id);
+            return await _estudiantesR.GetAsync(id);
+        }
+
+
+        public async Task<Estudiantes> GetEstudiante(int id)
+        {
+            return await _estudiantesR.GetEstudianteAsync(id);
 
         }
     }

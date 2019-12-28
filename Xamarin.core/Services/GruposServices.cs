@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -17,25 +17,26 @@ namespace Xamarin.core.Services
     public class GruposServices
     {
 
-        private GruposRepositorio _gruposR;
+        private readonly GruposRepositorio _gruposR;
         public GruposServices()
         {
             _gruposR = new GruposRepositorio();
 
         }
 
-        public List<Grupos> Get(int id) {
-        
-            return _gruposR.Get(id);
-
-        
+        public async Task<List<Grupos>> GetAsync(int id)
+        {
+            return await _gruposR.GetAsync(id);
         }
 
-        public List<Estudiantes> GetGrupo(int id) {
-            return _gruposR.GetGrupo(id);
+        public async Task <List<Estudiantes>> GetGrupo(int id) {
+            return await _gruposR.GetGrupoAsync(id);
         
         }
-
+        public async Task<bool> PostAsync(Grupos grupo)
+        {
+            return await _gruposR.PostAsync(grupo);
+        }
 
     }
 }
