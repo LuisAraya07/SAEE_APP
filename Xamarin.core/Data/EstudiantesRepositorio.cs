@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -16,30 +18,39 @@ namespace Xamarin.core.Data
 {
     public class EstudiantesRepositorio
     {
-        private List<Estudiantes> estudiantes;
-        private WebServices ws;
+        private readonly HttpClient client;
+
         public EstudiantesRepositorio()
         {
-            ws = new WebServices();
-        }
-
-
-        public List<Estudiantes> Get(int id)
-        {
-            var response = ws.Get(ValuesServices.url + "Estudiantes/GetEstudiantes?id=" + id);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Estudiantes>>(response.Content);
-
-        }
-
-        public Estudiantes GetEstudiante(int id)
-        {
-            var response = ws.Get(ValuesServices.url + "Estudiantes/GetEstudiante?id=" + id);
-            if (response.HttpStatusCode != System.Net.HttpStatusCode.OK)
+            client = new HttpClient
             {
-                throw new ApplicationException("Estudiante no encontrado");
-            }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Estudiantes>(response.Content);
+                BaseAddress = new Uri($"{ValuesServices.url}/")
+            };
+        }
+
+
+      
+        public async Task<List<Estudiantes>> GetAsync(int id)
+        {
+            var json = await client.GetStringAsync($"Estudiantes/GetEstudiantes?id=" + id);
+            return JsonConvert.DeserializeObject<List<Estudiantes>>(json);
+        }
+
+        public async Task<Estudiantes> GetEstudianteAsync(int id)
+        {
+            var json = await client.GetStringAsync($"Estudiantes/GetEstudiante?id=" + id);
+            return await Task.Run(() => JsonConvert.DeserializeObject<Estudiantes>(json));
 
         }
+
+        public async Task<bool> PostAsync(Estudiantes estudiante)
+        {
+            var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
+
+            var response = await client.PostAsync($"Estudiantes/PostEstudiantes", new StringContent(serializedEstudiante, Encoding.UTF8, "application/json"));
+
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

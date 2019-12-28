@@ -25,12 +25,33 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_estudiantes);
+            fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
+
+        }
+
+        protected override async void OnStart()
+        {
+            base.OnStart();
             var estudiantesServicio = new EstudiantesServices();
             var estudiantesListView = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
-            var estudiantes = estudiantesServicio.Get(1);
-            estudiantesListView.Adapter = new ListEstudiantesAdaptador(this, estudiantes);
-           // fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
+            var estudiantes = await estudiantesServicio.GetAsync(1);
+            TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
+            TextView tvNombre = FindViewById<TextView>(Resource.Id.textViewEstudiantes2);
+            TextView tvCedula = FindViewById<TextView>(Resource.Id.textViewCedula2);
+            TextView tvOpciones = FindViewById<TextView>(Resource.Id.textViewOpcionesE);
 
+            if (estudiantes.Count == 0)
+            {
+                tvNombre.Visibility = ViewStates.Gone;
+                tvOpciones.Visibility = ViewStates.Gone;
+                tvCedula.Visibility = ViewStates.Gone;
+                tvCargando.Text = "No hay datos";
+            }
+            else
+            {
+                tvCargando.Visibility = ViewStates.Gone;
+                estudiantesListView.Adapter = new ListEstudiantesAdaptador(this, estudiantes);
+            }
         }
     }
 }

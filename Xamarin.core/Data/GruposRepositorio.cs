@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -16,27 +18,45 @@ namespace Xamarin.core.Data
 {
     public class GruposRepositorio
     {
-        private List<Grupos> _grupos;
-        private WebServices ws;
+        private readonly HttpClient client;
+
         public GruposRepositorio() {
-            ws = new WebServices();
+            client = new HttpClient
+            {
+                BaseAddress = new Uri($"{ValuesServices.url}/")
+            };
         }
 
-        public List<Grupos> Get(int id) {
-            var response = ws.Get(ValuesServices.url+"Grupos/GetGrupos?id="+id);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Grupos>>(response.Content);
-            
-        }
-
-        public List<Estudiantes> GetGrupo(int id)
+        public async Task<List<Grupos>> GetAsync(int id)
         {
-            var response = ws.Get(ValuesServices.url + "Grupos/GetEstudiantes?id=" + id);
-            if (response.HttpStatusCode != System.Net.HttpStatusCode.OK) {
-                throw new ApplicationException("Grupo no encontrado");
-            }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Estudiantes>>(response.Content);
-
+            var json = await client.GetStringAsync($"Grupos/GetGrupos?id="+id);
+            return JsonConvert.DeserializeObject<List<Grupos>>(json);
         }
+
+        public async Task<List<Estudiantes>> GetGrupoAsync(int id)
+        {
+            var json = await client.GetStringAsync($"Grupos/GetEstudiantes?id="+id);
+            return await Task.Run(() => JsonConvert.DeserializeObject<List<Estudiantes>>(json));
+        }
+
+        public async Task<bool> PostAsync(Grupos grupo)
+        {
+            var serializedGrupo = JsonConvert.SerializeObject(grupo);
+
+            var response = await client.PostAsync($"Grupos/PostGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> PutAsync(Grupos grupo)
+        {
+            var serializedGrupo = JsonConvert.SerializeObject(grupo);
+
+            var response = await client.PutAsync($"Grupos/PutGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
+
+            return response.IsSuccessStatusCode;
+        }
+
 
 
     }
