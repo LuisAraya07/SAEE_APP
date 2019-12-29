@@ -82,15 +82,9 @@ namespace SAEEAPP
             var grupos = await grupoServicio.GetAsync(1);
             listaGrupos = grupos;
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
-            TextView tvAnio = FindViewById<TextView>(Resource.Id.textViewAnio2);
-            TextView tvGrupo = FindViewById<TextView>(Resource.Id.textViewGrupos2);
-            TextView tvOpciones = FindViewById<TextView>(Resource.Id.textViewOpciones);
-
+           
             if (grupos.Count == 0)
             {
-                tvAnio.Visibility = ViewStates.Gone;
-                tvOpciones.Visibility = ViewStates.Gone;
-                tvGrupo.Visibility = ViewStates.Gone;
                 tvCargando.Text = "No hay datos";
             }
             else

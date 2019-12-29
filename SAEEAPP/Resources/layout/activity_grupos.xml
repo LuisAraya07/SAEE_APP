@@ -8,11 +8,11 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="420dp"
+        android:layout_height="489.5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="62.9dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:cacheColorHint="#4A97D3"
@@ -20,6 +20,7 @@
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:layout_marginBottom="0.0dp" 
         />
     <TextView
         android:text="Cargando..."
@@ -42,38 +43,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/grupo"
         android:textSize="24sp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="20.0dp"
-        android:layout_marginTop="37.7dp"
-        android:text="@string/seccionGrupos"
-        android:textSize="20sp"
-        android:id="@+id/textViewGrupos2"
-        android:layout_marginRight="0.0dp"
-        android:layout_marginBottom="9.6dp"
-        android:layout_below="@id/txtSecciones" />
-    <TextView
-        android:id="@+id/textViewOpciones"
-        android:layout_width="91.0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
-        android:text="@string/opciones"
-        android:layout_toRightOf = "@id/textViewAnio2"
-        android:layout_alignBaseline = "@id/textViewGrupos2"
-        android:textSize="20sp"
-        android:layout_marginLeft="115.0dp"
-        android:layout_below="@id/txtSecciones" />
-    <TextView
-        android:id="@+id/textViewAnio2"
-        android:layout_width="46.5dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf = "@id/textViewGrupos2"
-        android:layout_alignBaseline = "@id/textViewOpciones"
-        android:text="@string/anio"
-        android:textSize="20sp"
-        android:layout_marginLeft="46.9dp"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
