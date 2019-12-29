@@ -63,6 +63,7 @@
     <Compile Include="Adaptadores\ListEstudiantesAdaptador.cs" />
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
+    <Compile Include="AgregarProfesorActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
     <Compile Include="MainActivity.cs" />
@@ -161,6 +162,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_estudiantes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Agregar_Profesor.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
