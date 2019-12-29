@@ -65,7 +65,7 @@ namespace Xamarin.core.Data
         public async Task<bool> DeleteEstudiantesAsync(Estudiantes estudiante)
         {
             var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
-            var buffer = Encoding.UTF8.GetBytes(serializedEstudiante);
+           // var buffer = Encoding.UTF8.GetBytes(serializedEstudiante);
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,

@@ -36,15 +36,11 @@ namespace SAEEAPP
             var estudiantesListView = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
             var estudiantes = await estudiantesServicio.GetAsync(1);
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
-            TextView tvNombre = FindViewById<TextView>(Resource.Id.textViewEstudiantes2);
-            TextView tvCedula = FindViewById<TextView>(Resource.Id.textViewCedula2);
-            TextView tvOpciones = FindViewById<TextView>(Resource.Id.textViewOpcionesE);
+            
 
             if (estudiantes.Count == 0)
             {
-                tvNombre.Visibility = ViewStates.Gone;
-                tvOpciones.Visibility = ViewStates.Gone;
-                tvCedula.Visibility = ViewStates.Gone;
+               
                 tvCargando.Text = "No hay datos";
             }
             else
