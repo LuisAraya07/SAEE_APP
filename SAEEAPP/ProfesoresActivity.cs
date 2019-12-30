@@ -20,6 +20,10 @@ namespace SAEEAPP
     [Activity(Label = "Profesores", Theme = "@style/AppTheme")]
     public class ProfesoresActivity : AppCompatActivity
     {
+        List<Profesores> profesores = null;
+        ListView lvProfesores;
+        TextView tvCargando;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -32,37 +36,30 @@ namespace SAEEAPP
         protected override async void OnStart()
         {
             base.OnStart();
-            ListView lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
-            TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
-            ProfesoresServices servicioProfesores = new ProfesoresServices();
-            List<Profesores> profesores = await servicioProfesores.GetAsync();
-            if(profesores.Count == 0)
+
+            lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
+
+            if (profesores == null)
             {
-                tvCargando.Text = "No hay datos";
-            }
-            else
-            {
-                tvCargando.Visibility = ViewStates.Gone;
-                lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
+                ProfesoresServices servicioProfesores = new ProfesoresServices();
+                profesores = await servicioProfesores.GetAsync();
+                if (profesores.Count == 0)
+                {
+                    tvCargando.Text = "No hay datos";
+                }
+                else
+                {
+                    tvCargando.Visibility = ViewStates.Gone;
+                    lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
+                }
             }
         }
 
         private void AgregarProfesor(object sender, EventArgs e)
         {
-            AgregarProfesorActivity agregarProfesorActivity = new AgregarProfesorActivity(this);
+            AgregarProfesorActivity agregarProfesorActivity = new AgregarProfesorActivity(this, lvProfesores, profesores);
             agregarProfesorActivity.Show();
-            //ProfesoresServices servicioProfesores = new ProfesoresServices();
-            //servicioProfesores.PostAsync(new Profesores()
-            //{
-            //    Cedula = "000000000",
-            //    Administrador = false,
-            //    Contrasenia = "123",
-            //    Correo = "post@post.com",
-            //    Nombre = "nombrePost",
-            //    PrimerApellido = "ApellidoPost",
-            //    SegundoApellido = "SegundoPost"
-            //});
-
         }
     }
 }
