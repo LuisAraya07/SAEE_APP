@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Xamarin.core.Models;
+using Xamarin.core.Services;
 
 namespace SAEEAPP.Adaptadores
 {
@@ -45,7 +46,43 @@ namespace SAEEAPP.Adaptadores
                 FindViewById<TextView>(Resource.Id.textViewNombreE).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
             convertView.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
+            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarE);
+            btBorrar.Click += delegate
+            {
+                OnClick_Borrar(estudiante);
+
+            };
+            Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditarE);
+            btEditar.Click += delegate
+            {
+                OnClick_Editar(estudiante);
+
+            };
             return convertView;
+        }
+        public void OnClick_Borrar(Estudiantes estudiante)
+        {
+            new AlertDialog.Builder(_context)
+              .SetIcon(Resource.Drawable.trash_can_outline)
+              .SetTitle("¿Está seguro?")
+              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
+              .SetPositiveButton("Sí", delegate
+              {
+                  EstudiantesServices gruposServices = new EstudiantesServices();
+                  gruposServices.DeleteEstudiantesAsync(estudiante);
+                  Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                  _estudiantes.Remove(estudiante);
+                  this.NotifyDataSetChanged();
+              })
+              .SetNegativeButton("No", delegate
+              {
+                  this.Dispose();
+
+              })
+              .Show();
+        }
+        public void OnClick_Editar(Estudiantes estudiante)
+        {
         }
     }
 }
