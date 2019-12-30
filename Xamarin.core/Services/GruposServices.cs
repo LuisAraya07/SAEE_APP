@@ -34,7 +34,7 @@ namespace Xamarin.core.Services
         
         }
         //Agregar grupo
-        public async Task<bool> PostAsync(Grupos grupo)
+        public async Task<Grupos> PostAsync(Grupos grupo)
         {
             return await _gruposR.PostAsync(grupo);
         }

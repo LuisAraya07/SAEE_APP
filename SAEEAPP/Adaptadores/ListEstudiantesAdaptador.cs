@@ -41,48 +41,51 @@ namespace SAEEAPP.Adaptadores
             if (convertView == null)
             {
                 convertView = _context.LayoutInflater.Inflate(Resource.Layout.EstudiantesListRow, null);
+
+                Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarE);
+                btBorrar.SetTag(Resource.Id.btBorrarE, position);
+                //btBorrar.Click -= OnClick_Borrar;
+                btBorrar.Click += OnClick_Borrar;
+
+
+                Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditarE);
+                btEditar.SetTag(Resource.Id.btEditarE, position);
+                btEditar.Click += OnClick_Editar;
             }
             convertView.
                 FindViewById<TextView>(Resource.Id.textViewNombreE).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
             convertView.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
-            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarE);
-            btBorrar.Click += delegate
-            {
-                OnClick_Borrar(estudiante);
-
-            };
-            Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditarE);
-            btEditar.Click += delegate
-            {
-                OnClick_Editar(estudiante);
-
-            };
             return convertView;
         }
-        public void OnClick_Borrar(Estudiantes estudiante)
+        public void OnClick_Borrar(object sender, EventArgs e)
         {
-            new AlertDialog.Builder(_context)
-              .SetIcon(Resource.Drawable.trash_can_outline)
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarE);
+            var estudiante = _estudiantes.ElementAt(i);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
+              .SetCancelable(false)
               .SetTitle("¿Está seguro?")
               .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
-              .SetPositiveButton("Sí", delegate
+              .SetPositiveButton("Sí", async delegate
               {
                   EstudiantesServices gruposServices = new EstudiantesServices();
-                  gruposServices.DeleteEstudiantesAsync(estudiante);
+                  await gruposServices.DeleteEstudiantesAsync(estudiante);
                   Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                  _estudiantes.Remove(estudiante);
-                  this.NotifyDataSetChanged();
+                  _estudiantes.RemoveAt(i);
+                  NotifyDataSetChanged();
               })
               .SetNegativeButton("No", delegate
               {
-                  this.Dispose();
+                  alertDialogBuilder.Dispose();
 
               })
               .Show();
         }
-        public void OnClick_Editar(Estudiantes estudiante)
+        public void OnClick_Editar(object sender, EventArgs e)
         {
+            int i = (int)((Button)sender).GetTag(Resource.Id.btEditarE);
+            var estudiante = _estudiantes.ElementAt(i);
         }
     }
 }

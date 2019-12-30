@@ -41,12 +41,12 @@ namespace Xamarin.core.Data
         }
 
         //Agregar Grupo
-        public async Task<bool> PostAsync(Grupos grupo)
+        public async Task<Grupos> PostAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
             var response = await client.PostAsync($"Grupos/PostGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
-
-            return response.IsSuccessStatusCode;
+            string resString = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Grupos>(resString);
         }
 
         //Modificar grupo

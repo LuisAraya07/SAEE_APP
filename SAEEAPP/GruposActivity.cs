@@ -75,9 +75,9 @@ namespace SAEEAPP
                  };
                  grupo.EstudiantesXgrupos.Add (EG);*/
                 //listaGrupos.ElementAt(0)
-                await gruposServices.PostAsync(grupo);
+                var _grupo= await gruposServices.PostAsync(grupo);
                 Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
-                listaGrupos.Add(grupo);
+                listaGrupos.Add(_grupo);
                 adaptadorGrupos.NotifyDataSetChanged();
                 alertDialogBuilder.Dispose();
             }
@@ -95,6 +95,8 @@ namespace SAEEAPP
             var grupoListView = FindViewById<ListView>(Resource.Id.listView);
             //Obtengo el id el profesor
             listaGrupos = await grupoServicio.GetAsync(1);
+            
+
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             if (listaGrupos.Count == 0)
             {
@@ -103,9 +105,12 @@ namespace SAEEAPP
             else
             {
                 adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
+                
                 tvCargando.Visibility = ViewStates.Gone;
                 grupoListView.Adapter = adaptadorGrupos;
             }
         }
+
+
     }
 }

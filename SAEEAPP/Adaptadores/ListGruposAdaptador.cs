@@ -19,10 +19,12 @@ namespace SAEEAPP.Adaptadores
 
         private readonly Activity _context;
         private readonly List<Grupos> _grupos;
+
         public ListGruposAdaptador(Activity context, List<Grupos> grupos)
         {
             _context = context;
             _grupos = grupos;
+            
         }
 
 
@@ -34,70 +36,74 @@ namespace SAEEAPP.Adaptadores
         {
             return this[position].Id;
         }
-
+        
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var item = this[position];
-            if (convertView == null)
+            View row = convertView;
+            var grupo = this[position];
+            if (row == null)
             {
-                convertView = _context.LayoutInflater.Inflate(Resource.Layout.GruposListRow, null);
+                row = _context.LayoutInflater.Inflate(Resource.Layout.GruposListRow, null);
+
+                Button btBorrar = row.FindViewById<Button>(Resource.Id.btBorrar);
+                btBorrar.SetTag(Resource.Id.btBorrar, position);
+                //btBorrar.Click -= OnClick_Borrar;
+                btBorrar.Click += OnClick_Borrar;
+
+                Button btEditar = row.FindViewById<Button>(Resource.Id.btEditar);
+                btEditar.SetTag(Resource.Id.btEditar, position);
+                btEditar.Click += OnClick_Editar;
+
+                Button btEstudiantes = row.FindViewById<Button>(Resource.Id.btEstudiantes);
+                btEstudiantes.SetTag(Resource.Id.btEstudiantes, position);
+                btEstudiantes.Click += OnClick_Estudiantes;
             }
             //item.EstudiantesXgrupos.ElementAt(0).IdEstudianteNavigation.Nombre
-            convertView.FindViewById<TextView>(Resource.Id.textViewGrupo).Text = item.Grupo;
-            convertView.FindViewById<TextView>(Resource.Id.textViewAnio).Text = item.Anio.ToString();
-            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrar);
-            btBorrar.Click += delegate
-            {
-                OnClick_Borrar(item);
-
-            };
-            Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditar);
-            btEditar.Click += delegate
-            {
-                OnClick_Editar(item);
-
-            };
-            Button btEstudiantes = convertView.FindViewById<Button>(Resource.Id.btEstudiantes);
-            btEstudiantes.Click += delegate
-            {
-                OnClick_Estudiantes(item);
-
-            };
-            return convertView;
+            row.FindViewById<TextView>(Resource.Id.textViewGrupo).Text = grupo.Grupo;
+            row.FindViewById<TextView>(Resource.Id.textViewAnio).Text = grupo.Anio.ToString();
+            return row;
         }
-
-        public void OnClick_Borrar(Grupos grupo)
+        
+        public void OnClick_Borrar(object sender, EventArgs e)
         {
-            new AlertDialog.Builder(_context)
-              .SetIcon(Resource.Drawable.trash_can_outline)
-              .SetTitle("¿Está seguro?")
-              .SetMessage("Quiere eliminar el grupo: " + grupo.Grupo)
-              .SetPositiveButton("Sí", delegate
-              {
-                  GruposServices gruposServices = new GruposServices();
-                  gruposServices.DeleteGruposAsync(grupo);
-                  Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                  _grupos.Remove(grupo);
-                  this.NotifyDataSetChanged();
-              })
-              .SetNegativeButton("No", delegate
-              {
-                  this.Dispose();
-
-              })
-              .Show();
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
+            var grupo = _grupos.ElementAt(i);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            alertDialogBuilder.SetCancelable(false)
+            .SetIcon(Resource.Drawable.trash_can_outline)
+               .SetTitle("¿Está seguro?")
+               .SetMessage("Quiere eliminar el grupo: " + grupo.Grupo)
+               .SetPositiveButton("Sí", async delegate
+               {
+                   GruposServices gruposServices = new GruposServices();
+                   await gruposServices.DeleteGruposAsync(grupo);
+                   Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                   _grupos.RemoveAt(i);
+                   NotifyDataSetChanged();
+               })
+               .SetNegativeButton("No", delegate
+               {
+                   alertDialogBuilder.Dispose();
+               })
+               .Show();
         }
-        public void OnClick_Editar(Grupos grupo)
+        public void OnClick_Editar(object sender, EventArgs e)
         {
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
+            var grupo = _grupos.ElementAt(i);
 
 
         }
-        public void OnClick_Estudiantes(Grupos grupo)
+        public void OnClick_Estudiantes(object sender, EventArgs e)
         {
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
+            var grupo = _grupos.ElementAt(i);
 
 
         }
     }
+    
 
-        
+
 }
+

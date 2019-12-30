@@ -8,11 +8,11 @@
     <ListView
         android:id="@+id/listViewEstudiantes"
         android:layout_width="match_parent"
-        android:layout_height="489.5dp"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="62.9dp"
+        android:layout_marginTop="54.5dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:cacheColorHint="#4A97D3"
@@ -20,6 +20,7 @@
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:layout_marginBottom="78.1dp"
         />
     <TextView
         android:text="Cargando..."
