@@ -14,7 +14,6 @@ using Android.Widget;
 using SAEEAPP.Adaptadores;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
-
 namespace SAEEAPP
 {
     [Activity(Label = "Grupos", Theme = "@style/AppTheme")]
@@ -22,6 +21,7 @@ namespace SAEEAPP
     {
         private FloatingActionButton fab;
         private List<Grupos> listaGrupos = new List<Grupos>();
+        ListGruposAdaptador adaptadorGrupos;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -34,11 +34,11 @@ namespace SAEEAPP
                 View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos,null);
                 Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(this);
                 alertDialogBuilder.SetView(mView);
-                var txtGrupo = mView.FindViewById<EditText>(Resource.Id.etGrupo);
+                var etGrupo = mView.FindViewById<EditText>(Resource.Id.etGrupo);
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar",delegate {
-                   // Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
-                    Onclick();
+                    // Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
+                    AgregarGrupoAsync(alertDialogBuilder,etGrupo.Text);
                 })
                 .SetNegativeButton("Cancelar",delegate {
                     alertDialogBuilder.Dispose();
@@ -51,46 +51,60 @@ namespace SAEEAPP
             };
         }
 
-        private void Onclick()
+        private async System.Threading.Tasks.Task AgregarGrupoAsync(Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder, string etGrupo)
         {
+            DateTime fechaActual = DateTime.Today;
             GruposServices gruposServices = new GruposServices();
-            Grupos grupo =
-            new Grupos()
+            if (!etGrupo.Equals(""))
             {
-                IdProfesor = 1,
-                Anio = 2019,
-                Grupo = "7-7"
+                Grupos grupo =
+                new Grupos()
+                {
+                    //Debo traerme el id del profesor
+                    IdProfesor = 1,
+                    Anio = fechaActual.Year,
+                    Grupo = etGrupo
 
-            };
-            EstudiantesXgrupos EG = new EstudiantesXgrupos() {
-                
-               IdProfesor = 1,
-               IdGrupo = 4,
-               IdEstudiante = 3
+                };
+                /* EstudiantesXgrupos EG = new EstudiantesXgrupos() {
 
-            };
-            grupo.EstudiantesXgrupos.Add (EG);
-            gruposServices.DeleteGruposAsync( listaGrupos.ElementAt(0));
+                    IdProfesor = 1,
+                    IdGrupo = 4,
+                    IdEstudiante = 3
+
+                 };
+                 grupo.EstudiantesXgrupos.Add (EG);*/
+                //listaGrupos.ElementAt(0)
+                await gruposServices.PostAsync(grupo);
+                Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
+                listaGrupos.Add(grupo);
+                adaptadorGrupos.NotifyDataSetChanged();
+                alertDialogBuilder.Dispose();
+            }
+            else {
+                Toast.MakeText(this, "Debe ingresar un grupo.", ToastLength.Long).Show();
+
+            }
 
         }
-
+        
         protected override async void OnStart()
         {
             base.OnStart();
             var grupoServicio = new GruposServices();
             var grupoListView = FindViewById<ListView>(Resource.Id.listView);
-            var grupos = await grupoServicio.GetAsync(1);
-            listaGrupos = grupos;
+            //Obtengo el id el profesor
+            listaGrupos = await grupoServicio.GetAsync(1);
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
-           
-            if (grupos.Count == 0)
+            if (listaGrupos.Count == 0)
             {
                 tvCargando.Text = "No hay datos";
             }
             else
             {
+                adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
                 tvCargando.Visibility = ViewStates.Gone;
-                grupoListView.Adapter = new ListGruposAdaptador(this, grupos);
+                grupoListView.Adapter = adaptadorGrupos;
             }
         }
     }

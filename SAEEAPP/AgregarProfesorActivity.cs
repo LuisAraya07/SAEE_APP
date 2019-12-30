@@ -32,7 +32,6 @@ namespace SAEEAPP
             etApellido2 = VistaAgregar.FindViewById<EditText>(Resource.Id.etSegundoApellido);
             etCorreo = VistaAgregar.FindViewById<EditText>(Resource.Id.etCorreo);
             etContrasenia = VistaAgregar.FindViewById<EditText>(Resource.Id.etContrasenia);
-
             alertDialogBuilder = new AlertDialog.Builder(context)
             .SetView(VistaAgregar)
             .SetPositiveButton("Agregar", (EventHandler<DialogClickEventArgs>)null)
