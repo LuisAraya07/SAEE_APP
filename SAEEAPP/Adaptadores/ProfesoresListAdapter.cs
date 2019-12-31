@@ -9,11 +9,13 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Java.Interop;
+using SAEEAPP.Listeners;
 using Xamarin.core.Models;
 
 namespace SAEEAPP.Adaptadores
 {
-    class ProfesoresListAdapter : BaseAdapter<Profesores>
+    public class ProfesoresListAdapter : BaseAdapter<Profesores>
     {
         private readonly Activity _context;
         private readonly List<Profesores> _profesores;
@@ -41,12 +43,25 @@ namespace SAEEAPP.Adaptadores
             {
                 convertView = _context.LayoutInflater.Inflate(Resource.Layout.ProfesoresListRow, null);
             }
-            convertView.
-                FindViewById<TextView>(Resource.Id.tvNombre).
-                Text = $"{profesor.Nombre} {profesor.PrimerApellido} {profesor.SegundoApellido}";
-            convertView.FindViewById<TextView>(Resource.Id.tvCedula).Text = profesor.Cedula;
-            convertView.FindViewById<TextView>(Resource.Id.tvCorreo).Text = profesor.Correo;
+            TextView tvNombre = convertView.FindViewById<TextView>(Resource.Id.tvNombre);
+            TextView tvCedula = convertView.FindViewById<TextView>(Resource.Id.tvCedula);
+            TextView tvCorreo = convertView.FindViewById<TextView>(Resource.Id.tvCorreo);
+            Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditar);
+            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrar);
+
+            tvNombre.Text = $"{profesor.Nombre} {profesor.PrimerApellido} {profesor.SegundoApellido}";
+            tvCedula.Text = profesor.Cedula;
+            tvCorreo.Text = profesor.Correo;
+
+            btEditar.SetOnClickListener(new EditarPListener(_context, _profesores, profesor, this));
+            btBorrar.SetOnClickListener(new BorrarPListener(_context, _profesores, profesor, this));
+
             return convertView;
+        }
+
+        public void ActualizarDatos()
+        {
+            NotifyDataSetChanged();
         }
     }
 }

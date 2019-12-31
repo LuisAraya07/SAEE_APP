@@ -43,13 +43,13 @@ namespace Xamarin.core.Data
 
         }
         //Agregar estudiante
-        public async Task<Estudiantes> PostAsync(Estudiantes estudiante)
+        public async Task<bool> PostAsync(Estudiantes estudiante)
         {
             var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
 
             var response = await client.PostAsync($"Estudiantes/PostEstudiantes", new StringContent(serializedEstudiante, Encoding.UTF8, "application/json"));
-            string resString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Estudiantes>(resString);
+
+            return response.IsSuccessStatusCode;
         }
 
         //Modificar estudiante

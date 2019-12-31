@@ -14,7 +14,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP.Adaptadores
 {
-    public class ListEstudiantesAdaptador : BaseAdapter<Estudiantes>
+    class ListEstudiantesAdaptador : BaseAdapter<Estudiantes>
     {
         private readonly Activity _context;
         private readonly List<Estudiantes> _estudiantes;

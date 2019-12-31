@@ -35,11 +35,10 @@ namespace SAEEAPP
                 Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(this);
                 alertDialogBuilder.SetView(mView);
                 var etGrupo = mView.FindViewById<EditText>(Resource.Id.etGrupo);
-                alertDialogBuilder.SetTitle("Agregando Grupo");
                 alertDialogBuilder.SetCancelable(false)
-                .SetPositiveButton("Agregar", async delegate {
+                .SetPositiveButton("Agregar",delegate {
                     // Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
-                    await AgregarGrupoAsync(alertDialogBuilder, etGrupo.Text);
+                    AgregarGrupoAsync(alertDialogBuilder,etGrupo.Text);
                 })
                 .SetNegativeButton("Cancelar",delegate {
                     alertDialogBuilder.Dispose();
@@ -56,7 +55,7 @@ namespace SAEEAPP
         {
             DateTime fechaActual = DateTime.Today;
             GruposServices gruposServices = new GruposServices();
-            if (!etGrupo.Equals("") && !etGrupo.StartsWith(" "))
+            if (!etGrupo.Equals(""))
             {
                 Grupos grupo =
                 new Grupos()
@@ -96,6 +95,8 @@ namespace SAEEAPP
             var grupoListView = FindViewById<ListView>(Resource.Id.listView);
             //Obtengo el id el profesor
             listaGrupos = await grupoServicio.GetAsync(1);
+            
+
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             if (listaGrupos.Count == 0)
             {
@@ -104,6 +105,7 @@ namespace SAEEAPP
             else
             {
                 adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
+                
                 tvCargando.Visibility = ViewStates.Gone;
                 grupoListView.Adapter = adaptadorGrupos;
             }

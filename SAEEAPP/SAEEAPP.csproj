@@ -60,14 +60,13 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adaptadores\ListEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEstudiantesAdaptador.cs" />
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
-    <Compile Include="AgregarEstudianteActivity.cs" />
-    <Compile Include="AgregarProfesorActivity.cs" />
+    <Compile Include="AgregarEditarProfesorActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
+    <Compile Include="Listeners\ProfesoresListeners.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MenuActivity.cs" />
     <Compile Include="ProfesoresActivity.cs" />
@@ -184,11 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\trash_can_outline.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\Dialogo_Agregar_Estudiante.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

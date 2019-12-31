@@ -22,6 +22,7 @@ namespace SAEEAPP
     {
         List<Profesores> profesores = null;
         ListView lvProfesores;
+        ProfesoresListAdapter profesoresAdapter;
         TextView tvCargando;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -51,14 +52,16 @@ namespace SAEEAPP
                 else
                 {
                     tvCargando.Visibility = ViewStates.Gone;
-                    lvProfesores.Adapter = new ProfesoresListAdapter(this, profesores);
+                    profesoresAdapter = new ProfesoresListAdapter(this, profesores);
+                    lvProfesores.Adapter = profesoresAdapter;
                 }
             }
         }
 
         private void AgregarProfesor(object sender, EventArgs e)
         {
-            AgregarProfesorActivity agregarProfesorActivity = new AgregarProfesorActivity(this, lvProfesores, profesores);
+            AgregarEditarProfesorActivity agregarProfesorActivity =
+                new AgregarEditarProfesorActivity(this, profesoresAdapter, profesores);
             agregarProfesorActivity.Show();
         }
     }

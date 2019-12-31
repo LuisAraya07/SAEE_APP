@@ -40,12 +40,6 @@ namespace Xamarin.core.Data
             return await Task.Run(() => JsonConvert.DeserializeObject<List<Estudiantes>>(json));
         }
 
-        public async Task<List<EstudiantesXgrupos>> GetEGAsync(int id)
-        {
-            var json = await client.GetStringAsync($"Grupos/GetEG?id=" + id);
-            return await Task.Run(() => JsonConvert.DeserializeObject<List<EstudiantesXgrupos>>(json));
-        }
-
         //Agregar Grupo
         public async Task<Grupos> PostAsync(Grupos grupo)
         {
@@ -75,20 +69,6 @@ namespace Xamarin.core.Data
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri($"{ValuesServices.url}/Grupos/DeleteGrupos"),
                 Content = new StringContent(serializedGrupo, Encoding.UTF8, "application/json")
-            };
-            var response = await client.SendAsync(request);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<Boolean> DeleteEGAsync(EstudiantesXgrupos EG)
-        {
-            var serializedEG = JsonConvert.SerializeObject(EG);
-            var buffer = Encoding.UTF8.GetBytes(serializedEG);
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri($"{ValuesServices.url}/Grupos/DeleteEG"),
-                Content = new StringContent(serializedEG, Encoding.UTF8, "application/json")
             };
             var response = await client.SendAsync(request);
             return response.IsSuccessStatusCode;
