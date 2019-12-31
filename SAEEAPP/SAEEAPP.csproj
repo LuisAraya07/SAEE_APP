@@ -66,8 +66,10 @@
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
     <Compile Include="AgregarProfesorActivity.cs" />
+    <Compile Include="AgregarEditarProfesorActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
+    <Compile Include="Listeners\ProfesoresListeners.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MenuActivity.cs" />
     <Compile Include="ProfesoresActivity.cs" />

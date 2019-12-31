@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -22,7 +23,7 @@ namespace Xamarin.core.Services
             _profesoresR = new ProfesoresRepositorio();
         }
 
-        public async Task<bool> PostAsync(Profesores profesor)
+        public async Task<HttpResponseMessage> PostAsync(Profesores profesor)
         {
             return await _profesoresR.PostAsync(profesor);
         }
@@ -42,7 +43,7 @@ namespace Xamarin.core.Services
             return await _profesoresR.UpdateProfesorAsync(profesor);
         }
 
-        public async Task<bool> DeleteItemAsync(int id)
+        public async Task<bool> DeleteProfesorAsync(int id)
         {
             return await _profesoresR.DeleteItemAsync(id);
         }
