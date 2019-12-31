@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -9,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using SAEEAPP.Adaptadores;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
@@ -25,7 +27,7 @@ namespace SAEEAPP
         List<Profesores> profesores;
         Profesores profesor;
         EditText etCedula, etNombre, etApellido1, etApellido2, etCorreo, etContrasenia;
-        bool editando;
+        private readonly bool editando;
 
         public AgregarEditarProfesorActivity(Activity context, ProfesoresListAdapter profesoresAdapter, List<Profesores> profesores)
         {
@@ -82,7 +84,7 @@ namespace SAEEAPP
         private async Task AgregarAsync()
         {
             ProfesoresServices servicioProfesores = new ProfesoresServices();
-            bool resultado = await servicioProfesores.PostAsync(new Profesores()
+            Profesores profesorNuevo = new Profesores()
             {
                 Cedula = etCedula.Text,
                 Administrador = false,
@@ -91,15 +93,17 @@ namespace SAEEAPP
                 Nombre = etNombre.Text,
                 PrimerApellido = etApellido1.Text,
                 SegundoApellido = etApellido2.Text
-            });
+            };
+            HttpResponseMessage resultado = await servicioProfesores.PostAsync(profesorNuevo);
 
-            if (resultado)
+            if (resultado.IsSuccessStatusCode)
             {
+                // Se obtiene el elemento insertado
+                string resultadoString = await resultado.Content.ReadAsStringAsync();
+                profesorNuevo = JsonConvert.DeserializeObject<Profesores>(resultadoString);
                 // Se actualiza la lista de profesores
-                profesores = await servicioProfesores.GetAsync();
-                //lvProfesores.Adapter = new ProfesoresListAdapter(context, profesores);
+                profesores.Add(profesorNuevo);
                 profesoresAdapter.ActualizarDatos();
-                //((ProfesoresListAdapter)lvProfesores.Adapter).NotifyDataSetChanged();
 
                 Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                 alertDialogAndroid.Dismiss();
@@ -137,10 +141,7 @@ namespace SAEEAPP
             if (resultado)
             {
                 // Se actualiza la lista de profesores
-                profesores = await servicioProfesores.GetAsync();
-                //lvProfesores.Adapter = new ProfesoresListAdapter(context, profesores);
                 profesoresAdapter.ActualizarDatos();
-                //((ProfesoresListAdapter)lvProfesores.Adapter).NotifyDataSetChanged();
 
                 Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
                 alertDialogAndroid.Dismiss();

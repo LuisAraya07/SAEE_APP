@@ -29,13 +29,13 @@ namespace Xamarin.core.Data
             };
         }
 
-        public async Task<bool> PostAsync(Profesores profesor)
+        public async Task<HttpResponseMessage> PostAsync(Profesores profesor)
         {
             var serializedProfesor = JsonConvert.SerializeObject(profesor);
 
             var response = await client.PostAsync($"Profesores", new StringContent(serializedProfesor, Encoding.UTF8, "application/json"));
 
-            return response.IsSuccessStatusCode;
+            return response;
         }
 
         public async Task<List<Profesores>> GetAsync()
