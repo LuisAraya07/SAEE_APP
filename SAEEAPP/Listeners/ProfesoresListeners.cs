@@ -21,6 +21,7 @@ namespace SAEEAPP.Listeners
         private readonly List<Profesores> _profesores;
         private readonly Profesores _profesor;
         private readonly ProfesoresListAdapter _profesoresAdapter;
+        AlertDialog alertDialogAndroid;
 
         public BorrarPListener(Activity context, List<Profesores> profesores, Profesores profesor,
             ProfesoresListAdapter profesoresAdapter)
@@ -33,16 +34,19 @@ namespace SAEEAPP.Listeners
 
         public void OnClick(View v)
         {
-            new AlertDialog.Builder(_context)
+            alertDialogAndroid = new AlertDialog.Builder(_context)
               .SetIcon(Resource.Drawable.trash_can_outline)
               .SetTitle("Eliminando profesor")
               .SetMessage($"¿Realmente desea borrar al profesor \"{_profesor.Nombre} {_profesor.PrimerApellido} {_profesor.SegundoApellido}\" y toda su información relacionada?")
               .SetPositiveButton("Borrar", Borrar)
-              .SetNegativeButton("Cancelar", delegate
-              {
-                  Dispose();
-              })
-              .Show();
+              .SetNegativeButton("Cancelar", Cancelar)
+              .Create();
+            alertDialogAndroid.Show();
+        }
+
+        private void Cancelar(object sender, DialogClickEventArgs e)
+        {
+            alertDialogAndroid.Dismiss();
         }
 
         private void Borrar(object sender, DialogClickEventArgs e)
