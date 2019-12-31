@@ -15,20 +15,44 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    public class AgregarProfesorActivity
+    public class AgregarEditarProfesorActivity
     {
 
         AlertDialog.Builder alertDialogBuilder;
         AlertDialog alertDialogAndroid;
         Activity context;
-        ListView lvProfesores;
+        ProfesoresListAdapter profesoresAdapter;
         List<Profesores> profesores;
+        Profesores profesor;
         EditText etCedula, etNombre, etApellido1, etApellido2, etCorreo, etContrasenia;
+        bool editando;
 
-        public AgregarProfesorActivity(Activity context, ListView lvProfesores, List<Profesores> profesores)
+        public AgregarEditarProfesorActivity(Activity context, ProfesoresListAdapter profesoresAdapter, List<Profesores> profesores)
+        {
+            InicializarValores(context, profesoresAdapter, profesores, "Agregando profesor", "Agregar");
+            editando = false;
+            profesor = null;
+        }
+
+        public AgregarEditarProfesorActivity(Activity context, ProfesoresListAdapter profesoresAdapter,
+            List<Profesores> profesores, Profesores profesor)
+        {
+            InicializarValores(context, profesoresAdapter, profesores, "Editando profesor", "Guardar");
+            editando = true;
+            etCedula.Text = profesor.Cedula;
+            etNombre.Text = profesor.Nombre;
+            etApellido1.Text = profesor.PrimerApellido;
+            etApellido2.Text = profesor.SegundoApellido;
+            etCorreo.Text = profesor.Correo;
+            etContrasenia.Text = profesor.Contrasenia;
+            this.profesor = profesor;
+        }
+
+        private void InicializarValores(Activity context, ProfesoresListAdapter profesoresAdapter,
+            List<Profesores> profesores, string titulo, string textoBotonConfirmacion)
         {
             this.context = context;
-            this.lvProfesores = lvProfesores;
+            this.profesoresAdapter = profesoresAdapter;
             this.profesores = profesores;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Profesor, null);
@@ -41,9 +65,9 @@ namespace SAEEAPP
             etContrasenia = VistaAgregar.FindViewById<EditText>(Resource.Id.etContrasenia);
             alertDialogBuilder = new AlertDialog.Builder(context)
             .SetView(VistaAgregar)
-            .SetPositiveButton("Agregar", (EventHandler<DialogClickEventArgs>)null)
+            .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
-            .SetTitle("Agregando profesor");
+            .SetTitle(titulo);
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
@@ -73,7 +97,9 @@ namespace SAEEAPP
             {
                 // Se actualiza la lista de profesores
                 profesores = await servicioProfesores.GetAsync();
-                lvProfesores.Adapter = new ProfesoresListAdapter(context, profesores);
+                //lvProfesores.Adapter = new ProfesoresListAdapter(context, profesores);
+                profesoresAdapter.ActualizarDatos();
+                //((ProfesoresListAdapter)lvProfesores.Adapter).NotifyDataSetChanged();
 
                 Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                 alertDialogAndroid.Dismiss();
@@ -87,6 +113,42 @@ namespace SAEEAPP
         private void Cancelar(object sender, EventArgs e)
         {
             alertDialogAndroid.Dismiss();
+        }
+
+        private void Editar(object sender, EventArgs e)
+        {
+            if (EntradaValida())
+            {
+                EditarAsync();
+            }
+        }
+
+        private async Task EditarAsync()
+        {
+            ProfesoresServices servicioProfesores = new ProfesoresServices();
+            profesor.Cedula = etCedula.Text;
+            profesor.Nombre = etNombre.Text;
+            profesor.PrimerApellido = etApellido1.Text;
+            profesor.SegundoApellido = etApellido2.Text;
+            profesor.Correo = etCorreo.Text;
+            profesor.Contrasenia = etContrasenia.Text;
+            bool resultado = await servicioProfesores.UpdateProfesorAsync(profesor);
+
+            if (resultado)
+            {
+                // Se actualiza la lista de profesores
+                profesores = await servicioProfesores.GetAsync();
+                //lvProfesores.Adapter = new ProfesoresListAdapter(context, profesores);
+                profesoresAdapter.ActualizarDatos();
+                //((ProfesoresListAdapter)lvProfesores.Adapter).NotifyDataSetChanged();
+
+                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                alertDialogAndroid.Dismiss();
+            }
+            else
+            {
+                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+            }
         }
 
         private bool EntradaValida()
@@ -126,11 +188,18 @@ namespace SAEEAPP
         {
             alertDialogAndroid.Show();
             // Se obtienen los botones para asignarles los métodos nuevos (no cierran el diálogo).
-            Button btAgregar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
+            Button btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
             Button btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
 
             // Se asignan las funciones
-            btAgregar.Click += Agregar;
+            if (editando)
+            {
+                btAgregarEditar.Click += Editar;
+            }
+            else
+            {
+                btAgregarEditar.Click += Agregar;
+            }
             btCancelar.Click += Cancelar;
         }
     }

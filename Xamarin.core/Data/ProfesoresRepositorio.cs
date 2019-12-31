@@ -53,10 +53,7 @@ namespace Xamarin.core.Data
         public async Task<bool> UpdateProfesorAsync(Profesores profesor)
         {
             var serializedProfesor = JsonConvert.SerializeObject(profesor);
-            var buffer = Encoding.UTF8.GetBytes(serializedProfesor);
-            var byteContent = new ByteArrayContent(buffer);
-
-            var response = await client.PutAsync(new Uri($"Profesores/{profesor.Id}"), byteContent);
+            var response = await client.PutAsync($"Profesores/{profesor.Id}", new StringContent(serializedProfesor, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
         }
