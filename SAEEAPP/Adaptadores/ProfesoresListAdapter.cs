@@ -58,7 +58,6 @@ namespace SAEEAPP.Adaptadores
 
             return convertView;
         }
-
         public void ActualizarDatos()
         {
             NotifyDataSetChanged();

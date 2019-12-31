@@ -65,7 +65,6 @@
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
-    <Compile Include="AgregarProfesorActivity.cs" />
     <Compile Include="AgregarEditarProfesorActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
