@@ -14,15 +14,17 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP.Adaptadores
 {
-    public class ListEstudiantesAdaptador : BaseAdapter<Estudiantes>
+    class ListEGAdaptador : BaseAdapter<Estudiantes>
     {
         private readonly Activity _context;
         private readonly List<Estudiantes> _estudiantes;
-
-        public ListEstudiantesAdaptador(Activity context, List<Estudiantes> estudiantes)
+        public List<EstudiantesXgrupos> _EG;
+        public ListEGAdaptador(Activity context, List<Estudiantes> estudiantes,List<EstudiantesXgrupos> EG)
         {
             _context = context;
             _estudiantes = estudiantes;
+            _EG = EG;
+          
         }
 
         public override Estudiantes this[int position] => _estudiantes[position];
@@ -40,40 +42,47 @@ namespace SAEEAPP.Adaptadores
 
             if (convertView == null)
             {
-                convertView = _context.LayoutInflater.Inflate(Resource.Layout.EstudiantesListRow, null);
+                convertView = _context.LayoutInflater.Inflate(Resource.Layout.EGListRow, null);
 
-                Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarE);
-                btBorrar.SetTag(Resource.Id.btBorrarE, position);
+                Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarEG);
+                btBorrar.SetTag(Resource.Id.btBorrarEG, position);
                 //btBorrar.Click -= OnClick_Borrar;
                 btBorrar.Click += OnClick_Borrar;
-
-
-                Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditarE);
-                btEditar.SetTag(Resource.Id.btEditarE, position);
-                btEditar.Click += OnClick_Editar;
             }
             convertView.
-                FindViewById<TextView>(Resource.Id.textViewNombreE).
+                FindViewById<TextView>(Resource.Id.textViewNombreEG).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
-            convertView.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
+            convertView.FindViewById<TextView>(Resource.Id.textViewCedEG).Text = estudiante.Cedula;
             return convertView;
         }
+
         public void OnClick_Borrar(object sender, EventArgs e)
         {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarE);
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarEG);
             var estudiante = _estudiantes.ElementAt(i);
             Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
             alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
               .SetCancelable(false)
               .SetTitle("¿Está seguro?")
-              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
+              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}"+" de este grupo")
               .SetPositiveButton("Sí", async delegate
               {
-                  EstudiantesServices gruposServices = new EstudiantesServices();
-                  await gruposServices.DeleteEstudiantesAsync(estudiante);
-                  Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                  _estudiantes.RemoveAt(i);
-                  NotifyDataSetChanged();
+                  //ELIMINAR AQUI 
+                  GruposServices gruposServices = new GruposServices();
+                  var _EGEliminar = _EG.Where(x => x.IdEstudiante == estudiante.Id).FirstOrDefault();
+                  var eliminado = await gruposServices.DeleteEGAsync(_EGEliminar);
+                  if (eliminado)
+                  {
+                      Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                      _estudiantes.RemoveAt(i);
+                      _EG.Remove(_EGEliminar);
+                      NotifyDataSetChanged();
+                  }
+                  else
+                  {
+                      Toast.MakeText(_context, "No se ha podido eliminar.", ToastLength.Long).Show();
+                  }
+                  
               })
               .SetNegativeButton("No", delegate
               {
@@ -82,10 +91,7 @@ namespace SAEEAPP.Adaptadores
               })
               .Show();
         }
-        public void OnClick_Editar(object sender, EventArgs e)
-        {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btEditarE);
-            var estudiante = _estudiantes.ElementAt(i);
-        }
+
+
     }
 }

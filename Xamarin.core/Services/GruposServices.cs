@@ -47,6 +47,14 @@ namespace Xamarin.core.Services
         {
             return await _gruposR.DeleteGrupoAsync(grupo);
         }
+        public async Task<List<EstudiantesXgrupos>> GetEGAsync(int id)
+        {
+            return await _gruposR.GetEGAsync(id);
+        }
+        public async Task<Boolean> DeleteEGAsync(EstudiantesXgrupos EG)
+        {
+            return await _gruposR.DeleteEGAsync(EG);
+        }
 
     }
 }

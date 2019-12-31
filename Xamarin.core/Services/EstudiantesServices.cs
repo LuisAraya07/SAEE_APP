@@ -35,7 +35,7 @@ namespace Xamarin.core.Services
 
         }
         //Agregar estudiantes
-        public async Task<bool> PostAsync(Estudiantes estudiante)
+        public async Task<Estudiantes> PostAsync(Estudiantes estudiante)
         {
             return await _estudiantesR.PostAsync(estudiante);
         }

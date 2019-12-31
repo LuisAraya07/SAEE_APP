@@ -12,6 +12,7 @@ using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
+using Xamarin.core.Models;
 using Xamarin.core.Services;
 
 namespace SAEEAPP
@@ -19,6 +20,8 @@ namespace SAEEAPP
     [Activity(Label = "Estudiantes", Theme = "@style/AppTheme")]
     public class EstudiantesActivity : AppCompatActivity
     {
+        private List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
+        ListEstudiantesAdaptador adaptadorEstudiantes;
         private FloatingActionButton fab;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -26,6 +29,7 @@ namespace SAEEAPP
 
             SetContentView(Resource.Layout.activity_estudiantes);
             fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
+            fab.Click += AgregarEstudiante;
 
         }
 
@@ -33,21 +37,26 @@ namespace SAEEAPP
         {
             base.OnStart();
             var estudiantesServicio = new EstudiantesServices();
-            var estudiantesListView = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
-            var estudiantes = await estudiantesServicio.GetAsync(1);
+            var lvEstudiantes = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
+            listaEstudiantes = await estudiantesServicio.GetAsync(1);
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
-            
-
-            if (estudiantes.Count == 0)
+            if (listaEstudiantes.Count == 0)
             {
                
                 tvCargando.Text = "No hay datos";
             }
             else
             {
+                adaptadorEstudiantes = new ListEstudiantesAdaptador(this, listaEstudiantes);
                 tvCargando.Visibility = ViewStates.Gone;
-                estudiantesListView.Adapter = new ListEstudiantesAdaptador(this, estudiantes);
+                lvEstudiantes.Adapter = adaptadorEstudiantes;
             }
+        }
+
+        private void AgregarEstudiante(object sender, EventArgs e)
+        {
+            AgregarEstudianteActivity agregarEstudianteActivity = new AgregarEstudianteActivity(this, adaptadorEstudiantes, listaEstudiantes);
+            agregarEstudianteActivity.Show();
         }
     }
 }

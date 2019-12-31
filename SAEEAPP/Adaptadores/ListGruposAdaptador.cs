@@ -89,17 +89,45 @@ namespace SAEEAPP.Adaptadores
         }
         public void OnClick_Editar(object sender, EventArgs e)
         {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
+            int i = (int)((Button)sender).GetTag(Resource.Id.btEditar);
             var grupo = _grupos.ElementAt(i);
-
+            
 
         }
-        public void OnClick_Estudiantes(object sender, EventArgs e)
+
+
+        public async void OnClick_Estudiantes(object sender, EventArgs e)
         {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
+            int i = (int)((Button)sender).GetTag(Resource.Id.btEstudiantes);
             var grupo = _grupos.ElementAt(i);
+            List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
+            List<EstudiantesXgrupos> listaEG = new List<EstudiantesXgrupos>();
+            GruposServices gruposServicios = new GruposServices();
+            //Cada vez vamos a obtener los estudiantes de ese grupo
+            listaEG = await gruposServicios.GetEGAsync(grupo.Id);//grupo.EstudiantesXgrupos.Select(x => x.IdEstudianteNavigation).ToList();
+            listaEstudiantes = listaEG.Select(x=>x.IdEstudianteNavigation).ToList();
+            var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEG);
+            ListEGAdaptador adaptadorEG = new ListEGAdaptador(_context, listaEstudiantes,listaEG);
+            //estudiantesListView.Adapter = adaptadorEG;
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            alertDialogBuilder.SetCancelable(true)
+            .SetTitle("Estudiantes del Grupo")
+            .SetView(estudiantesListView)
+            .SetAdapter(adaptadorEG,(s,e)=>{
+                var index = e.Which;
+                
+            })
+            .SetNegativeButton("Cerrar", delegate {
+                 alertDialogBuilder.Dispose();
 
+             })
+            .SetPositiveButton("Añadir", delegate {
+                Toast.MakeText(_context,"Aqui agregamos",ToastLength.Short).Show();
 
+             });
+            Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
+            alertDialogAndroid.Show();
+            
         }
     }
     
