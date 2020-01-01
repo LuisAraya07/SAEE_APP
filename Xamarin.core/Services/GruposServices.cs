@@ -55,6 +55,10 @@ namespace Xamarin.core.Services
         {
             return await _gruposR.DeleteEGAsync(EG);
         }
+        public async Task<EstudiantesXgrupos> PostEGAsync(EstudiantesXgrupos EG) {
+            return await _gruposR.PostEGAsync(EG);
+        
+        }
 
     }
 }

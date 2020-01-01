@@ -94,6 +94,14 @@ namespace Xamarin.core.Data
             return response.IsSuccessStatusCode;
         }
 
+        public async Task<EstudiantesXgrupos> PostEGAsync(EstudiantesXgrupos EG)
+        {
+            var serializedEG = JsonConvert.SerializeObject(EG);
+            var response = await client.PostAsync($"Grupos/PostEG", new StringContent(serializedEG, Encoding.UTF8, "application/json"));
+            string resString = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<EstudiantesXgrupos>(resString);
+        }
+
 
 
     }

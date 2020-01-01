@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -95,8 +96,24 @@ namespace SAEEAPP.Adaptadores
 
         }
 
+        String[] colors = new String[]{
+                        "Red",
+                        "Green",
+                        "Blue",
+                        "Purple",
+                        "Olive"
+                };
 
-        public async void OnClick_Estudiantes(object sender, EventArgs e)
+        // Boolean array for initial selected items
+         Boolean[] checkedColors = new Boolean[]{
+                        false, // Red
+                        true, // Green
+                        false, // Blue
+                        true, // Purple
+                        false // Olive
+
+                };
+    public async void OnClick_Estudiantes(object sender, EventArgs e)
         {
             int i = (int)((Button)sender).GetTag(Resource.Id.btEstudiantes);
             var grupo = _grupos.ElementAt(i);
@@ -113,21 +130,60 @@ namespace SAEEAPP.Adaptadores
             alertDialogBuilder.SetCancelable(true)
             .SetTitle("Estudiantes del Grupo")
             .SetView(estudiantesListView)
-            .SetAdapter(adaptadorEG,(s,e)=>{
-                var index = e.Which;
-                
+            .SetAdapter(adaptadorEG,(s,e)=> {
+                     var index = e.Which;
+                    
+
             })
             .SetNegativeButton("Cerrar", delegate {
                  alertDialogBuilder.Dispose();
 
              })
-            .SetPositiveButton("Añadir", delegate {
-                Toast.MakeText(_context,"Aqui agregamos",ToastLength.Short).Show();
-
+            .SetPositiveButton("Añadir", async delegate {
+                //Toast.MakeText(_context,"Aqui agregamos",ToastLength.Short).Show();
+                await MostrarLVAgregarAsync(grupo,listaEstudiantes,listaEG);
+               
+                
              });
+
             Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
             alertDialogAndroid.Show();
-            
+
+        }
+        
+
+        public async System.Threading.Tasks.Task MostrarLVAgregarAsync(Grupos grupo,List<Estudiantes> listaAgregados,List<EstudiantesXgrupos>listaEG)
+        {
+            EstudiantesServices estudiantesServicios = new EstudiantesServices();
+            List<Estudiantes> listaTemporal = new List<Estudiantes>();
+            //Se le envia el id del profesor para obtener todos los estudiantes
+            listaTemporal = await estudiantesServicios.GetAsync(grupo.IdProfesor);
+            var listaAgregar = listaTemporal.Where(st=> !(listaAgregados.Select(x=>x.Id).Contains(st.Id))).ToList();
+            var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEGA);
+            ListAgregarEGAdaptador adaptadorEG = new ListAgregarEGAdaptador(_context, listaAgregar, listaAgregados,listaEG,grupo.Id);
+            //estudiantesListView.Adapter = adaptadorEG;
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilderAgregar = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            alertDialogBuilderAgregar.SetCancelable(true)
+            .SetTitle("Estudiantes Para Agregar")
+            //.SetView(estudiantesListView)
+            .SetAdapter(adaptadorEG, (s, e) =>
+            //.SetMultiChoiceItems(colors, checkedColors, (s, e) => 
+            {
+                var index = e.Which;
+            })
+            .SetNegativeButton("Cerrar", delegate
+            {
+                alertDialogBuilderAgregar.Dispose();
+            });
+            //.SetPositiveButton("Añadir", async delegate {
+            //    Toast.MakeText(_context,"Aqui agregamos",ToastLength.Short).Show();
+            //    await MostrarLVAgregarAsync(grupo, listaEstudiantes, listaEG);
+
+            //});
+            Android.Support.V7.App.AlertDialog alertDialogAndroidAgregar = alertDialogBuilderAgregar.Create();
+            alertDialogAndroidAgregar.Show();
+
+
         }
     }
     

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Luis Araya Aragón"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="262.1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft = "true"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewNombreEGA" 
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="16sp"
+        android:layout_marginTop="15.0dp"/>
+    <TextView
+        android:text="702550708"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="182.9dp"
+        android:layout_height="30.1dp"
+        android:layout_marginLeft="15dp"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/textViewCedulaEGA"
+        android:layout_marginBottom="0.0dp"
+        android:textStyle="bold"
+        android:textColor="#ff1a237e"
+        android:textSize="16sp"
+        android:layout_below="@id/textViewNombreEGA"
+        android:layout_marginTop="10dp"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxEGA"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="35dp"
+        android:layout_alignParentTop="true"
+        />
+
+
+
+</RelativeLayout>
