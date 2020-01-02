@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -34,7 +35,7 @@ namespace Xamarin.core.Services
         
         }
         //Agregar grupo
-        public async Task<Grupos> PostAsync(Grupos grupo)
+        public async Task<HttpResponseMessage> PostAsync(Grupos grupo)
         {
             return await _gruposR.PostAsync(grupo);
         }

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
-using Java.Interop;
 using SAEEAPP.Listeners;
+using System.Collections.Generic;
 using Xamarin.core.Models;
 
 namespace SAEEAPP.Adaptadores

@@ -43,22 +43,18 @@ namespace Xamarin.core.Data
 
         }
         //Agregar estudiante
-        public async Task<Estudiantes> PostAsync(Estudiantes estudiante)
+        public async Task<HttpResponseMessage> PostAsync(Estudiantes estudiante)
         {
             var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
-
             var response = await client.PostAsync($"Estudiantes/PostEstudiantes", new StringContent(serializedEstudiante, Encoding.UTF8, "application/json"));
-            string resString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Estudiantes>(resString);
+            return response;
         }
 
         //Modificar estudiante
         public async Task<bool> PutAsync(Estudiantes estudiante)
         {
             var serializedEstudiante = JsonConvert.SerializeObject(estudiante);
-            var buffer = Encoding.UTF8.GetBytes(serializedEstudiante);
-            var byteContent = new ByteArrayContent(buffer);
-            var response = await client.PutAsync($"Estudiantes/PutEstudiantes", byteContent);
+            var response = await client.PutAsync($"Estudiantes/PutEstudiantes", new StringContent(serializedEstudiante, Encoding.UTF8, "application/json"));
             return response.IsSuccessStatusCode;
         }
 

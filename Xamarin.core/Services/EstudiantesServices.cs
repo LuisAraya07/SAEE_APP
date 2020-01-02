@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -35,7 +36,7 @@ namespace Xamarin.core.Services
 
         }
         //Agregar estudiantes
-        public async Task<Estudiantes> PostAsync(Estudiantes estudiante)
+        public async Task<HttpResponseMessage> PostAsync(Estudiantes estudiante)
         {
             return await _estudiantesR.PostAsync(estudiante);
         }

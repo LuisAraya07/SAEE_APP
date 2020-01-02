@@ -47,29 +47,24 @@ namespace Xamarin.core.Data
         }
 
         //Agregar Grupo
-        public async Task<Grupos> PostAsync(Grupos grupo)
+        public async Task<HttpResponseMessage> PostAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
             var response = await client.PostAsync($"Grupos/PostGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
-            string resString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Grupos>(resString);
+            return response;
         }
 
         //Modificar grupo
         public async Task<bool> PutAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
-            var buffer = Encoding.UTF8.GetBytes(serializedGrupo);
-            var byteContent = new ByteArrayContent(buffer);
-            var response = await client.PutAsync($"Grupos/PutGrupos", byteContent);
+            var response = await client.PutAsync($"Grupos/PutGrupos", new StringContent(serializedGrupo, Encoding.UTF8, "application/json"));
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteGrupoAsync(Grupos grupo)
         {
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
-            var buffer = Encoding.UTF8.GetBytes(serializedGrupo);
-            var byteContent = new ByteArrayContent(buffer);
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
@@ -83,7 +78,6 @@ namespace Xamarin.core.Data
         public async Task<Boolean> DeleteEGAsync(EstudiantesXgrupos EG)
         {
             var serializedEG = JsonConvert.SerializeObject(EG);
-            var buffer = Encoding.UTF8.GetBytes(serializedEG);
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,

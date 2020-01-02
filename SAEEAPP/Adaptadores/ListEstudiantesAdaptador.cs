@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -37,26 +32,24 @@ namespace SAEEAPP.Adaptadores
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             Estudiantes estudiante = this[position];
-
-            if (convertView == null)
+            View view = convertView;
+            if (view == null)
             {
-                convertView = _context.LayoutInflater.Inflate(Resource.Layout.EstudiantesListRow, null);
-
-                Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarE);
-                btBorrar.SetTag(Resource.Id.btBorrarE, position);
-                //btBorrar.Click -= OnClick_Borrar;
-                btBorrar.Click += OnClick_Borrar;
-
-
-                Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditarE);
-                btEditar.SetTag(Resource.Id.btEditarE, position);
-                btEditar.Click += OnClick_Editar;
+                view = _context.LayoutInflater.Inflate(Resource.Layout.EstudiantesListRow, null);
             }
-            convertView.
+            Button btBorrar = view.FindViewById<Button>(Resource.Id.btBorrarE);
+            btBorrar.SetTag(Resource.Id.btBorrarE, position);
+            btBorrar.Click -= OnClick_Borrar;
+            btBorrar.Click += OnClick_Borrar;
+            Button btEditar = view.FindViewById<Button>(Resource.Id.btEditarE);
+            btEditar.SetTag(Resource.Id.btEditarE, position);
+            btEditar.Click -= OnClick_Editar;
+            btEditar.Click += OnClick_Editar;
+            view.
                 FindViewById<TextView>(Resource.Id.textViewNombreE).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
-            convertView.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
-            return convertView;
+            view.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
+            return view;
         }
         public void OnClick_Borrar(object sender, EventArgs e)
         {
@@ -86,6 +79,14 @@ namespace SAEEAPP.Adaptadores
         {
             int i = (int)((Button)sender).GetTag(Resource.Id.btEditarE);
             var estudiante = _estudiantes.ElementAt(i);
+            AgregarEstudianteActivity agregarEditarEstudianteActivity =
+                new AgregarEstudianteActivity(_context, this, _estudiantes, estudiante);
+            agregarEditarEstudianteActivity.Show();
+        }
+
+        public void ActualizarDatos()
+        {
+            NotifyDataSetChanged();
         }
     }
 }

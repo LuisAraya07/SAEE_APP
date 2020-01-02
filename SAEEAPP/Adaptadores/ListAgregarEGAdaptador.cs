@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -19,14 +14,12 @@ namespace SAEEAPP.Adaptadores
 
         private readonly Activity _context;
         private readonly List<Estudiantes> _listaAgregar;
-        private readonly List<Estudiantes> _listaAgregados;
         public List<EstudiantesXgrupos> _EG;
         private readonly int _idGrupo;
-        public ListAgregarEGAdaptador(Activity context, List<Estudiantes> listaAgregar,List<Estudiantes>listaAgregados, List<EstudiantesXgrupos> EG,int idGrupo)
+        public ListAgregarEGAdaptador(Activity context, List<Estudiantes> listaAgregar, List<EstudiantesXgrupos> EG, int idGrupo)
         {
             _context = context;
             _listaAgregar = listaAgregar;
-            _listaAgregados = listaAgregados;
             _EG = EG;
             _idGrupo = idGrupo;
 
@@ -49,11 +42,11 @@ namespace SAEEAPP.Adaptadores
             {
                 convertView = _context.LayoutInflater.Inflate(Resource.Layout.AgregarEGListRow, null);
 
-                CheckBox CBAgregar = convertView.FindViewById<CheckBox>(Resource.Id.checkBoxEGA);
-                CBAgregar.SetTag(Resource.Id.checkBoxEGA, position);
-                //btBorrar.Click -= OnClick_Borrar;
-               CBAgregar.Click += OnClick_AgregarAsync;
             }
+            CheckBox CBAgregar = convertView.FindViewById<CheckBox>(Resource.Id.checkBoxEGA);
+            CBAgregar.SetTag(Resource.Id.checkBoxEGA, position);
+            CBAgregar.Click -= OnClick_AgregarAsync;
+            CBAgregar.Click += OnClick_AgregarAsync;
             convertView.
                 FindViewById<TextView>(Resource.Id.textViewNombreEGA).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
@@ -91,7 +84,8 @@ namespace SAEEAPP.Adaptadores
                 Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
             }
         }
-        public async void AgregarEstudiante(Estudiantes estudiante) {
+        public async void AgregarEstudiante(Estudiantes estudiante)
+        {
             EstudiantesXgrupos EGAgregar = new EstudiantesXgrupos()
             {
                 IdEstudiante = estudiante.Id,
@@ -104,7 +98,6 @@ namespace SAEEAPP.Adaptadores
             if (EGNuevo == null)
             {
                 Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
-
             }
             else
             {
@@ -116,5 +109,5 @@ namespace SAEEAPP.Adaptadores
 
     }
 
-    
+
 }

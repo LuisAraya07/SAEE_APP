@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
+using System;
+using System.Collections.Generic;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -29,6 +24,7 @@ namespace SAEEAPP
 
             SetContentView(Resource.Layout.activity_estudiantes);
             fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
+            fab.Visibility = ViewStates.Invisible;
             fab.Click += AgregarEstudiante;
 
         }
@@ -42,7 +38,7 @@ namespace SAEEAPP
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
             if (listaEstudiantes.Count == 0)
             {
-               
+
                 tvCargando.Text = "No hay datos";
             }
             else
@@ -51,6 +47,7 @@ namespace SAEEAPP
                 tvCargando.Visibility = ViewStates.Gone;
                 lvEstudiantes.Adapter = adaptadorEstudiantes;
             }
+            fab.Visibility = ViewStates.Visible;
         }
 
         private void AgregarEstudiante(object sender, EventArgs e)

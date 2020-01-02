@@ -1,58 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using SAEEAPP.Adaptadores;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    public class AgregarEstudianteActivity 
+    public class AgregarEstudianteActivity
     {
         AlertDialog.Builder alertDialogBuilder;
         AlertDialog alertDialogAndroid;
         ListEstudiantesAdaptador adaptadorEstudiantes;
-        List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
+        List<Estudiantes> listaEstudiantes;
+        Estudiantes _estudiante;
         Activity context;
         EditText etCedula, etNombre, etApellido1, etApellido2, etContrasenia;
-
-        public AgregarEstudianteActivity(Activity context, ListEstudiantesAdaptador adaptadorEstudiantes,List<Estudiantes> listaEstudiantes)
+        private readonly bool editando;
+        public AgregarEstudianteActivity(Activity context, ListEstudiantesAdaptador adaptadorEstudiantes, List<Estudiantes> listaEstudiantes)
         {
-            this.context = context;
-            this.adaptadorEstudiantes = adaptadorEstudiantes;
-            this.listaEstudiantes = listaEstudiantes;
-            LayoutInflater layoutInflater = LayoutInflater.From(context);
-            View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Estudiante, null);
-
-            etCedula = VistaAgregar.FindViewById<EditText>(Resource.Id.etCedulaE);
-            etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombreE);
-            etApellido1 = VistaAgregar.FindViewById<EditText>(Resource.Id.etPrimerApellidoE);
-            etApellido2 = VistaAgregar.FindViewById<EditText>(Resource.Id.etSegundoApellidoE);
-            etContrasenia = VistaAgregar.FindViewById<EditText>(Resource.Id.etContraseniaE);
-            alertDialogBuilder = new AlertDialog.Builder(context)
-            .SetView(VistaAgregar)
-            .SetPositiveButton("Agregar", (EventHandler<DialogClickEventArgs>)null)
-            .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
-            .SetTitle("Agregando Estudiante");
-            alertDialogAndroid = alertDialogBuilder.Create();
+            InicializarValores(context, adaptadorEstudiantes, listaEstudiantes, "Agregando estudiante", "Agregar");
+            editando = false;
+            _estudiante = null;
         }
-
-        private void Agregar(object sender, EventArgs e)
+        public AgregarEstudianteActivity(Activity context, ListEstudiantesAdaptador adaptadorEstudiantes,
+            List<Estudiantes> listaEstudiantes, Estudiantes estudiante)
+        {
+            InicializarValores(context, adaptadorEstudiantes, listaEstudiantes, "Editando estudiante", "Guardar");
+            editando = true;
+            etCedula.Text = estudiante.Cedula;
+            etNombre.Text = estudiante.Nombre;
+            etApellido1.Text = estudiante.PrimerApellido;
+            etApellido2.Text = estudiante.SegundoApellido;
+            etContrasenia.Text = estudiante.Pin;
+            _estudiante = estudiante;
+        }
+        private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-                if (etContrasenia.Text.Equals("") || etContrasenia.Text.StartsWith(" ")) {
+                if (etContrasenia.Text.Equals("") || etContrasenia.Text.StartsWith(" "))
+                {
                     etContrasenia.Text = GenerarContrasenia();
                 }
-                AgregarAsync();
+                await AgregarAsync();
             }
         }
         public string GenerarContrasenia()
@@ -70,11 +67,32 @@ namespace SAEEAPP
             }
             return contraseniaAleatoria;
         }
+        private void InicializarValores(Activity context, ListEstudiantesAdaptador estudiantesAdapter,
+            List<Estudiantes> estudiantes, string titulo, string textoBotonConfirmacion)
+        {
+            this.context = context;
+            this.adaptadorEstudiantes = estudiantesAdapter;
+            this.listaEstudiantes = estudiantes;
+            LayoutInflater layoutInflater = LayoutInflater.From(context);
+            View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Estudiante, null);
+            etCedula = VistaAgregar.FindViewById<EditText>(Resource.Id.etCedulaE);
+            etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombreE);
+            etApellido1 = VistaAgregar.FindViewById<EditText>(Resource.Id.etPrimerApellidoE);
+            etApellido2 = VistaAgregar.FindViewById<EditText>(Resource.Id.etSegundoApellidoE);
+            etContrasenia = VistaAgregar.FindViewById<EditText>(Resource.Id.etContraseniaE);
+            alertDialogBuilder = new AlertDialog.Builder(context)
+            .SetView(VistaAgregar)
+            .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
+            .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
+            .SetTitle(titulo);
+            alertDialogAndroid = alertDialogBuilder.Create();
+        }
+
+
         private async Task AgregarAsync()
         {
             EstudiantesServices servicioEstudiantes = new EstudiantesServices();
-
-            var resultado = await servicioEstudiantes.PostAsync(new Estudiantes()
+            Estudiantes estudiante = new Estudiantes()
             {
                 //Obtengo el id del profesor
                 IdProfesor = 1,
@@ -83,26 +101,57 @@ namespace SAEEAPP
                 Nombre = etNombre.Text,
                 PrimerApellido = etApellido1.Text,
                 SegundoApellido = etApellido2.Text
-            });
-            if (resultado == null)
+            };
+            HttpResponseMessage resultado = await servicioEstudiantes.PostAsync(estudiante);
+            if (resultado.IsSuccessStatusCode)
             {
-                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
-            }
-            else
-            {
-                listaEstudiantes.Add(resultado);
+                string resultadoString = await resultado.Content.ReadAsStringAsync();
+                var estudianteNuevo = JsonConvert.DeserializeObject<Estudiantes>(resultadoString);
+                listaEstudiantes.Add(estudianteNuevo);
                 adaptadorEstudiantes.NotifyDataSetChanged();
                 alertDialogBuilder.Dispose();
                 Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                 alertDialogAndroid.Dismiss();
             }
+            else
+            {
+                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+            }
         }
-
+        private void Editar(object sender, EventArgs e)
+        {
+            if (EntradaValida())
+            {
+                EditarAsync();
+            }
+        }
         private void Cancelar(object sender, EventArgs e)
         {
             alertDialogAndroid.Dismiss();
         }
+        private async Task EditarAsync()
+        {
+            EstudiantesServices servicioEstudiantes = new EstudiantesServices();
+            _estudiante.Cedula = etCedula.Text;
+            _estudiante.Nombre = etNombre.Text;
+            _estudiante.PrimerApellido = etApellido1.Text;
+            _estudiante.SegundoApellido = etApellido2.Text;
+            _estudiante.Pin = etContrasenia.Text;
+            bool resultado = await servicioEstudiantes.PutAsync(_estudiante);
 
+            if (resultado)
+            {
+                // Se actualiza la lista de profesores
+                adaptadorEstudiantes.ActualizarDatos();
+
+                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                alertDialogAndroid.Dismiss();
+            }
+            else
+            {
+                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+            }
+        }
         private bool EntradaValida()
         {
             if (etCedula.Text.Equals("") || etCedula.Text.StartsWith(" "))
@@ -135,11 +184,18 @@ namespace SAEEAPP
         {
             alertDialogAndroid.Show();
             // Se obtienen los botones para asignarles los métodos nuevos (no cierran el diálogo).
-            Button btAgregar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
+            Button btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
             Button btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
 
             // Se asignan las funciones
-            btAgregar.Click += Agregar;
+            if (editando)
+            {
+                btAgregarEditar.Click += Editar;
+            }
+            else
+            {
+                btAgregarEditar.Click += Agregar;
+            }
             btCancelar.Click += Cancelar;
         }
     }

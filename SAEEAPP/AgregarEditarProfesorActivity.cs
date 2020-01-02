@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
 using SAEEAPP.Adaptadores;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -25,7 +21,7 @@ namespace SAEEAPP
         Activity context;
         ProfesoresListAdapter profesoresAdapter;
         List<Profesores> profesores;
-        Profesores profesor;
+        readonly Profesores profesor;
         EditText etCedula, etNombre, etApellido1, etApellido2, etCorreo, etContrasenia;
         private readonly bool editando;
 
@@ -58,7 +54,6 @@ namespace SAEEAPP
             this.profesores = profesores;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Profesor, null);
-
             etCedula = VistaAgregar.FindViewById<EditText>(Resource.Id.etCedula);
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
             etApellido1 = VistaAgregar.FindViewById<EditText>(Resource.Id.etPrimerApellido);
@@ -154,7 +149,7 @@ namespace SAEEAPP
 
         private bool EntradaValida()
         {
-            if(etCedula.Text.Equals("") || etCedula.Text.StartsWith(" "))
+            if (etCedula.Text.Equals("") || etCedula.Text.StartsWith(" "))
             {
                 Toast.MakeText(context, "Ingrese la cédula", ToastLength.Long).Show();
                 return false;

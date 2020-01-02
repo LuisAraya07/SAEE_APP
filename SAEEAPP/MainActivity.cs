@@ -1,10 +1,9 @@
 ﻿using Android.App;
-using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
-using Android.Widget;
-using Android.Views;
 using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Support.V7.App;
+using Android.Widget;
 using System;
 
 namespace SAEEAPP
@@ -33,7 +32,7 @@ namespace SAEEAPP
         public void OnClick_Ingresar(object sender, EventArgs e)
         {
             etCuenta = FindViewById<EditText>(Resource.Id.txtCuenta);
-            etContrasenia = FindViewById<EditText>(Resource.Id.txtContrasenia);
+            etContrasenia = FindViewById<EditText>(Resource.Id.etContraseniaLogin);
             string cuenta = etCuenta.Text.ToString();
             string contrasenia = etContrasenia.Text.ToString();
             Intent siguiente = new Intent(this, typeof(MenuActivity));

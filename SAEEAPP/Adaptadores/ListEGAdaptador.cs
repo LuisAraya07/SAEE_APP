@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -19,12 +14,12 @@ namespace SAEEAPP.Adaptadores
         private readonly Activity _context;
         private readonly List<Estudiantes> _estudiantes;
         public List<EstudiantesXgrupos> _EG;
-        public ListEGAdaptador(Activity context, List<Estudiantes> estudiantes,List<EstudiantesXgrupos> EG)
+        public ListEGAdaptador(Activity context, List<Estudiantes> estudiantes, List<EstudiantesXgrupos> EG)
         {
             _context = context;
             _estudiantes = estudiantes;
             _EG = EG;
-          
+
         }
 
         public override Estudiantes this[int position] => _estudiantes[position];
@@ -44,11 +39,12 @@ namespace SAEEAPP.Adaptadores
             {
                 convertView = _context.LayoutInflater.Inflate(Resource.Layout.EGListRow, null);
 
-                Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarEG);
-                btBorrar.SetTag(Resource.Id.btBorrarEG, position);
-                //btBorrar.Click -= OnClick_Borrar;
-                btBorrar.Click += OnClick_Borrar;
             }
+
+            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrarEG);
+            btBorrar.SetTag(Resource.Id.btBorrarEG, position);
+            btBorrar.Click -= OnClick_Borrar;
+            btBorrar.Click += OnClick_Borrar;
             convertView.
                 FindViewById<TextView>(Resource.Id.textViewNombreEG).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
@@ -64,7 +60,7 @@ namespace SAEEAPP.Adaptadores
             alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
               .SetCancelable(false)
               .SetTitle("¿Está seguro?")
-              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}"+" de este grupo")
+              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}" + " de este grupo")
               .SetPositiveButton("Sí", async delegate
               {
                   //ELIMINAR AQUI 
@@ -82,7 +78,7 @@ namespace SAEEAPP.Adaptadores
                   {
                       Toast.MakeText(_context, "No se ha podido eliminar.", ToastLength.Long).Show();
                   }
-                  
+
               })
               .SetNegativeButton("No", delegate
               {
