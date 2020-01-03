@@ -29,7 +29,7 @@ namespace SAEEAPP.Listeners
 
         public void OnClick(View v)
         {
-            alertDialogAndroid = new AlertDialog.Builder(_context)
+            alertDialogAndroid = new AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle)
               .SetIcon(Resource.Drawable.trash_can_outline)
               .SetTitle("Eliminando profesor")
               .SetMessage($"¿Realmente desea borrar al profesor \"{_profesor.Nombre} {_profesor.PrimerApellido} {_profesor.SegundoApellido}\" y toda su información relacionada?")

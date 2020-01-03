@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:textColor="#FFF"
             android:id="@+id/tvCedula" />
         <EditText
             android:inputType="textPersonName"
@@ -24,6 +25,8 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
             android:id="@+id/etCedulaE" />
         <TextView
             android:text="Nombre"
@@ -31,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:textColor="#FFF"
             android:id="@+id/tvNombre" />
         <EditText
             android:inputType="textPersonName"
@@ -39,6 +43,8 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
             android:id="@+id/etNombreE" />
         <TextView
             android:text="Primer apellido"
@@ -46,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:textColor="#FFF"
             android:id="@+id/tvPrimerApellido" />
         <EditText
             android:inputType="textPersonName"
@@ -54,13 +61,17 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
-            android:id="@+id/etPrimerApellidoE" />
+            android:id="@+id/etPrimerApellidoE"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+        />
         <TextView
             android:text="Segundo apellido"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:textColor="#FFF"
             android:id="@+id/tvSegundoApellido" />
         <EditText
             android:inputType="textPersonName"
@@ -69,19 +80,24 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
-            android:id="@+id/etSegundoApellidoE" />
+            android:id="@+id/etSegundoApellidoE" 
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            />
         <TextView
             android:text="Contraseña"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
+            android:textColor="#FFF"
             android:id="@+id/tvContrasenia" />
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorPrimaryDark">
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/etContraseniaE"
                 android:layout_width="match_parent"
@@ -90,7 +106,9 @@
                 android:layout_marginRight="25dp"
                 android:layout_marginBottom="10dp"
                 android:singleLine="true"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

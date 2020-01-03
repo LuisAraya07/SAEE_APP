@@ -69,7 +69,7 @@ namespace SAEEAPP.Adaptadores
         {
             int i = (int)((Button)sender).GetTag(Resource.Id.btBorrar);
             var grupo = _grupos.ElementAt(i);
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
             alertDialogBuilder.SetCancelable(false)
             .SetIcon(Resource.Drawable.trash_can_outline)
                .SetTitle("¿Está seguro?")
@@ -95,7 +95,7 @@ namespace SAEEAPP.Adaptadores
             //Toast.MakeText(this,"Dialogo agregar",ToastLength.Long).Show();
             LayoutInflater layoutInflater = LayoutInflater.From(_context);
             View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos, null);
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context,Resource.Style.AlertDialogStyle);
             alertDialogBuilder.SetView(mView);
             mView.FindViewById<EditText>(Resource.Id.etGrupo).Text = grupo.Grupo;
             alertDialogBuilder.SetTitle("Editando Grupo");
@@ -159,7 +159,7 @@ namespace SAEEAPP.Adaptadores
             var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEG);
             ListEGAdaptador adaptadorEG = new ListEGAdaptador(_context, listaEstudiantes, listaEG);
             //estudiantesListView.Adapter = adaptadorEG;
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
             alertDialogBuilder.SetCancelable(true)
             .SetTitle("Estudiantes del Grupo")
             .SetView(estudiantesListView)
@@ -196,7 +196,7 @@ namespace SAEEAPP.Adaptadores
             var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEGA);
             ListAgregarEGAdaptador adaptadorEG = new ListAgregarEGAdaptador(_context, listaAgregar, listaEG, grupo.Id);
             //estudiantesListView.Adapter = adaptadorEG;
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilderAgregar = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilderAgregar = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
             alertDialogBuilderAgregar.SetCancelable(true)
             .SetTitle("Estudiantes Para Agregar")
             //.SetView(estudiantesListView)

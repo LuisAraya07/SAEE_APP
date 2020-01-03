@@ -60,7 +60,7 @@ namespace SAEEAPP
             etApellido2 = VistaAgregar.FindViewById<EditText>(Resource.Id.etSegundoApellido);
             etCorreo = VistaAgregar.FindViewById<EditText>(Resource.Id.etCorreo);
             etContrasenia = VistaAgregar.FindViewById<EditText>(Resource.Id.etContrasenia);
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)

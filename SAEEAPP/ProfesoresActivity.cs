@@ -1,10 +1,13 @@
 ﻿using Android.App;
 using Android.OS;
+using Android.Runtime;
 using Android.Support.Design.Widget;
+using Android.Support.V4.View;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
+using SAEEAPP.JavaHolder;
 using System;
 using System.Collections.Generic;
 using Xamarin.core.Models;
@@ -12,13 +15,14 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Profesores", Theme = "@style/AppTheme")]
+    [Activity(Label = "Administración de profesores", Theme = "@style/AppTheme")]
     public class ProfesoresActivity : AppCompatActivity
     {
         List<Profesores> profesores = null;
         ListView lvProfesores;
         ProfesoresListAdapter profesoresAdapter;
         TextView tvCargando;
+        private Android.Support.V7.Widget.SearchView _searchView;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -59,5 +63,27 @@ namespace SAEEAPP
                 new AgregarEditarProfesorActivity(this, profesoresAdapter, profesores);
             agregarProfesorActivity.Show();
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main, menu);
+
+            var item = menu.FindItem(Resource.Id.searchView1);
+
+            var searchView = MenuItemCompat.GetActionView(item);
+            _searchView = searchView.JavaCast<Android.Support.V7.Widget.SearchView>();
+
+            _searchView.QueryTextChange += (s, e) => profesoresAdapter.Filter.InvokeFilter(e.NewText);
+
+            _searchView.QueryTextSubmit += (s, e) =>
+            {
+                Toast.MakeText(this, "Buscando: " + e.NewText, ToastLength.Short).Show();
+                e.Handled = true;
+            };
+
+            MenuItemCompat.SetOnActionExpandListener(item, new SearchViewExpandListener(profesoresAdapter));
+            return true;
+        }
+
     }
 }

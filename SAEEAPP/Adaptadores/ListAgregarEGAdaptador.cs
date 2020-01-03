@@ -76,6 +76,7 @@ namespace SAEEAPP.Adaptadores
             var EGBorrado = await gruposServices.DeleteEGAsync(eg);
             if (EGBorrado)
             {
+                Toast.MakeText(_context, "Eliminado.", ToastLength.Short).Show();
                 _EG.Remove(eg);
 
             }
@@ -101,6 +102,7 @@ namespace SAEEAPP.Adaptadores
             }
             else
             {
+                Toast.MakeText(_context, "Agregado.", ToastLength.Short).Show();
                 _EG.Add(EGNuevo);
             }
 

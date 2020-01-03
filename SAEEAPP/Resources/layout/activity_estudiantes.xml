@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
     <ListView
         android:id="@+id/listViewEstudiantes"
         android:layout_width="match_parent"
@@ -12,15 +14,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="54.5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:cacheColorHint="#4A97D3"
-        android:divider="@color/colorAccent"
+        android:divider="@color/colorPrimaryDark"
+        android:background="@color/fondo"
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:layout_marginBottom="78.1dp"
+        android:layout_marginBottom="74dp"
         />
     <TextView
         android:text="Cargando..."
@@ -28,20 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="40.8dp"
         android:id="@+id/tvCargandoE"
+        android:textColor="#FFF"
         android:layout_marginLeft="20.1dp"
         android:textSize="24sp"
-        android:layout_marginTop="4.5dp"
+        android:layout_marginTop="25dp"
         android:layout_marginBottom="0.0dp"
-        android:layout_below="@id/txtSeccionEstudiantes" />
-    <TextView
-        android:id="@+id/txtSeccionEstudiantes"
-        android:layout_width="378.3dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/seccionEstudiantes"
-        android:textSize="24sp"/>
+        />
+    
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabEstudiante"
         android:layout_width="wrap_content"
@@ -52,7 +48,7 @@
         app:srcCompat="@drawable/account_plus"
         android:layout_marginLeft="337.9dp"
         android:layout_marginRight="18.3dp"
-        app:backgroundTint="@color/design_default_color_primary_dark"
+        app:backgroundTint="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="8.4dp" 
