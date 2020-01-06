@@ -1,86 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo">
-   
-    <LinearLayout
-        android:layout_width="381dp"
-        android:layout_height="567.2dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="60dp"
+    <ImageView
+        android:src="@mipmap/ic_launcher_foreground"
+        android:layout_width="359.5dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView1"
         android:background="@color/fondo"
-        android:orientation="vertical"
-        android:layout_marginBottom="0.0dp">
-        <ImageView
-            android:src="@mipmap/ic_launcher_foreground"
-            android:layout_width="359.5dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView1"
-            android:background="@color/fondo"
-            android:layout_marginRight="0.0dp"
-            android:layout_marginLeft="13.7dp" />
-        
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutPasswordLoginCuenta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="0.0dp"
-            android:textColorHint="#FFF"
-            android:layout_marginLeft="0.0dp"
-            app:passwordToggleTint="@color/colorPrimaryDark">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txtCuenta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp"
-                android:singleLine="true"
-                android:ems="10"
-                android:hint="@string/cuenta"
-                android:inputType="textPassword"
-                android:textColor="#FFF"
-                android:backgroundTint="#FFF"
-                android:textColorHint="#FFF"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutPasswordLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            android:layout_marginRight="0.0dp"
-            android:textColorHint="#FFF"
-            android:layout_marginLeft="0.0dp"
-            app:passwordToggleTint="@color/colorPrimaryDark">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/etContraseniaLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp"
-                android:singleLine="true"
-                android:ems="10"
-                android:hint="@string/contrase_a"
-                android:inputType="textPassword"
-                android:textColor="#FFF"
-                android:backgroundTint="#FFF"
+        android:layout_marginRight="0.0dp"
+        android:layout_marginLeft="0.0dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
 
-                android:textColorHint="#FFF"/>
-        </android.support.design.widget.TextInputLayout>
-        <Button
-            android:textColor="#3282b8"
-            android:background="@drawable/button_border_edit"
-            android:id="@+id/btAceptar"
-            android:layout_width="326.1dp"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutPasswordLoginCuenta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0.0dp"
+        android:textColorHint="#FFF"
+        android:layout_marginLeft="0.0dp"
+        app:passwordToggleTint="@color/colorPrimaryDark"
+        android:layout_below="@id/imageView1">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/txtCuenta"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ingresar"
-            android:layout_marginRight="0.0dp"
-            android:layout_marginLeft="27.4dp" />
-    </LinearLayout>
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:singleLine="true"
+            android:ems="10"
+            android:layout_below="@id/imageView1"
+            android:hint="@string/cuenta"
+            android:inputType="textPassword"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:textColorHint="#FFF"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutPasswordLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        android:layout_marginRight="0.0dp"
+        android:textColorHint="#FFF"
+        android:layout_marginLeft="0.0dp"
+        app:passwordToggleTint="@color/colorPrimaryDark"
+        android:layout_marginTop="0.0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textInputLayoutPasswordLoginCuenta">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/etContraseniaLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:singleLine="true"
+            android:ems="10"
+            android:hint="@string/contrase_a"
+            android:inputType="textPassword"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:textColorHint="#FFF"/>
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:textColor="#3282b8"
+        android:background="@drawable/button_border_edit"
+        android:id="@+id/btAceptar"
+        android:layout_width="326.1dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ingresar"
+        android:layout_alignRight="@id/imageView1"
+        android:layout_alignLeft="@id/imageView1"
+        android:layout_below="@id/textInputLayoutPasswordLogin" />
     
 </RelativeLayout>

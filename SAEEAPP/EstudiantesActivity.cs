@@ -78,7 +78,7 @@ namespace SAEEAPP
 
             _searchView.QueryTextSubmit += (s, e) =>
             {
-                Toast.MakeText(this, "Buscando: " + e.NewText, ToastLength.Short).Show();
+                Toast.MakeText(this, "Buscando: " , ToastLength.Short).Show();
                 e.Handled = true;
             };
 
