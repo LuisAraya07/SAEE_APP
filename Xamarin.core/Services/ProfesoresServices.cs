@@ -18,6 +18,7 @@ namespace Xamarin.core.Services
     public class ProfesoresServices
     {
         private readonly ProfesoresRepositorio _profesoresR;
+
         public ProfesoresServices()
         {
             _profesoresR = new ProfesoresRepositorio();
@@ -45,7 +46,7 @@ namespace Xamarin.core.Services
 
         public async Task<bool> DeleteProfesorAsync(int id)
         {
-            return await _profesoresR.DeleteItemAsync(id);
+            return await _profesoresR.DeleteProfesorAsync(id);
         }
     }
 }

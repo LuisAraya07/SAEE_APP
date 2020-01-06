@@ -15,12 +15,20 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_Menu);
+            Button btCursos = FindViewById<Button>(Resource.Id.btCursos);
+            btCursos.Click += OnClick_Cursos;
             Button btGrupos = FindViewById<Button>(Resource.Id.btGrupos);
             btGrupos.Click += OnClick_Grupos;
             Button btProfesores = FindViewById<Button>(Resource.Id.btProfesores);
             btProfesores.Click += OnClick_Profesores;
             Button btEstudiantes = FindViewById<Button>(Resource.Id.btEstudiantes);
             btEstudiantes.Click += OnClick_Estudiantes;
+        }
+
+        public void OnClick_Cursos(object sender, EventArgs e)
+        {
+            Intent cursos = new Intent(this, typeof(CursosActivity));
+            StartActivity(cursos);
         }
 
         public void OnClick_Grupos(object sender, EventArgs e)

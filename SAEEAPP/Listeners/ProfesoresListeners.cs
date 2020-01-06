@@ -53,9 +53,16 @@ namespace SAEEAPP.Listeners
         {
             ProfesoresServices servicioProfesores = new ProfesoresServices();
             bool resultado = await servicioProfesores.DeleteProfesorAsync(_profesor.Id);
-            Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-            _profesores.Remove(_profesor);
-            _profesoresAdapter.ActualizarDatos();
+            if (resultado)
+            {
+                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                _profesores.Remove(_profesor);
+                _profesoresAdapter.ActualizarDatos();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Long).Show();
+            }
         }
     }
 

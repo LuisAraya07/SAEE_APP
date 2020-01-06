@@ -58,7 +58,7 @@ namespace Xamarin.core.Data
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteItemAsync(int id)
+        public async Task<bool> DeleteProfesorAsync(int id)
         {
             var response = await client.DeleteAsync($"Profesores/{id}");
 

@@ -60,15 +60,24 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adaptadores\CursosGruposAgregadosAdapter.cs" />
+    <Compile Include="Adaptadores\CursosGruposAgregarAdapter.cs" />
+    <Compile Include="Adaptadores\CursosListAdapter.cs" />
     <Compile Include="Adaptadores\ListAgregarEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEstudiantesAdaptador.cs" />
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
+    <Compile Include="AgregarEditarCursosActivity.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
     <Compile Include="AgregarEditarProfesorActivity.cs" />
+    <Compile Include="CursosActivity.cs" />
+    <Compile Include="CursosGruposAgregadosActivity.cs" />
+    <Compile Include="CursosGruposAgregarActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
+    <Compile Include="Listeners\CursosGruposListener.cs" />
+    <Compile Include="Listeners\CursosListener.cs" />
     <Compile Include="Listeners\ProfesoresListeners.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MenuActivity.cs" />
@@ -199,6 +208,41 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\EGAListView.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_cursos.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\CursosListRow.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Agregar_Curso.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\CursosGruposAgregadosListRow.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Cursos_Grupos_Agregados.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Cursos_Grupos_Agregar.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\CursosGruposAgregarListRow.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
