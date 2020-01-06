@@ -64,18 +64,22 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adaptadores\CursosGruposAgregadosAdapter.cs" />
+    <Compile Include="Adaptadores\CursosGruposAgregarAdapter.cs" />
+    <Compile Include="Adaptadores\CursosListAdapter.cs" />
     <Compile Include="Adaptadores\ListAgregarEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEstudiantesAdaptador.cs" />
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
+    <Compile Include="AgregarEditarCursosActivity.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
     <Compile Include="AgregarEditarProfesorActivity.cs" />
+    <Compile Include="CursosActivity.cs" />
+    <Compile Include="CursosGruposAgregadosActivity.cs" />
+    <Compile Include="CursosGruposAgregarActivity.cs" />
     <Compile Include="EstudiantesActivity.cs" />
     <Compile Include="GruposActivity.cs" />
-    <Compile Include="JavaHolder\JavaHolder.cs" />
-    <Compile Include="JavaHolder\ObjectExtensions.cs" />
-    <Compile Include="JavaHolder\SearchViewExpandListener.cs" />
     <Compile Include="Listeners\ProfesoresListeners.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MenuActivity.cs" />
@@ -227,14 +231,6 @@
     <AndroidResource Include="Resources\drawable\button_border_delete.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\menu\main.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_menu.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
