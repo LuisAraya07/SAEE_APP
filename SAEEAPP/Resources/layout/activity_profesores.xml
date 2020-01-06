@@ -4,39 +4,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:text="Administración de profesores"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="50.5dp"
-        android:id="@+id/tvTitulo"
-        android:layout_margin="14.0dp" />
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+   
     <TextView
         android:text="Cargando..."
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvTitulo"
+        android:layout_height="40.8dp"
         android:id="@+id/tvCargando"
-        android:layout_marginLeft="14.0dp" />
+        android:layout_marginLeft="20.1dp"
+        android:textSize="24sp"
+        android:layout_marginTop="25dp" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tvTitulo"
-        android:id="@+id/lvProfesores" />
+        android:id="@+id/lvProfesores"
+        android:cacheColorHint="#4A97D3"
+        android:divider="@color/colorPrimaryDark"
+        android:background="@color/fondo"
+        android:dividerHeight="1dp"
+        android:headerDividersEnabled="true"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:layout_marginBottom="74dp"/>
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:fabSize="normal"
-        app:srcCompat="@drawable/plus"
+        app:srcCompat="@drawable/account_plus"
         android:layout_marginLeft="337.9dp"
         android:layout_marginRight="18.3dp"
-        app:backgroundTint="@color/design_default_color_primary_dark"
+        app:backgroundTint="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="8.4dp"

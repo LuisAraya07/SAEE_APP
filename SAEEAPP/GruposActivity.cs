@@ -13,7 +13,7 @@ using Xamarin.core.Models;
 using Xamarin.core.Services;
 namespace SAEEAPP
 {
-    [Activity(Label = "Grupos", Theme = "@style/AppTheme")]
+    [Activity(Label = "@string/grupo", Theme = "@style/AppTheme")]
     public class GruposActivity : AppCompatActivity
     {
         private FloatingActionButton fab;
@@ -31,14 +31,13 @@ namespace SAEEAPP
                 //Toast.MakeText(this,"Dialogo agregar",ToastLength.Long).Show();
                 LayoutInflater layoutInflater = LayoutInflater.From(this);
                 View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos, null);
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(this);
+                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(this, Resource.Style.AlertDialogStyle);
                 alertDialogBuilder.SetView(mView);
                 var etGrupo = mView.FindViewById<EditText>(Resource.Id.etGrupo);
                 alertDialogBuilder.SetTitle("Agregando Grupo");
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar", delegate
                 {
-                    // Toast.MakeText(this, "Grupo: "+txtGrupo.Text, ToastLength.Long).Show();
                     AgregarGrupoAsync(alertDialogBuilder, etGrupo.Text);
                 })
                 .SetNegativeButton("Cancelar", delegate

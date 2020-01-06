@@ -1,25 +1,28 @@
 ﻿using Android.App;
 using Android.Views;
 using Android.Widget;
+using Java.Lang;
 using SAEEAPP.Listeners;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.core.Models;
 
 namespace SAEEAPP.Adaptadores
 {
-    public class ProfesoresListAdapter : BaseAdapter<Profesores>
+    public class ProfesoresListAdapter : BaseAdapter<Profesores>, IFilterable
     {
         private readonly Activity _context;
-        private readonly List<Profesores> _profesores;
-
+        private List<Profesores> _profesores;
+        private List<Profesores> datosOriginales;
         public ProfesoresListAdapter(Activity context, List<Profesores> profesores)
         {
             _context = context;
             _profesores = profesores;
+            Filter = new ProfesoresFilter(this);
         }
 
         public override Profesores this[int position] => _profesores[position];
-
+        public Filter Filter { get; private set; }
         public override int Count => _profesores.Count;
 
         public override long GetItemId(int position)
@@ -53,6 +56,53 @@ namespace SAEEAPP.Adaptadores
         public void ActualizarDatos()
         {
             NotifyDataSetChanged();
+        }
+
+
+
+        // FILTRO
+        private class ProfesoresFilter : Filter
+        {
+            private readonly ProfesoresListAdapter _adapter;
+            public ProfesoresFilter(ProfesoresListAdapter adapter)
+            {
+                _adapter = adapter;
+            }
+
+            protected override FilterResults PerformFiltering(ICharSequence constraint)
+            {
+                var returnObj = new FilterResults();
+                var results = new List<Profesores>();
+                if (_adapter.datosOriginales == null)
+                    _adapter.datosOriginales = _adapter._profesores;
+
+                if (constraint == null) return returnObj;
+
+                if (_adapter.datosOriginales != null && _adapter.datosOriginales.Any())
+                {
+                    results.AddRange(
+                        _adapter.datosOriginales.Where(
+                            profesor => (profesor.Nombre + profesor.PrimerApellido + profesor.SegundoApellido + profesor.Cedula).ToLower().Contains(constraint.ToString())));
+                }
+
+                returnObj.Values = FromArray(results.Select(r => r.ToJavaObject()).ToArray());
+                returnObj.Count = results.Count;
+
+                constraint.Dispose();
+
+                return returnObj;
+            }
+            protected override void PublishResults(ICharSequence constraint, FilterResults results)
+            {
+                using (var values = results.Values)
+                    _adapter._profesores = values.ToArray<Object>()
+                        .Select(r => r.ToNetObject<Profesores>()).ToList();
+                _adapter.NotifyDataSetChanged();
+                constraint.Dispose();
+                results.Dispose();
+            }
+
+
         }
     }
 }

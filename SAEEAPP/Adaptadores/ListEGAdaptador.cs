@@ -56,7 +56,7 @@ namespace SAEEAPP.Adaptadores
         {
             int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarEG);
             var estudiante = _estudiantes.ElementAt(i);
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
             alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
               .SetCancelable(false)
               .SetTitle("¿Está seguro?")

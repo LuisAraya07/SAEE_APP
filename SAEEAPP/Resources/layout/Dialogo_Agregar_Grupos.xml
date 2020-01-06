@@ -11,12 +11,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textView1"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="11.8dp" />
+        android:layout_marginTop="11.8dp"
+        android:textColor="#FFF"
+        />
     <EditText
         android:id="@+id/etGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:importantForAutofill="no"  
+        android:importantForAutofill="no" 
+        android:textColor="#FFF"
+        android:backgroundTint="#FFF"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="10dp"
