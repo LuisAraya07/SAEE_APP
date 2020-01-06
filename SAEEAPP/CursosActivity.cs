@@ -26,7 +26,9 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             servicioCursos = new CursosServices();
+#pragma warning disable CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
             SetContentView(Resource.Layout.activity_cursos);
+#pragma warning restore CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
             FloatingActionButton btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
             btAgregar.Click += AgregarCurso;
         }

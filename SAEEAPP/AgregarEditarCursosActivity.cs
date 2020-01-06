@@ -48,9 +48,13 @@ namespace SAEEAPP
             this.cursosAdapter = cursosAdapter;
             this.cursos = cursos;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
+#pragma warning disable CS0117 // 'Resource.Layout' no contiene una definición para 'Dialogo_Agregar_Curso'
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Curso, null);
+#pragma warning restore CS0117 // 'Resource.Layout' no contiene una definición para 'Dialogo_Agregar_Curso'
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
+#pragma warning disable CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             etCantidadPeriodos = VistaAgregar.FindViewById<EditText>(Resource.Id.etCantidadPeriodos);
+#pragma warning restore CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             alertDialogBuilder = new AlertDialog.Builder(context)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
@@ -63,7 +67,9 @@ namespace SAEEAPP
         {
             if (EntradaValida())
             {
+#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
                 AgregarAsync();
+#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
             }
         }
 
@@ -105,7 +111,9 @@ namespace SAEEAPP
         {
             if (EntradaValida())
             {
+#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
                 EditarAsync();
+#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
             }
         }
 

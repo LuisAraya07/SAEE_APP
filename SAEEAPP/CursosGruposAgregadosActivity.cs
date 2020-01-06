@@ -41,7 +41,7 @@ namespace SAEEAPP
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Cursos_Grupos_Agregados, null);
 
             // Se configura el listview
-            cursosGruposAgregadosAdapter = new CursosGruposAgregadosAdapter(context, curso, cursosGrupos, agregar, borrar);
+            cursosGruposAgregadosAdapter = new CursosGruposAgregadosAdapter(context, cursosGrupos, agregar, borrar);
             lvCursosGruposAgregados = VistaAgregar.FindViewById<ListView>(Resource.Id.lvCursosGruposAgregados);
             lvCursosGruposAgregados.Adapter = cursosGruposAgregadosAdapter;
 
@@ -57,7 +57,9 @@ namespace SAEEAPP
 
         private void Guardar(object sender, EventArgs e)
         {
+#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
             GuardarAsync();
+#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
         }
 
         private async Task GuardarAsync()

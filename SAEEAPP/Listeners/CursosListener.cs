@@ -46,7 +46,9 @@ namespace SAEEAPP.Listeners
 
         private void Borrar(object sender, DialogClickEventArgs e)
         {
+#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
             BorrarAsync();
+#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
         }
 
         private async Task BorrarAsync()

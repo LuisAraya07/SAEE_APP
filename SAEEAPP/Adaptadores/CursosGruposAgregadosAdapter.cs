@@ -10,14 +10,12 @@ namespace SAEEAPP.Adaptadores
     public class CursosGruposAgregadosAdapter : BaseAdapter<CursosGrupos>
     {
         private readonly Activity _context;
-        private List<CursosGrupos> _cursosGrupos, agregar, borrar;
-        private Cursos _curso;
+        private readonly List<CursosGrupos> _cursosGrupos, agregar, borrar;
 
-        public CursosGruposAgregadosAdapter(Activity context, Cursos curso, List<CursosGrupos> cursosGrupos,
+        public CursosGruposAgregadosAdapter(Activity context, List<CursosGrupos> cursosGrupos,
             List<CursosGrupos> agregar, List<CursosGrupos> borrar)
         {
             this._context = context;
-            this._curso = curso;
             this._cursosGrupos = cursosGrupos;
             this.agregar = agregar;
             this.borrar = borrar;

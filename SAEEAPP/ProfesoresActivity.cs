@@ -81,7 +81,9 @@ namespace SAEEAPP
                 e.Handled = true;
             };
 
+#pragma warning disable CS0612 // 'SearchViewExpandListener' está obsoleto
             MenuItemCompat.SetOnActionExpandListener(item, new SearchViewExpandListener(profesoresAdapter));
+#pragma warning restore CS0612 // 'SearchViewExpandListener' está obsoleto
             return true;
         }
 
