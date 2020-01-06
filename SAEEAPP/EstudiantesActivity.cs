@@ -7,12 +7,11 @@ using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
+using SAEEAPP.JavaHolder;
 using System;
 using System.Collections.Generic;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
-using Android.Support.V7.Widget;
-using SAEEAPP.JavaHolder;
 
 namespace SAEEAPP
 {
@@ -32,8 +31,8 @@ namespace SAEEAPP
             fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
             fab.Visibility = ViewStates.Invisible;
             fab.Click += AgregarEstudiante;
-           // buscarEstudiante = FindViewById<SearchView>(Resource.Id.searchView1);
-            
+            // buscarEstudiante = FindViewById<SearchView>(Resource.Id.searchView1);
+
 
 
         }
@@ -54,10 +53,10 @@ namespace SAEEAPP
                 adaptadorEstudiantes = new ListEstudiantesAdaptador(this, listaEstudiantes);
                 tvCargando.Visibility = ViewStates.Gone;
                 lvEstudiantes.Adapter = adaptadorEstudiantes;
-                
+
             }
             fab.Visibility = ViewStates.Visible;
-           // buscarEstudiante.QueryTextChange += (s, e) => adaptadorEstudiantes.Filter.InvokeFilter(e.NewText);
+            // buscarEstudiante.QueryTextChange += (s, e) => adaptadorEstudiantes.Filter.InvokeFilter(e.NewText);
         }
         private void AgregarEstudiante(object sender, EventArgs e)
         {
@@ -78,7 +77,7 @@ namespace SAEEAPP
 
             _searchView.QueryTextSubmit += (s, e) =>
             {
-                Toast.MakeText(this, "Buscando: " , ToastLength.Short).Show();
+                Toast.MakeText(this, "Buscando: ", ToastLength.Short).Show();
                 e.Handled = true;
             };
 
@@ -87,6 +86,6 @@ namespace SAEEAPP
         }
 
 
-        
+
     }
 }

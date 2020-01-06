@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
+using System.Collections.Generic;
 using Xamarin.core.Models;
 
 namespace SAEEAPP.Listeners
@@ -55,7 +48,7 @@ namespace SAEEAPP.Listeners
                         IdGrupoNavigation = _grupo
                     };
                 }
-                if(cursoGrupo.Id == -1)// Si es igual, entonces es un grupo que no existe, hay que agregarlo
+                if (cursoGrupo.Id == -1)// Si es igual, entonces es un grupo que no existe, hay que agregarlo
                 {
                     agregar.Add(cursoGrupo);
                 }

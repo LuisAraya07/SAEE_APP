@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Newtonsoft.Json;
 using SAEEAPP.Adaptadores;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -70,7 +65,7 @@ namespace SAEEAPP
             CursosServices servicioCursos = new CursosServices();
             List<CursosGrupos> agregarPreparados = new List<CursosGrupos>();
             // Se llena la lista con los cursosGrupos preparados para ser insertados
-            foreach(CursosGrupos cursosGruposTemp in agregar)
+            foreach (CursosGrupos cursosGruposTemp in agregar)
             {
                 agregarPreparados.Add(new CursosGrupos()
                 {
@@ -84,7 +79,7 @@ namespace SAEEAPP
                 agregados = await servicioCursos.AgregarCursosGruposAsync(agregarPreparados);
                 cambio = true;
             }
-            if(borrar.Count > 0)
+            if (borrar.Count > 0)
             {
                 borrados = await servicioCursos.BorrarCursosGruposAsync(borrar);
                 cambio = true;

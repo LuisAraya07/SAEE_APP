@@ -14,7 +14,7 @@ namespace SAEEAPP.Adaptadores
     {
         private readonly Activity _context;
         private List<Estudiantes> _estudiantes;
-        private  List<Estudiantes> datosOriginales;
+        private List<Estudiantes> datosOriginales;
 
         public ListEstudiantesAdaptador(Activity context, List<Estudiantes> estudiantes)
         {
@@ -53,7 +53,7 @@ namespace SAEEAPP.Adaptadores
             btEditar.SetTag(Resource.Id.btEditarE, position);
             btEditar.Click -= OnClick_Editar;
             btEditar.Click += OnClick_Editar;
-            
+
             view.
                 FindViewById<TextView>(Resource.Id.textViewNombreE).
                 Text = $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}";
@@ -122,7 +122,7 @@ namespace SAEEAPP.Adaptadores
                             estudiante => (estudiante.Nombre + estudiante.PrimerApellido + estudiante.SegundoApellido + estudiante.Cedula).ToLower().Contains(constraint.ToString())));
                 }
 
-                returnObj.Values =FromArray(results.Select(r => r.ToJavaObject()).ToArray());
+                returnObj.Values = FromArray(results.Select(r => r.ToJavaObject()).ToArray());
                 returnObj.Count = results.Count;
 
                 constraint.Dispose();
@@ -139,7 +139,7 @@ namespace SAEEAPP.Adaptadores
                 results.Dispose();
             }
 
-          
+
         }
     }
 }

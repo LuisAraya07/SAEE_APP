@@ -95,7 +95,7 @@ namespace SAEEAPP.Adaptadores
             //Toast.MakeText(this,"Dialogo agregar",ToastLength.Long).Show();
             LayoutInflater layoutInflater = LayoutInflater.From(_context);
             View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos, null);
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context,Resource.Style.AlertDialogStyle);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
             alertDialogBuilder.SetView(mView);
             mView.FindViewById<EditText>(Resource.Id.etGrupo).Text = grupo.Grupo;
             alertDialogBuilder.SetTitle("Editando Grupo");
