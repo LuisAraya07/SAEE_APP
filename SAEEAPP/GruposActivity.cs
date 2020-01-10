@@ -61,8 +61,7 @@ namespace SAEEAPP
                 Grupos grupo =
                 new Grupos()
                 {
-                    //Debo traerme el id del profesor
-                    IdProfesor = 1,
+                    
                     Anio = fechaActual.Year,
                     Grupo = etGrupo
 
@@ -112,7 +111,7 @@ namespace SAEEAPP
             var grupoServicio = new GruposServices();
             grupoListView = FindViewById<ListView>(Resource.Id.listView);
             //Obtengo el id el profesor
-            listaGrupos = await grupoServicio.GetAsync(1);
+            listaGrupos = await grupoServicio.GetAsync();
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             if (listaGrupos.Count == 0)
             {

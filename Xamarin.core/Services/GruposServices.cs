@@ -25,9 +25,9 @@ namespace Xamarin.core.Services
 
         }
 
-        public async Task<List<Grupos>> GetAsync(int id)
+        public async Task<List<Grupos>> GetAsync()
         {
-            return await _gruposR.GetAsync(id);
+            return await _gruposR.GetAsync();
         }
 
         public async Task <List<Estudiantes>> GetGrupo(int id) {

@@ -191,7 +191,7 @@ namespace SAEEAPP.Adaptadores
             EstudiantesServices estudiantesServicios = new EstudiantesServices();
             List<Estudiantes> listaTemporal = new List<Estudiantes>();
             //Se le envia el id del profesor para obtener todos los estudiantes
-            listaTemporal = await estudiantesServicios.GetAsync(grupo.IdProfesor);
+            listaTemporal = await estudiantesServicios.GetAsync();
             var listaAgregar = listaTemporal.Where(st => !(listaAgregados.Select(x => x.Id).Contains(st.Id))).ToList();
             var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEGA);
             ListAgregarEGAdaptador adaptadorEG = new ListAgregarEGAdaptador(_context, listaAgregar, listaEG, grupo.Id);

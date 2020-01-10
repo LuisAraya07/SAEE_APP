@@ -21,16 +21,12 @@ namespace Xamarin.core.Data
         private readonly HttpClient client;
 
         public GruposRepositorio() {
-            client = new HttpClient
-            {
-                BaseAddress = new Uri($"{ValuesServices.url}/")
-                
-            };
+            client = ClienteHttp.ObtenerHttpClient();
         }
 
-        public async Task<List<Grupos>> GetAsync(int id)
+        public async Task<List<Grupos>> GetAsync()
         {
-            var json = await client.GetStringAsync($"Grupos/GetGrupos?id="+id);
+            var json = await client.GetStringAsync($"Grupos/GetGrupos");
             return JsonConvert.DeserializeObject<List<Grupos>>(json);
         }
 

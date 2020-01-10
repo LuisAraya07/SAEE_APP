@@ -24,15 +24,15 @@ namespace Xamarin.core.Services
 
         }
 
-        public async Task<List<Estudiantes>> GetAsync(int id)
+        public async Task<List<Estudiantes>> GetAsync()
         {
-            return await _estudiantesR.GetAsync(id);
+            return await _estudiantesR.GetAsync();
         }
 
 
-        public async Task<Estudiantes> GetEstudiante(int id)
+        public async Task<Estudiantes> GetEstudiante()
         {
-            return await _estudiantesR.GetEstudianteAsync(id);
+            return await _estudiantesR.GetEstudianteAsync();
 
         }
         //Agregar estudiantes

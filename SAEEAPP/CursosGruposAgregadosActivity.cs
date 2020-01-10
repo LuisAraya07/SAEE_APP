@@ -119,7 +119,7 @@ namespace SAEEAPP
         private async Task AgregarAsync()
         {
             GruposServices servicioGrupos = new GruposServices();
-            var grupos = (await servicioGrupos.GetAsync(1)).
+            var grupos = (await servicioGrupos.GetAsync()).
                 Where(g => !cursosGrupos.Exists(cg => cg.IdGrupo == g.Id)).ToList();
             CursosGruposAgregarActivity cursosGruposAgregarActivity =
                 new CursosGruposAgregarActivity(context, cursosGruposAgregadosAdapter, curso, cursosGrupos, agregar, borrar, grupos);

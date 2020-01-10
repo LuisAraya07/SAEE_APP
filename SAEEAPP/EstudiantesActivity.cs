@@ -41,7 +41,7 @@ namespace SAEEAPP
             base.OnStart();
             var estudiantesServicio = new EstudiantesServices();
             var lvEstudiantes = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
-            listaEstudiantes = await estudiantesServicio.GetAsync(1);
+            listaEstudiantes = await estudiantesServicio.GetAsync();
             TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
             if (listaEstudiantes.Count == 0)
             {

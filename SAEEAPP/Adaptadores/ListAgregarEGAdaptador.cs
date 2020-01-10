@@ -90,9 +90,9 @@ namespace SAEEAPP.Adaptadores
             EstudiantesXgrupos EGAgregar = new EstudiantesXgrupos()
             {
                 IdEstudiante = estudiante.Id,
-                IdGrupo = _idGrupo,
+                IdGrupo = _idGrupo
                 //El id del profesor es irrelevante
-                IdProfesor = 1
+                //IdProfesor = estudiante.IdProfesor
             };
             GruposServices gruposServices = new GruposServices();
             var EGNuevo = await gruposServices.PostEGAsync(EGAgregar);

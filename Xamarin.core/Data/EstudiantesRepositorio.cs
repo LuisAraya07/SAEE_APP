@@ -22,23 +22,20 @@ namespace Xamarin.core.Data
 
         public EstudiantesRepositorio()
         {
-            client = new HttpClient
-            {
-                BaseAddress = new Uri($"{ValuesServices.url}/")
-            };
+            client = ClienteHttp.ObtenerHttpClient();
         }
 
 
       
-        public async Task<List<Estudiantes>> GetAsync(int id)
+        public async Task<List<Estudiantes>> GetAsync()
         {
-            var json = await client.GetStringAsync($"Estudiantes/GetEstudiantes?id=" + id);
+            var json = await client.GetStringAsync($"Estudiantes/GetEstudiantes");
             return JsonConvert.DeserializeObject<List<Estudiantes>>(json);
         }
 
-        public async Task<Estudiantes> GetEstudianteAsync(int id)
+        public async Task<Estudiantes> GetEstudianteAsync()
         {
-            var json = await client.GetStringAsync($"Estudiantes/GetEstudiante?id=" + id);
+            var json = await client.GetStringAsync($"Estudiantes/GetEstudiante");
             return await Task.Run(() => JsonConvert.DeserializeObject<Estudiantes>(json));
 
         }

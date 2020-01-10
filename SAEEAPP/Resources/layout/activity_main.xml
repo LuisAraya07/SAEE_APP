@@ -8,7 +8,7 @@
     <ImageView
         android:src="@mipmap/ic_launcher_foreground"
         android:layout_width="359.5dp"
-        android:layout_height="wrap_content"
+        android:layout_height="395.8dp"
         android:id="@+id/imageView1"
         android:background="@color/fondo"
         android:layout_marginRight="0.0dp"
@@ -83,6 +83,9 @@
         android:text="@string/ingresar"
         android:layout_alignRight="@id/imageView1"
         android:layout_alignLeft="@id/imageView1"
-        android:layout_below="@id/textInputLayoutPasswordLogin" />
+        android:layout_below="@id/textInputLayoutPasswordLogin"
+        android:layout_marginLeft="30dp" 
+        android:layout_marginRight="30dp"
+    />
     
 </RelativeLayout>

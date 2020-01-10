@@ -95,7 +95,6 @@ namespace SAEEAPP
             Estudiantes estudiante = new Estudiantes()
             {
                 //Obtengo el id del profesor
-                IdProfesor = 1,
                 Cedula = etCedula.Text,
                 Pin = etContrasenia.Text,
                 Nombre = etNombre.Text,
@@ -122,9 +121,7 @@ namespace SAEEAPP
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
                 EditarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
             }
         }
         private void Cancelar(object sender, EventArgs e)
