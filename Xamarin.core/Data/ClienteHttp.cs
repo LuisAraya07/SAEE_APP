@@ -39,6 +39,7 @@ namespace Xamarin.core.Data
             string resultadoString = await content.ReadAsStringAsync();
             // Se establece el usuario
             Usuario = JsonConvert.DeserializeObject<Usuario>(resultadoString);
+            client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("cedula", Usuario.Cedula);
             client.DefaultRequestHeaders.Add("contrasenia", Usuario.Contrasenia);
         }

@@ -22,6 +22,8 @@ namespace SAEEAPP
         ListView lvProfesores;
         ProfesoresListAdapter profesoresAdapter;
         TextView tvCargando;
+        FloatingActionButton btAgregar;
+        ProgressBar pbCargandoProfesores;
         private Android.Support.V7.Widget.SearchView _searchView;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -29,16 +31,16 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_profesores);
-            FloatingActionButton btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
+            lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
+            pbCargandoProfesores = FindViewById<ProgressBar>(Resource.Id.pbCargandoProfesores);
+            btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
             btAgregar.Click += AgregarProfesor;
         }
 
         protected override async void OnStart()
         {
             base.OnStart();
-
-            lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
-            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
 
             if (profesores == null)
             {
@@ -47,12 +49,15 @@ namespace SAEEAPP
                 if (profesores.Count == 0)
                 {
                     tvCargando.Text = "No hay datos";
+                    pbCargandoProfesores.Visibility = ViewStates.Gone;
                 }
                 else
                 {
                     tvCargando.Visibility = ViewStates.Gone;
+                    pbCargandoProfesores.Visibility = ViewStates.Gone;
                     profesoresAdapter = new ProfesoresListAdapter(this, profesores);
                     lvProfesores.Adapter = profesoresAdapter;
+                    lvProfesores.Visibility = ViewStates.Visible;
                 }
             }
         }
