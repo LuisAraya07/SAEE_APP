@@ -46,7 +46,7 @@ namespace SAEEAPP
             lvCursosGruposAgregados.Adapter = cursosGruposAgregadosAdapter;
 
             // Se contruye el diálogo
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton("Guardar", (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)

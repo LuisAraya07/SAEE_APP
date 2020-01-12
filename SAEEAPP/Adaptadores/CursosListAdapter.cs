@@ -45,7 +45,7 @@ namespace SAEEAPP.Adaptadores
             tvCantidadPeriodos.Text = curso.CantidadPeriodos.ToString();
 
             btEditar.SetOnClickListener(new EditarCListener(_context, _cursos, curso, this));
-            btGrupos.SetOnClickListener(new GruposCListener(_context, _cursos, curso, this));
+            btGrupos.SetOnClickListener(new GruposCListener(_context, curso, this));
             btBorrar.SetOnClickListener(new BorrarCListener(_context, _cursos, curso, this));
 
             return convertView;

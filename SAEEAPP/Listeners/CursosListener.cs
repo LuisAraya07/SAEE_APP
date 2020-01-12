@@ -29,7 +29,7 @@ namespace SAEEAPP.Listeners
 
         public void OnClick(View v)
         {
-            alertDialogAndroid = new AlertDialog.Builder(_context)
+            alertDialogAndroid = new AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle)
               .SetIcon(Resource.Drawable.trash_can_outline)
               .SetTitle("Eliminando curso")
               .SetMessage($"¿Realmente desea borrar el curso \"{_curso.Nombre}\" y toda su información relacionada?")
@@ -95,15 +95,13 @@ namespace SAEEAPP.Listeners
     class GruposCListener : Java.Lang.Object, View.IOnClickListener
     {
         private readonly Activity _context;
-        private readonly List<Cursos> _cursos;
         private readonly Cursos _curso;
         private readonly CursosListAdapter _cursosAdapter;
 
-        public GruposCListener(Activity context, List<Cursos> cursos, Cursos curso,
+        public GruposCListener(Activity context, Cursos curso,
             CursosListAdapter cursosAdapter)
         {
             _context = context;
-            _cursos = cursos;
             _curso = curso;
             _cursosAdapter = cursosAdapter;
         }

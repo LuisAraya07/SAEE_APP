@@ -55,7 +55,7 @@ namespace SAEEAPP
 #pragma warning disable CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             etCantidadPeriodos = VistaAgregar.FindViewById<EditText>(Resource.Id.etCantidadPeriodos);
 #pragma warning restore CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)

@@ -12,7 +12,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Cursos", Theme = "@style/AppTheme")]
+    [Activity(Label = "Administración de cursos", Theme = "@style/AppTheme")]
     public class CursosActivity : AppCompatActivity
     {
         List<Cursos> cursos = null;
@@ -20,6 +20,8 @@ namespace SAEEAPP
         CursosListAdapter cursosAdapter;
         TextView tvCargando;
         CursosServices servicioCursos;
+        ProgressBar pbCargandoCursos;
+        FloatingActionButton btAgregar;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -29,7 +31,10 @@ namespace SAEEAPP
 #pragma warning disable CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
             SetContentView(Resource.Layout.activity_cursos);
 #pragma warning restore CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
-            FloatingActionButton btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
+            lvCursos = FindViewById<ListView>(Resource.Id.lvCursos);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
+            btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
+            pbCargandoCursos = FindViewById<ProgressBar>(Resource.Id.pbCargandoCursos);
             btAgregar.Click += AgregarCurso;
         }
 
@@ -37,21 +42,20 @@ namespace SAEEAPP
         {
             base.OnStart();
 
-            lvCursos = FindViewById<ListView>(Resource.Id.lvCursos);
-            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
-
             if (cursos == null)
             {
                 cursos = await servicioCursos.GetAsync();
                 if (cursos.Count == 0)
                 {
                     tvCargando.Text = "No hay datos";
+                    pbCargandoCursos.Visibility = ViewStates.Gone;
                 }
                 else
                 {
                     tvCargando.Visibility = ViewStates.Gone;
                     cursosAdapter = new CursosListAdapter(this, cursos);
                     lvCursos.Adapter = cursosAdapter;
+                    pbCargandoCursos.Visibility = ViewStates.Gone;
                 }
             }
         }
