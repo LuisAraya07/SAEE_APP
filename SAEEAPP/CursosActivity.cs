@@ -45,18 +45,14 @@ namespace SAEEAPP
             if (cursos == null)
             {
                 cursos = await servicioCursos.GetAsync();
-                if (cursos.Count == 0)
+                if (cursos.Count > 0)
                 {
-                    tvCargando.Text = "No hay datos";
-                    pbCargandoCursos.Visibility = ViewStates.Gone;
+                    tvCargando.Visibility = ViewStates.Invisible;
                 }
-                else
-                {
-                    tvCargando.Visibility = ViewStates.Gone;
-                    cursosAdapter = new CursosListAdapter(this, cursos);
-                    lvCursos.Adapter = cursosAdapter;
-                    pbCargandoCursos.Visibility = ViewStates.Gone;
-                }
+                // El mensaje de "no hay datos", lo asigna el Adapter (ya que se pueden eliminar todos los curso)
+                cursosAdapter = new CursosListAdapter(this, cursos, tvCargando);
+                lvCursos.Adapter = cursosAdapter;
+                pbCargandoCursos.Visibility = ViewStates.Gone;
             }
         }
 

@@ -6,6 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo">
+    <TextView
+        android:text="Cargando"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCargandoG"
+        android:textColor="#FFF"
+        android:layout_centerInParent="true"
+        android:textAlignment="center" />
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="14.0dp"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:layout_below="@id/tvCargandoG"
+        android:id="@+id/pbCargandoGrupos" />
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
@@ -22,20 +39,8 @@
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:layout_marginBottom="74dp" 
-        />
-    <TextView
-        android:text="Cargando..."
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="40.8dp"
-        android:id="@+id/tvCargandoG"
-        android:layout_marginLeft="20.1dp"
-        android:textSize="24sp"
-        android:textColor="#FFF"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="0.0dp" />
-
+        android:layout_marginBottom="74dp"
+        android:visibility="invisible" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

@@ -11,11 +11,14 @@ namespace SAEEAPP.Adaptadores
     {
         private readonly Activity _context;
         private readonly List<Cursos> _cursos;
+        private readonly TextView _tvCargando;
 
-        public CursosListAdapter(Activity context, List<Cursos> cursos)
+        public CursosListAdapter(Activity context, List<Cursos> cursos, TextView tvCargando)
         {
             _context = context;
             _cursos = cursos;
+            _tvCargando = tvCargando;
+            tvCargando.Text = "No hay datos";//Si no hay datos, se muestra el mensaje, y si se eliminan todos tambien
         }
 
         public override Cursos this[int position] => _cursos[position];
@@ -52,6 +55,7 @@ namespace SAEEAPP.Adaptadores
         }
         public void ActualizarDatos()
         {
+            _tvCargando.Visibility = (_cursos.Count > 0)? ViewStates.Invisible : ViewStates.Visible;
             NotifyDataSetChanged();
         }
     }

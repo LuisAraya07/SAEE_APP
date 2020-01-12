@@ -32,12 +32,10 @@
         android:id="@+id/lvProfesores"
         android:cacheColorHint="#4A97D3"
         android:divider="@color/colorPrimaryDark"
-        android:background="@color/fondo"
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:layout_marginBottom="74dp"
-        android:visibility="invisible" />
+        android:layout_marginBottom="74dp" />
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

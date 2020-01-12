@@ -46,19 +46,14 @@ namespace SAEEAPP
             {
                 ProfesoresServices servicioProfesores = new ProfesoresServices();
                 profesores = await servicioProfesores.GetAsync();
-                if (profesores.Count == 0)
+                if (profesores.Count > 0)
                 {
-                    tvCargando.Text = "No hay datos";
-                    pbCargandoProfesores.Visibility = ViewStates.Gone;
+                    tvCargando.Visibility = ViewStates.Invisible;
                 }
-                else
-                {
-                    tvCargando.Visibility = ViewStates.Gone;
-                    pbCargandoProfesores.Visibility = ViewStates.Gone;
-                    profesoresAdapter = new ProfesoresListAdapter(this, profesores);
-                    lvProfesores.Adapter = profesoresAdapter;
-                    lvProfesores.Visibility = ViewStates.Visible;
-                }
+                // El mensaje de "no hay datos", lo asigna el Adapter
+                profesoresAdapter = new ProfesoresListAdapter(this, profesores, tvCargando);
+                lvProfesores.Adapter = profesoresAdapter;
+                pbCargandoProfesores.Visibility = ViewStates.Gone;
             }
         }
 

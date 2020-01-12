@@ -20,10 +20,16 @@ namespace SAEEAPP
         private List<Grupos> listaGrupos = new List<Grupos>();
         ListGruposAdaptador adaptadorGrupos;
         ListView grupoListView;
+        ProgressBar pbCargandoGrupos;
+        TextView tvCargando;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_grupos);
+            grupoListView = FindViewById<ListView>(Resource.Id.listView);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
+            pbCargandoGrupos = FindViewById<ProgressBar>(Resource.Id.pbCargandoGrupos);
             fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             fab.Visibility = ViewStates.Invisible;
             fab.Click += delegate
@@ -109,19 +115,19 @@ namespace SAEEAPP
         {
             base.OnStart();
             var grupoServicio = new GruposServices();
-            grupoListView = FindViewById<ListView>(Resource.Id.listView);
             //Obtengo el id el profesor
             listaGrupos = await grupoServicio.GetAsync();
-            TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             if (listaGrupos.Count == 0)
             {
-
                 tvCargando.Text = "No hay datos";
+                pbCargandoGrupos.Visibility = ViewStates.Gone;
             }
             else
             {
                 adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
                 tvCargando.Visibility = ViewStates.Gone;
+                pbCargandoGrupos.Visibility = ViewStates.Gone;
+                grupoListView.Visibility = ViewStates.Visible;
                 grupoListView.Adapter = adaptadorGrupos;
             }
             fab.Visibility = ViewStates.Visible;
