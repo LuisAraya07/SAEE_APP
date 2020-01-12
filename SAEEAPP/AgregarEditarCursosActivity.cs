@@ -22,6 +22,7 @@ namespace SAEEAPP
         List<Cursos> cursos;
         readonly Cursos curso;
         EditText etNombre, etCantidadPeriodos;
+        Button btAgregarEditar, btCancelar;
         private readonly bool editando;
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter, List<Cursos> cursos)
@@ -67,10 +68,14 @@ namespace SAEEAPP
         {
             if (EntradaValida())
             {
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Agregando, espere", ToastLength.Short).Show();
+
                 CursosServices servicioCursos = new CursosServices();
                 Cursos cursoNuevo = new Cursos()
                 {
-                    IdProfesor = 1,
+                    IdProfesor = 1,// En el api se asigna el correcto
                     Nombre = etNombre.Text,
                     CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
                 };
@@ -90,7 +95,9 @@ namespace SAEEAPP
                 }
                 else
                 {
-                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
                 }
             }
         }
@@ -104,6 +111,10 @@ namespace SAEEAPP
         {
             if (EntradaValida())
             {
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
+
                 CursosServices servicioCursos = new CursosServices();
                 curso.Nombre = etNombre.Text;
                 curso.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
@@ -119,7 +130,9 @@ namespace SAEEAPP
                 }
                 else
                 {
-                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
                 }
             }
         }
@@ -147,12 +160,19 @@ namespace SAEEAPP
             }
         }
 
+        private void ActivarDesactivarBotones(bool estado)
+        {
+            btAgregarEditar.Enabled = estado;
+            btCancelar.Enabled = estado;
+            alertDialogAndroid.SetCancelable(estado);
+        }
+
         public void Show()
         {
             alertDialogAndroid.Show();
             // Se obtienen los botones para asignarles los métodos nuevos (no cierran el diálogo).
-            Button btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
-            Button btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
+            btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
+            btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
 
             // Se asignan las funciones
             if (editando)

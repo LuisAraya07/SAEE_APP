@@ -45,6 +45,7 @@ namespace SAEEAPP
             {
                 // Se bloquean los controles y se activa el progress bar
                 ActivarDesactivarControles(false);
+                Toast.MakeText(this, "Ingresando", ToastLength.Short).Show();
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Visible;
 
                 InicioSesionServices inicioSesionServices = new InicioSesionServices();
@@ -60,6 +61,7 @@ namespace SAEEAPP
                 {
                     ClienteHttp.Usuario = null;
                     Toast.MakeText(this, $"Cédula o contraseña incorrecta", ToastLength.Short).Show();
+                    etContrasenia.Text = string.Empty;
                 }
                 // Se restablecen los controles y se oculta la barra
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Invisible;

@@ -56,7 +56,7 @@ namespace SAEEAPP.Listeners
             }
             else
             {
-                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Long).Show();
+                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
             }
         }
     }

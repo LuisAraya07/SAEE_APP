@@ -53,13 +53,13 @@ namespace SAEEAPP.Listeners
                     agregar.Add(cursoGrupo);
                 }
                 _cursosGrupos.Add(cursoGrupo);
-                Toast.MakeText(_context, "Agregado", ToastLength.Long).Show();
+                Toast.MakeText(_context, "Agregado", ToastLength.Short).Show();
             }
             else
             {
                 _cursosGrupos.RemoveAt(_cursosGrupos.FindIndex(grupoTemp => grupoTemp.IdGrupo == _grupo.Id));
                 agregar.RemoveAt(agregar.FindIndex(grupoTemp => grupoTemp.IdGrupo == _grupo.Id));
-                Toast.MakeText(_context, "Eliminado", ToastLength.Long).Show();
+                Toast.MakeText(_context, "Eliminado", ToastLength.Short).Show();
             }
         }
     }
@@ -95,7 +95,7 @@ namespace SAEEAPP.Listeners
             {
                 agregar.RemoveAt(i);
             }
-            Toast.MakeText(_context, "Eliminado", ToastLength.Long).Show();
+            Toast.MakeText(_context, "Eliminado", ToastLength.Short).Show();
             _cursosGruposAgregadosAdapter.ActualizarDatos();
         }
     }
