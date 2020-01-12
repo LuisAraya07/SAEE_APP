@@ -63,42 +63,35 @@ namespace SAEEAPP
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
-        private void Agregar(object sender, EventArgs e)
+        private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                AgregarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                CursosServices servicioCursos = new CursosServices();
+                Cursos cursoNuevo = new Cursos()
+                {
+                    IdProfesor = 1,
+                    Nombre = etNombre.Text,
+                    CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
+                };
+                HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
 
-        private async Task AgregarAsync()
-        {
-            CursosServices servicioCursos = new CursosServices();
-            Cursos cursoNuevo = new Cursos()
-            {
-                IdProfesor = 1,
-                Nombre = etNombre.Text,
-                CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
-            };
-            HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
+                if (resultado.IsSuccessStatusCode)
+                {
+                    // Se obtiene el elemento insertado
+                    string resultadoString = await resultado.Content.ReadAsStringAsync();
+                    cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
+                    // Se actualiza la lista de cursos
+                    cursos.Add(cursoNuevo);
+                    cursosAdapter.ActualizarDatos();
 
-            if (resultado.IsSuccessStatusCode)
-            {
-                // Se obtiene el elemento insertado
-                string resultadoString = await resultado.Content.ReadAsStringAsync();
-                cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
-                // Se actualiza la lista de cursos
-                cursos.Add(cursoNuevo);
-                cursosAdapter.ActualizarDatos();
-
-                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
         }
 
@@ -107,34 +100,27 @@ namespace SAEEAPP
             alertDialogAndroid.Dismiss();
         }
 
-        private void Editar(object sender, EventArgs e)
+        private async void Editar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                EditarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                CursosServices servicioCursos = new CursosServices();
+                curso.Nombre = etNombre.Text;
+                curso.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
+                bool resultado = await servicioCursos.UpdateCursoAsync(curso);
 
-        private async Task EditarAsync()
-        {
-            CursosServices servicioCursos = new CursosServices();
-            curso.Nombre = etNombre.Text;
-            curso.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
-            bool resultado = await servicioCursos.UpdateCursoAsync(curso);
+                if (resultado)
+                {
+                    // Se actualiza la lista de cursos
+                    cursosAdapter.ActualizarDatos();
 
-            if (resultado)
-            {
-                // Se actualiza la lista de cursos
-                cursosAdapter.ActualizarDatos();
-
-                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
         }
 

@@ -68,46 +68,39 @@ namespace SAEEAPP
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
-        private void Agregar(object sender, EventArgs e)
+        private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                AgregarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                ProfesoresServices servicioProfesores = new ProfesoresServices();
+                Profesores profesorNuevo = new Profesores()
+                {
+                    Cedula = etCedula.Text,
+                    Administrador = false,
+                    Contrasenia = etContrasenia.Text,
+                    Correo = etCorreo.Text,
+                    Nombre = etNombre.Text,
+                    PrimerApellido = etApellido1.Text,
+                    SegundoApellido = etApellido2.Text
+                };
+                HttpResponseMessage resultado = await servicioProfesores.PostAsync(profesorNuevo);
 
-        private async Task AgregarAsync()
-        {
-            ProfesoresServices servicioProfesores = new ProfesoresServices();
-            Profesores profesorNuevo = new Profesores()
-            {
-                Cedula = etCedula.Text,
-                Administrador = false,
-                Contrasenia = etContrasenia.Text,
-                Correo = etCorreo.Text,
-                Nombre = etNombre.Text,
-                PrimerApellido = etApellido1.Text,
-                SegundoApellido = etApellido2.Text
-            };
-            HttpResponseMessage resultado = await servicioProfesores.PostAsync(profesorNuevo);
+                if (resultado.IsSuccessStatusCode)
+                {
+                    // Se obtiene el elemento insertado
+                    string resultadoString = await resultado.Content.ReadAsStringAsync();
+                    profesorNuevo = JsonConvert.DeserializeObject<Profesores>(resultadoString);
+                    // Se actualiza la lista de profesores
+                    profesores.Add(profesorNuevo);
+                    profesoresAdapter.ActualizarDatos();
 
-            if (resultado.IsSuccessStatusCode)
-            {
-                // Se obtiene el elemento insertado
-                string resultadoString = await resultado.Content.ReadAsStringAsync();
-                profesorNuevo = JsonConvert.DeserializeObject<Profesores>(resultadoString);
-                // Se actualiza la lista de profesores
-                profesores.Add(profesorNuevo);
-                profesoresAdapter.ActualizarDatos();
-
-                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
         }
 
@@ -116,38 +109,31 @@ namespace SAEEAPP
             alertDialogAndroid.Dismiss();
         }
 
-        private void Editar(object sender, EventArgs e)
+        private async void Editar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                EditarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                ProfesoresServices servicioProfesores = new ProfesoresServices();
+                profesor.Cedula = etCedula.Text;
+                profesor.Nombre = etNombre.Text;
+                profesor.PrimerApellido = etApellido1.Text;
+                profesor.SegundoApellido = etApellido2.Text;
+                profesor.Correo = etCorreo.Text;
+                profesor.Contrasenia = etContrasenia.Text;
+                bool resultado = await servicioProfesores.UpdateProfesorAsync(profesor);
 
-        private async Task EditarAsync()
-        {
-            ProfesoresServices servicioProfesores = new ProfesoresServices();
-            profesor.Cedula = etCedula.Text;
-            profesor.Nombre = etNombre.Text;
-            profesor.PrimerApellido = etApellido1.Text;
-            profesor.SegundoApellido = etApellido2.Text;
-            profesor.Correo = etCorreo.Text;
-            profesor.Contrasenia = etContrasenia.Text;
-            bool resultado = await servicioProfesores.UpdateProfesorAsync(profesor);
+                if (resultado)
+                {
+                    // Se actualiza la lista de profesores
+                    profesoresAdapter.ActualizarDatos();
 
-            if (resultado)
-            {
-                // Se actualiza la lista de profesores
-                profesoresAdapter.ActualizarDatos();
-
-                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
         }
 

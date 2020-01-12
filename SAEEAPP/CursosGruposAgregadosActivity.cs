@@ -22,7 +22,7 @@ namespace SAEEAPP
         List<CursosGrupos> cursosGrupos;
         List<CursosGrupos> agregar;
         List<CursosGrupos> borrar;
-        readonly Cursos curso;
+        Cursos curso;
         ListView lvCursosGruposAgregados;
 
         public CursosGruposAgregadosActivity(Activity context, CursosListAdapter cursosAdapter,
@@ -55,14 +55,7 @@ namespace SAEEAPP
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
-        private void Guardar(object sender, EventArgs e)
-        {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            GuardarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-        }
-
-        private async Task GuardarAsync()
+        private async void Guardar(object sender, EventArgs e)
         {
             CursosServices servicioCursos = new CursosServices();
             List<CursosGrupos> agregarPreparados = new List<CursosGrupos>();
@@ -76,6 +69,7 @@ namespace SAEEAPP
                 });// Importante que solo tengan esto dos atributos para evitar errores
             }
             bool agregados = true, borrados = true, cambio = false;
+
             if (agregar.Count > 0)
             {
                 agregados = await servicioCursos.AgregarCursosGruposAsync(agregarPreparados);
@@ -111,12 +105,7 @@ namespace SAEEAPP
             alertDialogAndroid.Dismiss();
         }
 
-        private void Agregar(object sender, EventArgs e)
-        {
-            AgregarAsync();
-        }
-
-        private async Task AgregarAsync()
+        private async void Agregar(object sender, EventArgs e)
         {
             GruposServices servicioGrupos = new GruposServices();
             var grupos = (await servicioGrupos.GetAsync()).

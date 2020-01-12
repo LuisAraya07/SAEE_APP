@@ -22,10 +22,7 @@ namespace Xamarin.core.Data
 
         public CursosRepositorio()
         {
-            client = new HttpClient
-            {
-                BaseAddress = new Uri($"{ValuesServices.url}/")
-            };
+            client = ClienteHttp.ObtenerHttpClient();
         }
 
         public async Task<HttpResponseMessage> PostAsync(Cursos curso)
