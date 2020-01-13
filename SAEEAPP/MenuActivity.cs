@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 using System;
+using Xamarin.core.Data;
 
 namespace SAEEAPP
 {
@@ -23,6 +24,10 @@ namespace SAEEAPP
             btProfesores.Click += OnClick_Profesores;
             Button btEstudiantes = FindViewById<Button>(Resource.Id.btEstudiantes);
             btEstudiantes.Click += OnClick_Estudiantes;
+            if (!ClienteHttp.Usuario.Administrador)
+            {
+                btProfesores.Visibility = Android.Views.ViewStates.Gone;
+            }
         }
 
         public void OnClick_Cursos(object sender, EventArgs e)
