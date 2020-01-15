@@ -1,0 +1,133 @@
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollViewAdministrarProfesor"
+    android:background="@color/fondo">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilCedula">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="number"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Cédula"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etCedula" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilNombre">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Nombre"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etNombre" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilPrimerApellido">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Primer apellido"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etPrimerApellido" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilSegundoApellido">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Segundo apellido"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etSegundoApellido" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilCorreo">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textEmailAddress"
+                android:enabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Correo"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etCorreo" />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:text="Editar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btEditar" />
+        <Button
+            android:text="Cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/btCancelar" />
+        <Button
+            android:text="Cambiar contraseña"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btCambiarContrasenia" />
+
+    </LinearLayout>
+
+</ScrollView>

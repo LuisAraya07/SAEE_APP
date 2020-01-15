@@ -20,7 +20,7 @@ namespace SAEEAPP
         Activity context;
         CursosListAdapter cursosAdapter;
         List<Cursos> cursos;
-        readonly Cursos curso;
+        Cursos cursoTemp, curso;
         EditText etNombre, etCantidadPeriodos;
         Button btAgregarEditar, btCancelar;
         private readonly bool editando;
@@ -29,7 +29,7 @@ namespace SAEEAPP
         {
             InicializarValores(context, cursosAdapter, cursos, "Agregando curso", "Agregar");
             editando = false;
-            curso = null;
+            cursoTemp = null;
         }
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter,
@@ -40,6 +40,15 @@ namespace SAEEAPP
             etNombre.Text = curso.Nombre;
             etCantidadPeriodos.Text = curso.CantidadPeriodos.ToString();
             this.curso = curso;
+            cursoTemp = new Cursos()
+            {
+                Id = curso.Id,
+                Nombre = curso.Nombre,
+                CantidadPeriodos = curso.CantidadPeriodos,
+                CursosGrupos = curso.CursosGrupos,
+                IdProfesor = curso.IdProfesor,
+                IdProfesorNavigation = curso.IdProfesorNavigation
+            };
         }
 
         private void InicializarValores(Activity context, CursosListAdapter cursosAdapter,
@@ -116,12 +125,14 @@ namespace SAEEAPP
                 Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
                 CursosServices servicioCursos = new CursosServices();
-                curso.Nombre = etNombre.Text;
-                curso.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
-                bool resultado = await servicioCursos.UpdateCursoAsync(curso);
+                cursoTemp.Nombre = etNombre.Text;
+                cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
+                bool resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
 
                 if (resultado)
                 {
+                    curso.Nombre = cursoTemp.Nombre;
+                    curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
                     // Se actualiza la lista de cursos
                     cursosAdapter.ActualizarDatos();
 

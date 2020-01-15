@@ -55,17 +55,17 @@ namespace SAEEAPP
                     //Se abre el menu
                     Intent siguiente = new Intent(this, typeof(MenuActivity));
                     StartActivity(siguiente);
-                    Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Nombre}!", ToastLength.Short).Show();
+                    Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Short).Show();
                 }
                 else
                 {
                     ClienteHttp.Usuario = null;
                     Toast.MakeText(this, $"Cédula o contraseña incorrecta", ToastLength.Short).Show();
-                    etContrasenia.Text = string.Empty;
                 }
                 // Se restablecen los controles y se oculta la barra
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Invisible;
                 ActivarDesactivarControles(true);
+                etContrasenia.Text = string.Empty;// Se limpia, ya sea correcta o no
             }
         }
 

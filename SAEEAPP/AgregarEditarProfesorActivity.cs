@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -21,7 +22,7 @@ namespace SAEEAPP
         Activity context;
         ProfesoresListAdapter profesoresAdapter;
         List<Profesores> profesores;
-        readonly Profesores profesor;
+        Profesores profesor, profesorTemp;
         EditText etCedula, etNombre, etApellido1, etApellido2, etCorreo, etContrasenia;
         Button btAgregarEditar, btCancelar;
         private readonly bool editando;
@@ -45,6 +46,16 @@ namespace SAEEAPP
             etCorreo.Text = profesor.Correo;
             etContrasenia.Text = profesor.Contrasenia;
             this.profesor = profesor;
+            profesorTemp = new Profesores()
+            {
+                Cedula = profesor.Cedula,
+                Id = profesor.Id,
+                Nombre = profesor.Nombre,
+                PrimerApellido = profesor.PrimerApellido,
+                SegundoApellido = profesor.SegundoApellido,
+                Correo = profesor.Correo,
+                Contrasenia = profesor.Contrasenia
+            };
         }
 
         private void InicializarValores(Activity context, ProfesoresListAdapter profesoresAdapter,
@@ -125,16 +136,33 @@ namespace SAEEAPP
                 Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
                 ProfesoresServices servicioProfesores = new ProfesoresServices();
-                profesor.Cedula = etCedula.Text;
-                profesor.Nombre = etNombre.Text;
-                profesor.PrimerApellido = etApellido1.Text;
-                profesor.SegundoApellido = etApellido2.Text;
-                profesor.Correo = etCorreo.Text;
-                profesor.Contrasenia = etContrasenia.Text;
-                bool resultado = await servicioProfesores.UpdateProfesorAsync(profesor);
+                profesorTemp.Cedula = etCedula.Text;
+                profesorTemp.Nombre = etNombre.Text;
+                profesorTemp.PrimerApellido = etApellido1.Text;
+                profesorTemp.SegundoApellido = etApellido2.Text;
+                profesorTemp.Correo = etCorreo.Text;
+                profesorTemp.Contrasenia = etContrasenia.Text;
+                bool resultado = await servicioProfesores.UpdateProfesorAsync(profesorTemp);
 
                 if (resultado)
                 {
+                    if (profesor.Id == ClienteHttp.Usuario.Profesor.Id)
+                    {
+                        ClienteHttp.Usuario.Profesor.Cedula = profesorTemp.Cedula;
+                        ClienteHttp.Usuario.Profesor.Nombre = profesorTemp.Nombre;
+                        ClienteHttp.Usuario.Profesor.PrimerApellido = profesorTemp.PrimerApellido;
+                        ClienteHttp.Usuario.Profesor.SegundoApellido = profesorTemp.SegundoApellido;
+                        ClienteHttp.Usuario.Profesor.Correo = profesorTemp.Correo;
+                        ClienteHttp.Usuario.Profesor.Contrasenia = profesorTemp.Contrasenia;
+                        ClienteHttp.ActualizarHeaders();
+                    }
+                    // Se asigna lo del temp al profesor
+                    profesor.Cedula = profesorTemp.Cedula;
+                    profesor.Nombre = profesorTemp.Nombre;
+                    profesor.PrimerApellido = profesorTemp.PrimerApellido;
+                    profesor.SegundoApellido = profesorTemp.SegundoApellido;
+                    profesor.Correo = profesorTemp.Correo;
+                    profesor.Contrasenia = profesorTemp.Contrasenia;
                     // Se actualiza la lista de profesores
                     profesoresAdapter.ActualizarDatos();
 
@@ -154,27 +182,27 @@ namespace SAEEAPP
         {
             if (etCedula.Text.Equals("") || etCedula.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Ingrese la cédula", ToastLength.Long).Show();
+                Toast.MakeText(context, "Ingrese la cédula", ToastLength.Short).Show();
                 return false;
             }
             else if (etNombre.Text.Equals("") || etNombre.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Ingrese el nombre", ToastLength.Long).Show();
+                Toast.MakeText(context, "Ingrese el nombre", ToastLength.Short).Show();
                 return false;
             }
             else if (etApellido1.Text.Equals("") || etApellido1.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Ingrese el primer apellido", ToastLength.Long).Show();
+                Toast.MakeText(context, "Ingrese el primer apellido", ToastLength.Short).Show();
                 return false;
             }
             else if (etApellido2.Text.Equals("") || etApellido2.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Ingrese el segundo apellido", ToastLength.Long).Show();
+                Toast.MakeText(context, "Ingrese el segundo apellido", ToastLength.Short).Show();
                 return false;
             }
             else if (etContrasenia.Text.Equals("") || etContrasenia.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Ingrese la contraseña", ToastLength.Long).Show();
+                Toast.MakeText(context, "Ingrese la contraseña", ToastLength.Short).Show();
                 return false;
             }
             else
