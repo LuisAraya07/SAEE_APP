@@ -39,11 +39,9 @@ namespace SAEEAPP
             lvCursosGruposAgregar.Adapter = cursosGruposAgregarAdapter;
 
             // Se contruye el diálogo
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton("Cerrar", (EventHandler<DialogClickEventArgs>)null)
-            //.SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
-            //.SetNeutralButton("Agregar", (EventHandler<DialogClickEventArgs>)null)
             .SetTitle("Grupos disponibles para agregar");
             alertDialogAndroid = alertDialogBuilder.Create();
         }
@@ -52,25 +50,6 @@ namespace SAEEAPP
         {
             cursosGruposAgregadosAdapter.ActualizarDatos();
             alertDialogAndroid.Dismiss();
-        }
-
-        private async Task GuardarAsync()
-        {
-            CursosServices servicioCursos = new CursosServices();
-            bool resultado = await servicioCursos.UpdateCursoAsync(curso);
-
-            if (resultado)
-            {
-                // Se actualiza la lista de cursos
-                cursosGruposAgregadosAdapter.ActualizarDatos();
-
-                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
-            }
         }
 
         public void Show()

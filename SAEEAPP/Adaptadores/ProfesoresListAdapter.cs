@@ -14,10 +14,13 @@ namespace SAEEAPP.Adaptadores
         private readonly Activity _context;
         private List<Profesores> _profesores;
         private List<Profesores> datosOriginales;
-        public ProfesoresListAdapter(Activity context, List<Profesores> profesores)
+        private readonly TextView _tvCargando;
+        public ProfesoresListAdapter(Activity context, List<Profesores> profesores, TextView tvCargando)
         {
             _context = context;
             _profesores = profesores;
+            _tvCargando = tvCargando;
+            tvCargando.Text = "No hay datos";
             Filter = new ProfesoresFilter(this);
         }
 
@@ -55,10 +58,9 @@ namespace SAEEAPP.Adaptadores
         }
         public void ActualizarDatos()
         {
+            _tvCargando.Visibility = (_profesores.Count > 0) ? ViewStates.Invisible : ViewStates.Visible;
             NotifyDataSetChanged();
         }
-
-
 
         // FILTRO
         private class ProfesoresFilter : Filter
@@ -92,6 +94,7 @@ namespace SAEEAPP.Adaptadores
 
                 return returnObj;
             }
+
             protected override void PublishResults(ICharSequence constraint, FilterResults results)
             {
                 using (var values = results.Values)
@@ -101,8 +104,6 @@ namespace SAEEAPP.Adaptadores
                 constraint.Dispose();
                 results.Dispose();
             }
-
-
         }
     }
 }

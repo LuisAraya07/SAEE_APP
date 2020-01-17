@@ -20,15 +20,16 @@ namespace SAEEAPP
         Activity context;
         CursosListAdapter cursosAdapter;
         List<Cursos> cursos;
-        readonly Cursos curso;
+        Cursos cursoTemp, curso;
         EditText etNombre, etCantidadPeriodos;
+        Button btAgregarEditar, btCancelar;
         private readonly bool editando;
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter, List<Cursos> cursos)
         {
             InicializarValores(context, cursosAdapter, cursos, "Agregando curso", "Agregar");
             editando = false;
-            curso = null;
+            cursoTemp = null;
         }
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter,
@@ -39,6 +40,15 @@ namespace SAEEAPP
             etNombre.Text = curso.Nombre;
             etCantidadPeriodos.Text = curso.CantidadPeriodos.ToString();
             this.curso = curso;
+            cursoTemp = new Cursos()
+            {
+                Id = curso.Id,
+                Nombre = curso.Nombre,
+                CantidadPeriodos = curso.CantidadPeriodos,
+                CursosGrupos = curso.CursosGrupos,
+                IdProfesor = curso.IdProfesor,
+                IdProfesorNavigation = curso.IdProfesorNavigation
+            };
         }
 
         private void InicializarValores(Activity context, CursosListAdapter cursosAdapter,
@@ -55,7 +65,7 @@ namespace SAEEAPP
 #pragma warning disable CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             etCantidadPeriodos = VistaAgregar.FindViewById<EditText>(Resource.Id.etCantidadPeriodos);
 #pragma warning restore CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
@@ -63,42 +73,41 @@ namespace SAEEAPP
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
-        private void Agregar(object sender, EventArgs e)
+        private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                AgregarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Agregando, espere", ToastLength.Short).Show();
 
-        private async Task AgregarAsync()
-        {
-            CursosServices servicioCursos = new CursosServices();
-            Cursos cursoNuevo = new Cursos()
-            {
-                IdProfesor = 1,
-                Nombre = etNombre.Text,
-                CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
-            };
-            HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
+                CursosServices servicioCursos = new CursosServices();
+                Cursos cursoNuevo = new Cursos()
+                {
+                    IdProfesor = 1,// En el api se asigna el correcto
+                    Nombre = etNombre.Text,
+                    CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
+                };
+                HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
 
-            if (resultado.IsSuccessStatusCode)
-            {
-                // Se obtiene el elemento insertado
-                string resultadoString = await resultado.Content.ReadAsStringAsync();
-                cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
-                // Se actualiza la lista de cursos
-                cursos.Add(cursoNuevo);
-                cursosAdapter.ActualizarDatos();
+                if (resultado.IsSuccessStatusCode)
+                {
+                    // Se obtiene el elemento insertado
+                    string resultadoString = await resultado.Content.ReadAsStringAsync();
+                    cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
+                    // Se actualiza la lista de cursos
+                    cursos.Add(cursoNuevo);
+                    cursosAdapter.ActualizarDatos();
 
-                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
+                }
             }
         }
 
@@ -107,34 +116,35 @@ namespace SAEEAPP
             alertDialogAndroid.Dismiss();
         }
 
-        private void Editar(object sender, EventArgs e)
+        private async void Editar(object sender, EventArgs e)
         {
             if (EntradaValida())
             {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-                EditarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            }
-        }
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
-        private async Task EditarAsync()
-        {
-            CursosServices servicioCursos = new CursosServices();
-            curso.Nombre = etNombre.Text;
-            curso.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
-            bool resultado = await servicioCursos.UpdateCursoAsync(curso);
+                CursosServices servicioCursos = new CursosServices();
+                cursoTemp.Nombre = etNombre.Text;
+                cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
+                bool resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
 
-            if (resultado)
-            {
-                // Se actualiza la lista de cursos
-                cursosAdapter.ActualizarDatos();
+                if (resultado)
+                {
+                    curso.Nombre = cursoTemp.Nombre;
+                    curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
+                    // Se actualiza la lista de cursos
+                    cursosAdapter.ActualizarDatos();
 
-                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
-            }
-            else
-            {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                }
             }
         }
 
@@ -161,12 +171,19 @@ namespace SAEEAPP
             }
         }
 
+        private void ActivarDesactivarBotones(bool estado)
+        {
+            btAgregarEditar.Enabled = estado;
+            btCancelar.Enabled = estado;
+            alertDialogAndroid.SetCancelable(estado);
+        }
+
         public void Show()
         {
             alertDialogAndroid.Show();
             // Se obtienen los botones para asignarles los métodos nuevos (no cierran el diálogo).
-            Button btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
-            Button btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
+            btAgregarEditar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
+            btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
 
             // Se asignan las funciones
             if (editando)

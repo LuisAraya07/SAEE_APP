@@ -45,6 +45,7 @@ namespace SAEEAPP
             {
                 // Se bloquean los controles y se activa el progress bar
                 ActivarDesactivarControles(false);
+                Toast.MakeText(this, "Ingresando", ToastLength.Short).Show();
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Visible;
 
                 InicioSesionServices inicioSesionServices = new InicioSesionServices();
@@ -54,7 +55,7 @@ namespace SAEEAPP
                     //Se abre el menu
                     Intent siguiente = new Intent(this, typeof(MenuActivity));
                     StartActivity(siguiente);
-                    Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Nombre}!", ToastLength.Short).Show();
+                    Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Short).Show();
                 }
                 else
                 {
@@ -64,6 +65,7 @@ namespace SAEEAPP
                 // Se restablecen los controles y se oculta la barra
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Invisible;
                 ActivarDesactivarControles(true);
+                etContrasenia.Text = string.Empty;// Se limpia, ya sea correcta o no
             }
         }
 

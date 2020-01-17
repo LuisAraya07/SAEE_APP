@@ -44,14 +44,7 @@ namespace SAEEAPP.Listeners
             alertDialogAndroid.Dismiss();
         }
 
-        private void Borrar(object sender, DialogClickEventArgs e)
-        {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            BorrarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-        }
-
-        private async Task BorrarAsync()
+        private async void Borrar(object sender, DialogClickEventArgs e)
         {
             ProfesoresServices servicioProfesores = new ProfesoresServices();
             bool resultado = await servicioProfesores.DeleteProfesorAsync(_profesor.Id);
@@ -63,7 +56,7 @@ namespace SAEEAPP.Listeners
             }
             else
             {
-                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Long).Show();
+                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
             }
         }
     }

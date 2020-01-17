@@ -1,0 +1,70 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollViewCambiarContrasenia"
+    android:background="@color/fondo">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilContraseniaActual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/etContraseniaActual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:hint="Contraseña actual"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:singleLine="true"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilContraseniaNueva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/etContraseniaNueva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:hint="Contraseña nueva"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:singleLine="true"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilContraseniaConfirmada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFF">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/etContraseniaConfirmada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:hint="Confirmar contraseña nueva"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:singleLine="true"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+</ScrollView>

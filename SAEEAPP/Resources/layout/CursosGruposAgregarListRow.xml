@@ -13,6 +13,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:textStyle="bold"
+        android:textColor="#FFF"
         android:id="@+id/tvNombre" />
     <TextView
         android:text="Año"
@@ -22,15 +23,19 @@
         android:layout_below="@id/tvNombre"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
+        android:textColor="#FFF"
         android:id="@+id/tvAnio" />
     <CheckBox
         android:text=""
+        android:scaleX="1.7"
+        android:scaleY="1.7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:layout_marginRight="25dp"
-        android:id="@+id/cbAgregar" />
+        android:id="@+id/cbAgregar"
+        android:buttonTint="@color/colorAccent" />
 
 </RelativeLayout>
 

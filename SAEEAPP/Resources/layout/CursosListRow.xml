@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="15dp">
     <TextView
         android:text="Nombre"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -13,6 +14,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:textStyle="bold"
+        android:textColor="#FFF"
         android:id="@+id/tvNombre" />
     <TextView
         android:text="Cantidad de periodos"
@@ -22,29 +24,39 @@
         android:layout_below="@id/tvNombre"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
+        android:textColor="#FFF"
         android:id="@+id/tvCantidadPeriodos" />
     <Button
         android:text="Editar"
         android:layout_width="wrap_content"
         android:layout_height="37.9dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
+        android:textColor="#3282b8"
+        android:background="@drawable/button_border_edit"
         android:id="@+id/btEditar" />
     <Button
         android:text="Grupos"
         android:layout_width="wrap_content"
         android:layout_height="37.9dp"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="2dp"
         android:layout_marginRight="15dp"
         android:layout_below="@id/btEditar"
+        android:textColor="#f8b195"
+        android:background="@drawable/button_border_otros"
         android:id="@+id/btGrupos" />
     <Button
         android:text="Borrar"
         android:layout_width="wrap_content"
         android:layout_height="37.9dp"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="2dp"
         android:layout_marginRight="15dp"
         android:layout_below="@id/btGrupos"
+        android:textColor="#f65c78"
+        android:background="@drawable/button_border_delete"
         android:id="@+id/btBorrar" />
 
 </RelativeLayout>

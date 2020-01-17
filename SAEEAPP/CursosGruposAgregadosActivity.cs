@@ -22,7 +22,8 @@ namespace SAEEAPP
         List<CursosGrupos> cursosGrupos;
         List<CursosGrupos> agregar;
         List<CursosGrupos> borrar;
-        readonly Cursos curso;
+        Cursos curso;
+        Button btGuardar, btCancelar, btAgregar;
         ListView lvCursosGruposAgregados;
 
         public CursosGruposAgregadosActivity(Activity context, CursosListAdapter cursosAdapter,
@@ -46,7 +47,7 @@ namespace SAEEAPP
             lvCursosGruposAgregados.Adapter = cursosGruposAgregadosAdapter;
 
             // Se contruye el diálogo
-            alertDialogBuilder = new AlertDialog.Builder(context)
+            alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton("Guardar", (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cancelar", (EventHandler<DialogClickEventArgs>)null)
@@ -55,15 +56,12 @@ namespace SAEEAPP
             alertDialogAndroid = alertDialogBuilder.Create();
         }
 
-        private void Guardar(object sender, EventArgs e)
+        private async void Guardar(object sender, EventArgs e)
         {
-#pragma warning disable CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-            GuardarAsync();
-#pragma warning restore CS4014 // Como esta llamada no es 'awaited', la ejecución del método actual continuará antes de que se complete la llamada. Puede aplicar el operador 'await' al resultado de la llamada.
-        }
+            // Se desactivan los botones
+            ActivarDesactivarBotones(false);
+            Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
-        private async Task GuardarAsync()
-        {
             CursosServices servicioCursos = new CursosServices();
             List<CursosGrupos> agregarPreparados = new List<CursosGrupos>();
             // Se llena la lista con los cursosGrupos preparados para ser insertados
@@ -76,6 +74,7 @@ namespace SAEEAPP
                 });// Importante que solo tengan esto dos atributos para evitar errores
             }
             bool agregados = true, borrados = true, cambio = false;
+
             if (agregar.Count > 0)
             {
                 agregados = await servicioCursos.AgregarCursosGruposAsync(agregarPreparados);
@@ -102,7 +101,10 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                // Se restablecen los botones
+                ActivarDesactivarBotones(true);
+
+                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
             }
         }
 
@@ -111,28 +113,38 @@ namespace SAEEAPP
             alertDialogAndroid.Dismiss();
         }
 
-        private void Agregar(object sender, EventArgs e)
+        private async void Agregar(object sender, EventArgs e)
         {
-            AgregarAsync();
-        }
+            // Se desactivan los botones
+            ActivarDesactivarBotones(false);
+            Toast.MakeText(context, "Cargando, espere", ToastLength.Short).Show();
 
-        private async Task AgregarAsync()
-        {
             GruposServices servicioGrupos = new GruposServices();
             var grupos = (await servicioGrupos.GetAsync()).
                 Where(g => !cursosGrupos.Exists(cg => cg.IdGrupo == g.Id)).ToList();
             CursosGruposAgregarActivity cursosGruposAgregarActivity =
                 new CursosGruposAgregarActivity(context, cursosGruposAgregadosAdapter, curso, cursosGrupos, agregar, borrar, grupos);
             cursosGruposAgregarActivity.Show();
+
+            // Se restablecen los botones
+            ActivarDesactivarBotones(true);
+        }
+
+        private void ActivarDesactivarBotones(bool estado)
+        {
+            btAgregar.Enabled = estado;
+            btGuardar.Enabled = estado;
+            btCancelar.Enabled = estado;
+            alertDialogAndroid.SetCancelable(estado);
         }
 
         public void Show()
         {
             alertDialogAndroid.Show();
             // Se obtienen los botones para asignarles los métodos nuevos (no cierran el diálogo).
-            Button btGuardar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
-            Button btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
-            Button btAgregar = alertDialogAndroid.GetButton((int)DialogButtonType.Neutral);
+            btGuardar = alertDialogAndroid.GetButton((int)DialogButtonType.Positive);
+            btCancelar = alertDialogAndroid.GetButton((int)DialogButtonType.Negative);
+            btAgregar = alertDialogAndroid.GetButton((int)DialogButtonType.Neutral);
 
             // Se asignan las funciones
             btGuardar.Click += Guardar;

@@ -20,6 +20,9 @@ namespace SAEEAPP
     {
         private List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
         ListEstudiantesAdaptador adaptadorEstudiantes;
+        TextView tvCargando;
+        ListView lvEstudiantes;
+        ProgressBar pbCargandoEstudiantes;
         private FloatingActionButton fab;
         private Android.Support.V7.Widget.SearchView _searchView;
 
@@ -29,30 +32,31 @@ namespace SAEEAPP
 
             SetContentView(Resource.Layout.activity_estudiantes);
             fab = FindViewById<FloatingActionButton>(Resource.Id.fabEstudiante);
+            lvEstudiantes = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
+            pbCargandoEstudiantes = FindViewById<ProgressBar>(Resource.Id.pbCargandoEstudiantes);
             fab.Visibility = ViewStates.Invisible;
             fab.Click += AgregarEstudiante;
             // buscarEstudiante = FindViewById<SearchView>(Resource.Id.searchView1);
-
-
-
         }
+
         protected override async void OnStart()
         {
             base.OnStart();
             var estudiantesServicio = new EstudiantesServices();
-            var lvEstudiantes = FindViewById<ListView>(Resource.Id.listViewEstudiantes);
             listaEstudiantes = await estudiantesServicio.GetAsync();
-            TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
             if (listaEstudiantes.Count == 0)
             {
-
                 tvCargando.Text = "No hay datos";
+                pbCargandoEstudiantes.Visibility = ViewStates.Gone;
             }
             else
             {
                 adaptadorEstudiantes = new ListEstudiantesAdaptador(this, listaEstudiantes);
                 tvCargando.Visibility = ViewStates.Gone;
+                pbCargandoEstudiantes.Visibility = ViewStates.Gone;
                 lvEstudiantes.Adapter = adaptadorEstudiantes;
+                lvEstudiantes.Visibility = ViewStates.Visible;
 
             }
             fab.Visibility = ViewStates.Visible;
@@ -84,8 +88,5 @@ namespace SAEEAPP
             MenuItemCompat.SetOnActionExpandListener(item, new SearchViewExpandListener(adaptadorEstudiantes));
             return true;
         }
-
-
-
     }
 }

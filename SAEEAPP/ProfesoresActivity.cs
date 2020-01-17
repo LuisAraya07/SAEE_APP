@@ -22,6 +22,8 @@ namespace SAEEAPP
         ListView lvProfesores;
         ProfesoresListAdapter profesoresAdapter;
         TextView tvCargando;
+        FloatingActionButton btAgregar;
+        ProgressBar pbCargandoProfesores;
         private Android.Support.V7.Widget.SearchView _searchView;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -29,7 +31,10 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             SetContentView(Resource.Layout.activity_profesores);
-            FloatingActionButton btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
+            lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
+            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
+            pbCargandoProfesores = FindViewById<ProgressBar>(Resource.Id.pbCargandoProfesores);
+            btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
             btAgregar.Click += AgregarProfesor;
         }
 
@@ -37,23 +42,18 @@ namespace SAEEAPP
         {
             base.OnStart();
 
-            lvProfesores = FindViewById<ListView>(Resource.Id.lvProfesores);
-            tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
-
             if (profesores == null)
             {
                 ProfesoresServices servicioProfesores = new ProfesoresServices();
                 profesores = await servicioProfesores.GetAsync();
-                if (profesores.Count == 0)
+                if (profesores.Count > 0)
                 {
-                    tvCargando.Text = "No hay datos";
+                    tvCargando.Visibility = ViewStates.Invisible;
                 }
-                else
-                {
-                    tvCargando.Visibility = ViewStates.Gone;
-                    profesoresAdapter = new ProfesoresListAdapter(this, profesores);
-                    lvProfesores.Adapter = profesoresAdapter;
-                }
+                // El mensaje de "no hay datos", lo asigna el Adapter
+                profesoresAdapter = new ProfesoresListAdapter(this, profesores, tvCargando);
+                lvProfesores.Adapter = profesoresAdapter;
+                pbCargandoProfesores.Visibility = ViewStates.Gone;
             }
         }
 

@@ -75,6 +75,7 @@
     <Compile Include="AgregarEditarCursosActivity.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
     <Compile Include="AgregarEditarProfesorActivity.cs" />
+    <Compile Include="CambiarContraseniaActivity.cs" />
     <Compile Include="CursosActivity.cs" />
     <Compile Include="CursosGruposAgregadosActivity.cs" />
     <Compile Include="CursosGruposAgregarActivity.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="ProfesoresActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="UsuarioActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -263,6 +265,16 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\menu\main.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_usuario.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Cambiar_Contrasenia.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
