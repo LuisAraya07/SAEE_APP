@@ -60,5 +60,16 @@
         android:layout_marginTop="30dp"
         android:layout_below="@id/btProfesores"
         android:id="@+id/btEvaluaciones" />
+    <Button
+        android:textColor="#3282b8"
+        android:background="@drawable/button_border_edit"
+        android:text="Notificaciones"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/btEvaluaciones"
+        android:id="@+id/btNotificaciones" />
+
+
 
 </RelativeLayout>

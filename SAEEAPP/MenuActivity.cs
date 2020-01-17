@@ -7,7 +7,7 @@ using System;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Menú Principal", Theme = "@style/AppTheme")]
+    [Activity(Label = "Menú Principal", MainLauncher = true, Theme = "@style/AppTheme")]
     public class MenuActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -23,6 +23,8 @@ namespace SAEEAPP
             btProfesores.Click += OnClick_Profesores;
             Button btEstudiantes = FindViewById<Button>(Resource.Id.btEstudiantes);
             btEstudiantes.Click += OnClick_Estudiantes;
+            //Button btNotificaciones = FindViewById<Button>(Resource.Id.btNotificaciones);
+            //btNotificaciones.Click += OnClick_Notificaciones;
         }
 
         public void OnClick_Cursos(object sender, EventArgs e)
@@ -47,6 +49,12 @@ namespace SAEEAPP
         {
             Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
             StartActivity(estudiantes);
+        }
+
+        public void OnClick_Notificaciones(object sender, EventArgs e)
+        {
+            //Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
+            //StartActivity(notificaciones);
         }
     }
 }

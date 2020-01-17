@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Castle.Components.DictionaryAdapter;
 
 namespace Xamarin.core.Models
 {
@@ -19,7 +21,7 @@ namespace Xamarin.core.Models
             CursosGrupos = new HashSet<CursosGrupos>();
             EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
         }
-
+        [Key("Id")]
         public int Id { get; set; }
         public int IdProfesor { get; set; }
         public string Grupo { get; set; }

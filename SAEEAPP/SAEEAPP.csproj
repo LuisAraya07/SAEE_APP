@@ -129,6 +129,9 @@
     <AndroidResource Include="Resources\drawable\account_plus.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DotLiquid">
+      <Version>2.0.314</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />

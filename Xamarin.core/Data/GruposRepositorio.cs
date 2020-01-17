@@ -10,6 +10,9 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Microsoft.WindowsAzure.MobileServices.Sync;
 using Newtonsoft.Json;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
@@ -26,6 +29,8 @@ namespace Xamarin.core.Data
 
         public async Task<List<Grupos>> GetAsync()
         {
+           
+
             var json = await client.GetStringAsync($"Grupos/GetGrupos");
             return JsonConvert.DeserializeObject<List<Grupos>>(json);
         }

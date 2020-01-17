@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using Microsoft.EntityFrameworkCore;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
 
@@ -25,9 +20,10 @@ namespace Xamarin.core.Services
 
         }
 
+        
         public async Task<List<Grupos>> GetAsync()
         {
-            return await _gruposR.GetAsync();
+             return await _gruposR.GetAsync();
         }
 
         public async Task <List<Estudiantes>> GetGrupo(int id) {
