@@ -19,7 +19,7 @@ namespace SAEEAPP
         AlertDialog alertDialogAndroid;
         ListEstudiantesAdaptador adaptadorEstudiantes;
         List<Estudiantes> listaEstudiantes;
-        Estudiantes _estudiante;
+        readonly Estudiantes _estudiante;
         Activity context;
         EditText etCedula, etNombre, etApellido1, etApellido2, etContrasenia;
         private readonly bool editando;

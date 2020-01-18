@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+   
+        android:layout_height="wrap_content">
+    <item android:id="@+id/item1"
+            android:icon="@drawable/ic_editar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title = "Editar"/>
+    <item android:id="@+id/item2"
+            android:icon="@drawable/trash_can_outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title = "Borrar"/>
+</menu>

@@ -22,4 +22,14 @@
     <string name="opciones">Opciones</string>
     <string name="anio">Año</string>
     <string name="seccionEstudiantes">Administración de Estudiantes</string>
+    <string-array name="listaDias">
+      <item> 0 </item>
+      <item> 1 </item>
+      <item> 2 </item>
+      <item> 3 </item>
+      <item> 4 </item>
+      <item> 5 </item>
+      <item> 6 </item>
+      <item> 7 </item>
+    </string-array>
 </resources>

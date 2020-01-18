@@ -10,93 +10,88 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp">
-        <TextView
-            android:text="Cédula"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textColor="#FFF"
-            android:id="@+id/tvCedula" />
-        <EditText
-            android:inputType="textPersonName"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilCedula">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Cédula"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etCedulaE" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="#FFF"
-            android:backgroundTint="#FFF"
-            android:id="@+id/etCedulaE" />
-        <TextView
-            android:text="Nombre"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilNombreE">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Nombre"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etNombreE" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textColor="#FFF"
-            android:id="@+id/tvNombre" />
-        <EditText
-            android:inputType="textPersonName"
+            android:textColorHint="#FFF"
+            android:id="@+id/tilPrimerApellidoE">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Primer Apellido"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etPrimerApellidoE" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="#FFF"
-            android:backgroundTint="#FFF"
-            android:id="@+id/etNombreE" />
-        <TextView
-            android:text="Primer apellido"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textColor="#FFF"
-            android:id="@+id/tvPrimerApellido" />
-        <EditText
-            android:inputType="textPersonName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/etPrimerApellidoE"
-            android:textColor="#FFF"
-            android:backgroundTint="#FFF"
-        />
-        <TextView
-            android:text="Segundo apellido"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textColor="#FFF"
-            android:id="@+id/tvSegundoApellido" />
-        <EditText
-            android:inputType="textPersonName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/etSegundoApellidoE" 
-            android:textColor="#FFF"
-            android:backgroundTint="#FFF"
-            />
-        <TextView
-            android:text="Contraseña"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:textColor="#FFF"
-            android:id="@+id/tvContrasenia" />
+            android:textColorHint="#FFF"
+            android:id="@+id/tilSegundoApellidoE">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Segundo Apellido"
+                android:textColor="#FFF"
+                android:backgroundTint="#FFF"
+                android:id="@+id/etSegundoApellidoE" />
+        </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true"
+            android:textColorHint="#FFFF"
             app:passwordToggleTint="@color/colorPrimaryDark">
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/etContraseniaE"
@@ -106,6 +101,7 @@
                 android:layout_marginRight="25dp"
                 android:layout_marginBottom="10dp"
                 android:singleLine="true"
+                android:hint="Contraseña"
                 android:inputType="textPassword"
                 android:textColor="#FFF"
                 android:backgroundTint="#FFF"/>

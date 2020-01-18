@@ -1,7 +1,9 @@
 ﻿using Android.App;
+using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using Java.Lang;
+using SAEEAPP.Listeners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,14 +47,7 @@ namespace SAEEAPP.Adaptadores
             {
                 view = _context.LayoutInflater.Inflate(Resource.Layout.EstudiantesListRow, null);
             }
-            Button btBorrar = view.FindViewById<Button>(Resource.Id.btBorrarE);
-            btBorrar.SetTag(Resource.Id.btBorrarE, position);
-            btBorrar.Click -= OnClick_Borrar;
-            btBorrar.Click += OnClick_Borrar;
-            Button btEditar = view.FindViewById<Button>(Resource.Id.btEditarE);
-            btEditar.SetTag(Resource.Id.btEditarE, position);
-            btEditar.Click -= OnClick_Editar;
-            btEditar.Click += OnClick_Editar;
+            DefinirBotones(view, estudiante);
 
             view.
                 FindViewById<TextView>(Resource.Id.textViewNombreE).
@@ -60,43 +55,26 @@ namespace SAEEAPP.Adaptadores
             view.FindViewById<TextView>(Resource.Id.textViewCedE).Text = estudiante.Cedula;
             return view;
         }
-        public void OnClick_Borrar(object sender, EventArgs e)
-        {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarE);
-            var estudiante = _estudiantes.ElementAt(i);
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-            alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
-              .SetCancelable(false)
-              .SetTitle("¿Está seguro?")
-              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
-              .SetPositiveButton("Sí", async delegate
-              {
-                  EstudiantesServices gruposServices = new EstudiantesServices();
-                  await gruposServices.DeleteEstudiantesAsync(estudiante);
-                  Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                  _estudiantes.RemoveAt(i);
-                  NotifyDataSetChanged();
-              })
-              .SetNegativeButton("No", delegate
-              {
-                  alertDialogBuilder.Dispose();
 
-              })
-              .Show();
-        }
-        public void OnClick_Editar(object sender, EventArgs e)
+        private void DefinirBotones(View view, Estudiantes estudiante)
         {
-            int i = (int)((Button)sender).GetTag(Resource.Id.btEditarE);
-            var estudiante = _estudiantes.ElementAt(i);
-            AgregarEstudianteActivity agregarEditarEstudianteActivity =
-                new AgregarEstudianteActivity(_context, this, _estudiantes, estudiante);
-            agregarEditarEstudianteActivity.Show();
+            Button btnOpciones = view.FindViewById<Button>(Resource.Id.btnOpcionesE);
+            btnOpciones.SetTag(Resource.Id.btnOpcionesE, btnOpciones);
+            var draw = ContextCompat.GetDrawable(_context, Resource.Drawable.dots_vertical);
+            btnOpciones.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
+            btnOpciones.SetOnClickListener(new EstudiantesListener(_context, _estudiantes, estudiante, this, btnOpciones));
         }
 
+        
+       
         public void ActualizarDatos()
         {
             NotifyDataSetChanged();
         }
+
+
+
+
         // FILTRO
         private class EstudiantesFilter : Filter
         {

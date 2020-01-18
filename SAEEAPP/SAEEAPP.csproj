@@ -67,15 +67,22 @@
     <Compile Include="Adaptadores\CursosGruposAgregadosAdapter.cs" />
     <Compile Include="Adaptadores\CursosGruposAgregarAdapter.cs" />
     <Compile Include="Adaptadores\CursosListAdapter.cs" />
+    <Compile Include="Listeners\EstudiantesListener.cs" />
+    <Compile Include="Listeners\GruposListener.cs" />
     <Compile Include="Adaptadores\ListAgregarEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEGAdaptador.cs" />
     <Compile Include="Adaptadores\ListEstudiantesAdaptador.cs" />
     <Compile Include="Adaptadores\ListGruposAdaptador.cs" />
+    <Compile Include="Adaptadores\ListNotificacionesAdaptor.cs" />
     <Compile Include="Adaptadores\ProfesoresListAdapter.cs" />
+    <Compile Include="AENotificacionesActivity.cs" />
     <Compile Include="AgregarEditarCursosActivity.cs" />
     <Compile Include="AgregarEstudianteActivity.cs" />
     <Compile Include="AgregarEditarProfesorActivity.cs" />
     <Compile Include="CambiarContraseniaActivity.cs" />
+    <Compile Include="ManejoNotificaciones\CrearRecordatorio.cs" />
+    <Compile Include="ManejoNotificaciones\CrearEliminarNotificaciones.cs" />
+    <Compile Include="NotificacionesActivity.cs" />
     <Compile Include="CursosActivity.cs" />
     <Compile Include="CursosGruposAgregadosActivity.cs" />
     <Compile Include="CursosGruposAgregarActivity.cs" />
@@ -86,6 +93,7 @@
     <Compile Include="JavaHolder\SearchViewExpandListener.cs" />
     <Compile Include="Listeners\CursosGruposListener.cs" />
     <Compile Include="Listeners\CursosListener.cs" />
+    <Compile Include="Listeners\NotificacionesListener.cs" />
     <Compile Include="Listeners\ProfesoresListeners.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MenuActivity.cs" />
@@ -133,6 +141,15 @@
   <ItemGroup>
     <PackageReference Include="DotLiquid">
       <Version>2.0.314</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore">
+      <Version>4.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore">
+      <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
+      <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
@@ -275,6 +292,37 @@
     <AndroidResource Include="Resources\layout\Dialogo_Cambiar_Contrasenia.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\NotificacionesListView.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\NotificacionesListRow.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\menu_popup.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Agregar_Notificaciones.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dots_vertical.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\menu_popup_estudiantes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\menu_popup_grupos.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_estudiantes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_editar.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

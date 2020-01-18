@@ -115,7 +115,6 @@ namespace SAEEAPP
         {
             base.OnStart();
             var grupoServicio = new GruposServices();
-            //Obtengo el id el profesor
             listaGrupos = await grupoServicio.GetAsync();
             if (listaGrupos.Count == 0)
             {

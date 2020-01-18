@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using Java.Lang;
@@ -44,18 +45,28 @@ namespace SAEEAPP.Adaptadores
             TextView tvNombre = convertView.FindViewById<TextView>(Resource.Id.tvNombre);
             TextView tvCedula = convertView.FindViewById<TextView>(Resource.Id.tvCedula);
             TextView tvCorreo = convertView.FindViewById<TextView>(Resource.Id.tvCorreo);
-            Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditar);
-            Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrar);
+            //Button btEditar = convertView.FindViewById<Button>(Resource.Id.btEditar);
+            //Button btBorrar = convertView.FindViewById<Button>(Resource.Id.btBorrar);
 
             tvNombre.Text = $"{profesor.Nombre} {profesor.PrimerApellido} {profesor.SegundoApellido}";
             tvCedula.Text = profesor.Cedula;
             tvCorreo.Text = profesor.Correo;
-
-            btEditar.SetOnClickListener(new EditarPListener(_context, _profesores, profesor, this));
-            btBorrar.SetOnClickListener(new BorrarPListener(_context, _profesores, profesor, this));
+            DefinirBotones(convertView, profesor);
+            //btEditar.SetOnClickListener(new EditarPListener(_context, _profesores, profesor, this));
+            //btBorrar.SetOnClickListener(new BorrarPListener(_context, _profesores, profesor, this));
 
             return convertView;
         }
+        private void DefinirBotones(View row,Profesores profesor) {
+            Button btnOpciones = row.FindViewById<Button>(Resource.Id.btnOpcionesP);
+            btnOpciones.SetTag(Resource.Id.btnOpcionesP, btnOpciones);
+            var draw = ContextCompat.GetDrawable(_context, Resource.Drawable.dots_vertical);
+            btnOpciones.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
+            btnOpciones.SetOnClickListener(new ProfesoresListener(_context, _profesores, profesor, this, btnOpciones));
+
+
+        }
+       
         public void ActualizarDatos()
         {
             _tvCargando.Visibility = (_profesores.Count > 0) ? ViewStates.Invisible : ViewStates.Visible;

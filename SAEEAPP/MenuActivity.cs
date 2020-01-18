@@ -8,7 +8,7 @@ using Xamarin.core.Data;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Menú Principal", MainLauncher = true, Theme = "@style/AppTheme")]
+    [Activity(Label = "Menú Principal",  Theme = "@style/AppTheme")]
     public class MenuActivity : AppCompatActivity
     {
         Button btUsuario;
@@ -28,6 +28,8 @@ namespace SAEEAPP
             btProfesores.Click += OnClick_Profesores;
             Button btEstudiantes = FindViewById<Button>(Resource.Id.btEstudiantes);
             btEstudiantes.Click += OnClick_Estudiantes;
+            Button btNotificaciones = FindViewById<Button>(Resource.Id.btNotificaciones);
+            btNotificaciones.Click += OnClick_Notificaciones;
             if (!ClienteHttp.Usuario.Profesor.Administrador)
             {
                 btProfesores.Visibility = Android.Views.ViewStates.Gone;
@@ -72,8 +74,8 @@ namespace SAEEAPP
 
         public void OnClick_Notificaciones(object sender, EventArgs e)
         {
-            //Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
-            //StartActivity(notificaciones);
+            Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
+            StartActivity(notificaciones);
         }
     }
 }

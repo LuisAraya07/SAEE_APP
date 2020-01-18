@@ -42,49 +42,16 @@
     <Button
         android:textColor="#3282b8"
         android:background="@drawable/button_border_edit"
-        android:text="Editar"
-        android:layout_width="107dp"
-        android:layout_height="37.9dp"
-        android:layout_marginLeft="0.0dp"
-        android:layout_marginBottom="2dp"
-        android:textSize="12sp"
-        android:id="@+id/btEditar"
-        android:layout_below="@id/textViewGrupo"
-        android:layout_marginRight="15dp"
+        android:minWidth="25px"
+        android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/btBorrar"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginRight="37.9dp"
+        android:layout_marginTop="14.4dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:id="@+id/btnOpcionesG"
+        android:layout_marginLeft="22.1dp" />
 
-    <Button
-        android:textColor="#f65c78"
-        android:background="@drawable/button_border_delete"
-        android:text="Borrar"
-        android:layout_width="107dp"
-        android:layout_height="37.9dp"
-        android:layout_alignParentRight="true"
-        android:textSize="12sp"
-        android:id="@+id/btBorrar"
-        android:layout_marginRight="15.0dp"
-        android:layout_below="@id/textViewGrupo"
-        android:layout_alignParentTop="true"
-        android:layout_alignTop="@id/textViewGrupo"
-        android:layout_marginLeft="0.0dp"
-        android:layout_marginTop="5dp" />
-    <Button
-        android:textColor="#f8b195"
-        android:background="@drawable/button_border_otros"
-        android:text="Estudiantes"
-        android:layout_width="107.0dp"
-        android:layout_height="37.9dp"
-        android:layout_marginLeft="0.0dp"
-        android:id="@+id/btEstudiantes"
-        android:layout_marginRight="15dp"
-        android:textSize="12sp"
-        android:layout_below="@id/btEditar"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="0.0dp"
-        android:layout_marginTop="0.0dp"   />
-    
    
 </RelativeLayout>
       
