@@ -27,13 +27,8 @@ namespace Xamarin.core.Data
 
         public async Task<HttpResponseMessage> IniciarSesion(string cedula, string contrasenia)
         {
-            Usuario usuario = new Usuario() { 
-                Profesor = new Profesores() { 
-                    Cedula = cedula, Contrasenia = contrasenia
-                }
-            };
-            var serializedUsuario = JsonConvert.SerializeObject(usuario);
-            var response = await client.PostAsync($"InicioSesion", new StringContent(serializedUsuario, Encoding.UTF8, "application/json"));
+            ClienteHttp.EstablecerHeaders(cedula, contrasenia);
+            var response = await client.GetAsync($"Iniciar_sesion");
             if (response.IsSuccessStatusCode)
             {
                 ClienteHttp.EstablecerHeaders(response.Content);
