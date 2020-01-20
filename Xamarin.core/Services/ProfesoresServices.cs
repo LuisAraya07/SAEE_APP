@@ -10,20 +10,82 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Microsoft.EntityFrameworkCore;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
+using Xamarin.core.Offline;
 
 namespace Xamarin.core.Services
 {
     public class ProfesoresServices
     {
         private readonly ProfesoresRepositorio _profesoresR;
+        //Offline
+        private readonly int idProfesor;
+        private readonly DatabaseContextSistema db;
 
         public ProfesoresServices()
         {
             _profesoresR = new ProfesoresRepositorio();
         }
 
+        //Servicio offline
+        public ProfesoresServices(int idProfesor)
+        {
+            db = new DatabaseContextSistema();
+            this.idProfesor = idProfesor;
+
+        }
+        //Agregar profesor
+        public async Task<Profesores> PostOffline(Profesores profesores)
+        {
+            await db.Database.MigrateAsync();
+            db.Profesores.Add(profesores);
+            await db.SaveChangesAsync();
+            return profesores;
+        }
+        //Obtener profesores
+        public async Task<List<Profesores>> GetOffline()
+        {
+            await db.Database.MigrateAsync();
+            return await db.Profesores.ToListAsync();
+        }
+        //Editar profesores No debería servir
+        public async Task<bool> UpdateProfesorOffline(Profesores profesor)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                db.Entry(profesor).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        //Eliminar profesor
+        public async Task<bool> DeleteProfesorOffline(int id)
+        {
+            await db.Database.MigrateAsync();
+            var profesores = await db.Profesores.Include(profesor => profesor.Cursos)
+                .Include(profesor => profesor.EstudiantesXgrupos)
+                .Include(profesor => profesor.Estudiantes)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (profesores == null)
+            {
+                return false;
+            }
+            db.Profesores.Remove(profesores);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
+
+
+        /*   Termina offline       */
         public async Task<HttpResponseMessage> PostAsync(Profesores profesor)
         {
             return await _profesoresR.PostAsync(profesor);

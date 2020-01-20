@@ -75,7 +75,11 @@ namespace Xamarin.core.Data
             var json = await client.GetStringAsync($"CursosGrupos/{id}");
             return JsonConvert.DeserializeObject<List<CursosGrupos>>(json);
         }
-
+        public async Task<List<CursosGrupos>> GetCursosGruposAllAsync()
+        {
+            var json = await client.GetStringAsync($"CursosGrupos");
+            return JsonConvert.DeserializeObject<List<CursosGrupos>>(json);
+        }
         public async Task<bool> DeleteCursoAsync(int id)
         {
             var response = await client.DeleteAsync($"Cursos/{id}");

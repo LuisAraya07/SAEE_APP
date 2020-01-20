@@ -9,16 +9,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:title = "Editar"/>
-    <item android:id="@+id/item2"
-            android:textColor="#FFF"
-            android:icon="@drawable/trash_can_outline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:title = "Borrar"/>
+    
     <item android:id="@+id/item3"
             android:textColor="#FFF"
             android:icon="@drawable/ic_estudiantes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:title = "Estudiantes"/>
+    <item android:id="@+id/item2"
+            android:textColor="#FFF"
+            android:icon="@drawable/trash_can_outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title = "Borrar"/>
 </menu>

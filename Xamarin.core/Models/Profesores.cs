@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Castle.Components.DictionaryAdapter;
 
 namespace Xamarin.core.Models
 {
@@ -21,7 +22,7 @@ namespace Xamarin.core.Models
             EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
             Grupos = new HashSet<Grupos>();
         }
-
+        [Key("Id")]
         public int Id { get; set; }
         public string Cedula { get; set; }
         public string Nombre { get; set; }

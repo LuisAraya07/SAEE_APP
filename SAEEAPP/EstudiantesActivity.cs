@@ -10,7 +10,9 @@ using SAEEAPP.Adaptadores;
 using SAEEAPP.JavaHolder;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
+using Xamarin.core.OfflineServices;
 using Xamarin.core.Services;
 
 namespace SAEEAPP
@@ -25,7 +27,7 @@ namespace SAEEAPP
         ProgressBar pbCargandoEstudiantes;
         private FloatingActionButton fab;
         private Android.Support.V7.Widget.SearchView _searchView;
-
+        VerificarConexion vc;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -36,6 +38,7 @@ namespace SAEEAPP
             tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoE);
             pbCargandoEstudiantes = FindViewById<ProgressBar>(Resource.Id.pbCargandoEstudiantes);
             fab.Visibility = ViewStates.Invisible;
+            vc = new VerificarConexion(this);
             fab.Click += AgregarEstudiante;
             // buscarEstudiante = FindViewById<SearchView>(Resource.Id.searchView1);
         }
@@ -43,8 +46,22 @@ namespace SAEEAPP
         protected override async void OnStart()
         {
             base.OnStart();
-            var estudiantesServicio = new EstudiantesServices();
-            listaEstudiantes = await estudiantesServicio.GetAsync();
+            EstudiantesServices estudiantesServicio;
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                estudiantesServicio = new EstudiantesServices();
+                listaEstudiantes = await estudiantesServicio.GetAsync();
+            }
+            else
+            {
+                Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Long).Show();
+                //NotificacionesServices ns = new NotificacionesServices();
+                //var idProfesor = ns.GetProfesorConectado().Id;
+                //estudiantesServicio = new EstudiantesServices(idProfesor);
+                //listaEstudiantes = await estudiantesServicio.GetOffline();
+            }
+            
             if (listaEstudiantes.Count == 0)
             {
                 tvCargando.Text = "No hay datos";

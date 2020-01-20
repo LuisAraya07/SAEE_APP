@@ -47,6 +47,12 @@ namespace Xamarin.core.Data
             return await Task.Run(() => JsonConvert.DeserializeObject<List<EstudiantesXgrupos>>(json));
         }
 
+        public async Task<List<EstudiantesXgrupos>> GetAllEGAsync()
+        {
+            var json = await client.GetStringAsync($"Grupos/GetEGOffline");
+            return await Task.Run(() => JsonConvert.DeserializeObject<List<EstudiantesXgrupos>>(json));
+        }
+
         //Agregar Grupo
         public async Task<HttpResponseMessage> PostAsync(Grupos grupo)
         {

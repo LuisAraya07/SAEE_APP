@@ -33,7 +33,6 @@ namespace Xamarin.core.Data
                 }
             };
             var serializedUsuario = JsonConvert.SerializeObject(usuario);
-
             var response = await client.PostAsync($"InicioSesion", new StringContent(serializedUsuario, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {

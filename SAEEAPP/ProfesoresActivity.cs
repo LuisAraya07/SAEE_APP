@@ -2,6 +2,7 @@
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
+using Android.Support.V4.Content;
 using Android.Support.V4.View;
 using Android.Support.V7.App;
 using Android.Views;
@@ -69,7 +70,14 @@ namespace SAEEAPP
             MenuInflater.Inflate(Resource.Menu.main, menu);
 
             var item = menu.FindItem(Resource.Id.searchView1);
-
+            //var salir = menu.FindItem(Resource.Id.CerrarSesion);
+            //var btnS = MenuItemCompat.GetActionView(salir);
+            ////var draw = ContextCompat.GetDrawable(this, Resource.Drawable.ic_salir);
+            ////btnSalir.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
+            //btnSalir.Click += delegate
+            //{
+            //    Toast.MakeText(this, "Cerrr Sesión", ToastLength.Short).Show();
+            //};
             var searchView = MenuItemCompat.GetActionView(item);
             _searchView = searchView.JavaCast<Android.Support.V7.Widget.SearchView>();
 
@@ -84,6 +92,17 @@ namespace SAEEAPP
             MenuItemCompat.SetOnActionExpandListener(item, new SearchViewExpandListener(profesoresAdapter));
             return true;
         }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+
+            if (item.ItemId == Resource.Id.CerrarSesion)
+            {
+                Toast.MakeText(this, "Cerrar Sesión", ToastLength.Short).Show();
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+
 
     }
 }

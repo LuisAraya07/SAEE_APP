@@ -25,7 +25,7 @@
 
   <style name ="PopupTheme" parent="ThemeOverlay.AppCompat.Light">
     <item name="android:textColorPrimary" >#FFF</item>
-    <item name="android:background">@color/fondo</item>
+    <item name="android:background">#342E2D</item>
   </style>
 
 </resources>

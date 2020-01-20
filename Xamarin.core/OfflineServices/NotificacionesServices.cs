@@ -19,17 +19,17 @@ namespace Xamarin.core.OfflineServices
     {
         //private readonly string dbNotificaciones = "dbNotificaciones.db";
         private DatabaseContext db;
-
-        public NotificacionesServices(string databasePath)
+        
+        public NotificacionesServices()
         {
-            db = new DatabaseContext(databasePath);
+            db = new DatabaseContext();
         }
 
         public async Task<List<Notificaciones>> GetNotificaciones(int idProfesor)
         {
             await db.Database.MigrateAsync();
             var notificaciones = await db.Notificaciones.Where(x => x.IdProfesor == idProfesor).ToListAsync();
-            return (notificaciones==null)?new List<Notificaciones>() : notificaciones;
+            return notificaciones ?? new List<Notificaciones>();
 
         }
         public async Task<List<Notificaciones>> GetNotificacionesEliminar(int idProfesor) {
@@ -46,11 +46,9 @@ namespace Xamarin.core.OfflineServices
         {
             try
             {
-
-                
-                 db.Database.MigrateAsync();
+                db.Database.MigrateAsync();
                 db.Entry(notificacion).State = EntityState.Modified;
-                 db.SaveChangesAsync();
+                db.SaveChangesAsync();
                 return true;
             }
             catch (DbUpdateConcurrencyException)
@@ -66,9 +64,9 @@ namespace Xamarin.core.OfflineServices
             try
             {
                 
-                 db.Database.MigrateAsync();
+                db.Database.MigrateAsync();
                 db.Notificaciones.Add(notificacion);
-                 db.SaveChangesAsync();
+                db.SaveChangesAsync();
                 return notificacion;
             }
             catch (DbUpdateConcurrencyException)
@@ -83,15 +81,54 @@ namespace Xamarin.core.OfflineServices
         {
             try
             {
-                
-                 db.Database.MigrateAsync();
+                db.Database.MigrateAsync();
                 db.Notificaciones.Remove(notificacion);
-                 db.SaveChangesAsync();
+                db.SaveChangesAsync();
                 return true;
             }
             catch (DbUpdateConcurrencyException)
             {
                 return false;
+            }
+
+        }
+
+        //Obtener Profesor
+        public async Task<Profesores> GetProfesorConectado()
+        {
+            await db.Database.MigrateAsync();
+            return await db.ProfesorConectado.FirstOrDefaultAsync();
+        }
+        //Eliminar profesor
+        public Boolean EliminarProfesorConectado(Profesores profesor)
+        {
+            try
+            {
+                db.Database.MigrateAsync();
+                db.ProfesorConectado.Remove(profesor);
+                db.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+        }
+        //Agregar profesor
+        public Profesores PostProfesorConectado(Profesores profesor)
+        {
+            try
+            {
+
+                db.Database.MigrateAsync();
+                db.ProfesorConectado.Add(profesor);
+                db.SaveChangesAsync();
+                return profesor;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return profesor;
             }
 
         }

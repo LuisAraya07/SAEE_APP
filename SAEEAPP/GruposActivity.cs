@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Net;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
@@ -11,6 +12,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
+using Android.Content;
+using Xamarin.core;
+using Xamarin.core.Data;
+using Xamarin.core.OfflineServices;
+
 namespace SAEEAPP
 {
     [Activity(Label = "@string/grupo", Theme = "@style/AppTheme")]
@@ -22,7 +28,7 @@ namespace SAEEAPP
         ListView grupoListView;
         ProgressBar pbCargandoGrupos;
         TextView tvCargando;
-
+        VerificarConexion vc; 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -31,6 +37,7 @@ namespace SAEEAPP
             tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
             pbCargandoGrupos = FindViewById<ProgressBar>(Resource.Id.pbCargandoGrupos);
             fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
+            vc  = new VerificarConexion(this);
             fab.Visibility = ViewStates.Invisible;
             fab.Click += delegate
             {
@@ -44,6 +51,7 @@ namespace SAEEAPP
                 alertDialogBuilder.SetCancelable(false)
                 .SetPositiveButton("Agregar", delegate
                 {
+                    
                     AgregarGrupoAsync(alertDialogBuilder, etGrupo.Text);
                 })
                 .SetNegativeButton("Cancelar", delegate
@@ -61,7 +69,7 @@ namespace SAEEAPP
         private async void AgregarGrupoAsync(Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder, string etGrupo)
         {
             DateTime fechaActual = DateTime.Today;
-            GruposServices gruposServices = new GruposServices();
+            GruposServices gruposServices;
             if (!etGrupo.Equals("") && !etGrupo.StartsWith(" "))
             {
                 Grupos grupo =
@@ -72,20 +80,39 @@ namespace SAEEAPP
                     Grupo = etGrupo
 
                 };
-                HttpResponseMessage resultado = await gruposServices.PostAsync(grupo);
-                if (resultado.IsSuccessStatusCode)
+                //Verificar conexión
+                
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    string resultadoString = await resultado.Content.ReadAsStringAsync();
-                    var grupoNuevo = JsonConvert.DeserializeObject<Grupos>(resultadoString);
-                    VerificarLista(grupoNuevo);
-                    Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
-                    alertDialogBuilder.Dispose();
+                    gruposServices = new GruposServices();
+                    HttpResponseMessage resultado = await gruposServices.PostAsync(grupo);
+                    if (resultado.IsSuccessStatusCode)
+                    {
+                        string resultadoString = await resultado.Content.ReadAsStringAsync();
+                        var grupoNuevo = JsonConvert.DeserializeObject<Grupos>(resultadoString);
+                        VerificarLista(grupoNuevo);
+                        Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
+                        alertDialogBuilder.Dispose();
+
+                    }
+                    else
+                    {
+                        Toast.MakeText(this, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                    }
 
                 }
-                else
-                {
-                    Toast.MakeText(this, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                else {
+                    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+                    //NotificacionesServices ns = new NotificacionesServices();
+                    //var idProfesor = ns.GetProfesorConectado().Id;
+                    //gruposServices = new GruposServices(idProfesor);
+                    //var grupoNuevo = await gruposServices.PostOffline(grupo);
+                    //VerificarLista(grupoNuevo);
+                    //Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
+                    //alertDialogBuilder.Dispose();
                 }
+                
 
             }
             else
@@ -114,8 +141,23 @@ namespace SAEEAPP
         protected override async void OnStart()
         {
             base.OnStart();
-            var grupoServicio = new GruposServices();
-            listaGrupos = await grupoServicio.GetAsync();
+            //Verificamos conexion
+            var conectado = vc.IsOnline();
+            GruposServices grupoServicio;
+            if (conectado)
+            {
+                grupoServicio = new GruposServices();
+                listaGrupos = await grupoServicio.GetAsync();
+            }
+            //else
+            //{
+            //    NotificacionesServices ns = new NotificacionesServices();
+            //    var idProfesor = ns.GetProfesorConectado().Id;
+            //    grupoServicio = new GruposServices(idProfesor);
+            //    listaGrupos = await grupoServicio.GetOffline();
+            //}
+             
+            
             if (listaGrupos.Count == 0)
             {
                 tvCargando.Text = "No hay datos";
@@ -131,6 +173,8 @@ namespace SAEEAPP
             }
             fab.Visibility = ViewStates.Visible;
         }
+
+       
 
 
     }

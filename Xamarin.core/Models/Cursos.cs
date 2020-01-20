@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Castle.Components.DictionaryAdapter;
 
 namespace Xamarin.core.Models
 {
@@ -19,7 +20,7 @@ namespace Xamarin.core.Models
         {
             CursosGrupos = new HashSet<CursosGrupos>();
         }
-
+        [Key("Id")]
         public int Id { get; set; }
         public int IdProfesor { get; set; }
         public string Nombre { get; set; }

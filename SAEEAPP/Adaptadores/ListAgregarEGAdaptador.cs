@@ -4,6 +4,7 @@ using Android.Widget;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -72,17 +73,25 @@ namespace SAEEAPP.Adaptadores
         }
         public async void EliminarEstudiantes(EstudiantesXgrupos eg)
         {
-            GruposServices gruposServices = new GruposServices();
-            var EGBorrado = await gruposServices.DeleteEGAsync(eg);
-            if (EGBorrado)
-            {
-                Toast.MakeText(_context, "Eliminado.", ToastLength.Short).Show();
-                _EG.Remove(eg);
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado) { 
+                GruposServices gruposServices = new GruposServices();
+                var EGBorrado = await gruposServices.DeleteEGAsync(eg);
+                if (EGBorrado)
+                {
+                    Toast.MakeText(_context, "Eliminado.", ToastLength.Short).Show();
+                    _EG.Remove(eg);
 
+                }
+                else
+                {
+                    Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+                }
             }
             else
             {
-                Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
             }
         }
         public async void AgregarEstudiante(Estudiantes estudiante)
@@ -94,16 +103,26 @@ namespace SAEEAPP.Adaptadores
                 //El id del profesor es irrelevante
                 //IdProfesor = estudiante.IdProfesor
             };
-            GruposServices gruposServices = new GruposServices();
-            var EGNuevo = await gruposServices.PostEGAsync(EGAgregar);
-            if (EGNuevo == null)
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+                GruposServices gruposServices = new GruposServices();
+                var EGNuevo = await gruposServices.PostEGAsync(EGAgregar);
+                if (EGNuevo == null)
+                {
+                    Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "Agregado.", ToastLength.Short).Show();
+                    _EG.Add(EGNuevo);
+                }
             }
             else
             {
-                Toast.MakeText(_context, "Agregado.", ToastLength.Short).Show();
-                _EG.Add(EGNuevo);
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
+
             }
 
         }

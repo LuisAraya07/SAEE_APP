@@ -10,6 +10,7 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.EntityFrameworkCore;
 using SAEEAPP.Adaptadores;
+using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.OfflineServices;
@@ -40,34 +41,15 @@ namespace SAEEAPP
             BindDataAsync();
             
         }
-        
-        //private async void BinData6() {
-        //    //var dbFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-        //    //var fileName = "dbLocal.db";
-        //    //var dbFullPath = Path.Combine(dbFolder, fileName);
-           
-
-                    
-               
-
-        //}
-
-
         private async void BindDataAsync()
         {
-            var notificacionIns = new NotificacionesServices("dbNotificaciones.db");
+            var notificacionIns = new NotificacionesServices();
             //Id del profesor
             var idProfesor = ClienteHttp.Usuario.Profesor.Id;
             listitem = await notificacionIns.GetNotificaciones(idProfesor);
             if (listitem.Count > 0)
             {
                 _txtLabel.Visibility = ViewStates.Invisible;
-
-                //adapter = new GridReminder(this, listitem);
-                //list.Adapter = adapter;
-                //list.ItemClick += List_ItemClick;    
-                //adapter = new ListNotificacionesAdaptor(this, listitem);
-                //list.Adapter = adapter;
             }
             else
             {
@@ -86,9 +68,29 @@ namespace SAEEAPP
 
         private void AgregarNotificacion(object sender, EventArgs e)
         {
-            AENotificacionesActivity agregarNotificacionActivity =
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                AENotificacionesActivity agregarNotificacionActivity =
                 new AENotificacionesActivity(this, adapter, listitem);
-            agregarNotificacionActivity.Show();
+                agregarNotificacionActivity.Show();
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
         }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+
+            if (item.ItemId == Resource.Id.CerrarSesion)
+            {
+                Toast.MakeText(this, "Cerrar Sesión", ToastLength.Short).Show();
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
     }
 }

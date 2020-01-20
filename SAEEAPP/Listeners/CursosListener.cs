@@ -7,6 +7,7 @@ using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -95,16 +96,25 @@ namespace SAEEAPP.Listeners
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
             CursosServices servicioCursos = new CursosServices();
-            bool resultado = await servicioCursos.DeleteCursoAsync(_curso.Id);
-            if (resultado)
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                _cursos.Remove(_curso);
-                _cursosListAdapter.ActualizarDatos();
+                bool resultado = await servicioCursos.DeleteCursoAsync(_curso.Id);
+                if (resultado)
+                {
+                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                    _cursos.Remove(_curso);
+                    _cursosListAdapter.ActualizarDatos();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
+                }
             }
             else
             {
-                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
+                Toast.MakeText(_context,"Necesita conexión a internet.",ToastLength.Long).Show();
             }
         }
         private void OnClick_Editar()

@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
@@ -63,43 +64,52 @@ namespace SAEEAPP
 
         private async void BtEditar_Click(object sender, EventArgs e)
         {
-            if (editando) // Si está editando, hay que guardar la información
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                if (EntradaValida())
+                if (editando) // Si está editando, hay que guardar la información
                 {
-                    //Bloquear botones
-                    ActivarDesactivarBotones(false);
-                    // Guardar información...
-                    Toast.MakeText(this, "Guardando, espere...", ToastLength.Short).Show();
-                    // Se utiliza esta clase en caso de que falle, para restaurar los valores
-                    profesor.Nombre = etNombre.Text;
-                    profesor.PrimerApellido = etPrimerApellido.Text;
-                    profesor.SegundoApellido = etSegundoApellido.Text;
-                    profesor.Correo = etCorreo.Text;
-                    // La contraseña se asigna en el dialogo de cambio de contraseña
-                    ProfesoresServices servicioProfesores = new ProfesoresServices();
-                    bool respuesta = await servicioProfesores.UpdatePerfilAsync(profesor);
-                    if (respuesta)
+                    if (EntradaValida())
                     {
-                        ClienteHttp.Usuario.Profesor.Nombre = profesor.Nombre;
-                        ClienteHttp.Usuario.Profesor.PrimerApellido = profesor.PrimerApellido;
-                        ClienteHttp.Usuario.Profesor.SegundoApellido = profesor.SegundoApellido;
-                        ClienteHttp.Usuario.Profesor.Correo = profesor.Correo;
-                        CambiarEstadoBotones(false);
-                        editando = false;
-                        Toast.MakeText(this, "Guardado correctamente", ToastLength.Long).Show();
+                        //Bloquear botones
+                        ActivarDesactivarBotones(false);
+                        // Guardar información...
+                        Toast.MakeText(this, "Guardando, espere...", ToastLength.Short).Show();
+                        // Se utiliza esta clase en caso de que falle, para restaurar los valores
+                        profesor.Nombre = etNombre.Text;
+                        profesor.PrimerApellido = etPrimerApellido.Text;
+                        profesor.SegundoApellido = etSegundoApellido.Text;
+                        profesor.Correo = etCorreo.Text;
+                        // La contraseña se asigna en el dialogo de cambio de contraseña
+                        ProfesoresServices servicioProfesores = new ProfesoresServices();
+                        bool respuesta = await servicioProfesores.UpdatePerfilAsync(profesor);
+                        if (respuesta)
+                        {
+                            ClienteHttp.Usuario.Profesor.Nombre = profesor.Nombre;
+                            ClienteHttp.Usuario.Profesor.PrimerApellido = profesor.PrimerApellido;
+                            ClienteHttp.Usuario.Profesor.SegundoApellido = profesor.SegundoApellido;
+                            ClienteHttp.Usuario.Profesor.Correo = profesor.Correo;
+                            CambiarEstadoBotones(false);
+                            editando = false;
+                            Toast.MakeText(this, "Guardado correctamente", ToastLength.Long).Show();
+                        }
+                        else
+                        {
+                            Toast.MakeText(this, "Error al guardar", ToastLength.Short).Show();
+                        }
+                        ActivarDesactivarBotones(true);
                     }
-                    else
-                    {
-                        Toast.MakeText(this, "Error al guardar", ToastLength.Short).Show();
-                    }
-                    ActivarDesactivarBotones(true);
+                }
+                else
+                {
+                    CambiarEstadoBotones(true);
+                    editando = true;
                 }
             }
             else
             {
-                CambiarEstadoBotones(true);
-                editando = true;
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
             }
         }
 
@@ -113,9 +123,18 @@ namespace SAEEAPP
 
         private void BtCambiarContrasenia_Click(object sender, EventArgs e)
         {
-            CambiarContraseniaActivity cambiarContrasenia =
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                CambiarContraseniaActivity cambiarContrasenia =
                 new CambiarContraseniaActivity(this, profesor);
-            cambiarContrasenia.Show();
+                cambiarContrasenia.Show();
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
         }
 
         private void AsignarValoresUsuario()

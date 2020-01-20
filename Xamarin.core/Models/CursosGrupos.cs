@@ -9,11 +9,13 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Castle.Components.DictionaryAdapter;
 
 namespace Xamarin.core.Models
 {
     public partial class CursosGrupos
     {
+        [Key("Id")]
         public int Id { get; set; }
         public int IdCurso { get; set; }
         public int IdGrupo { get; set; }

@@ -11,6 +11,7 @@ using Android.Widget;
 using Java.Lang.Reflect;
 using SAEEAPP.Adaptadores;
 using SAEEP.ManejoNotificaciones;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.OfflineServices;
 
@@ -68,30 +69,39 @@ namespace SAEEAPP.Listener
             
         }
         private void OnClick_Eliminar() {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
-            AlertDialog alert = dialog.Create();
-            alert.SetTitle("Eliminar");
-            alert.SetMessage("Está seguro?");
-
-            alert.SetButton("Sí", (c, ev) =>
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                var eliminarNotificacion = new NotificacionesServices("dbNotificaciones.db");
-                var eliminado = eliminarNotificacion.DeleteNotificaciones(_notificacion);
-                if (eliminado)
-                {
-                    EliminarAlarmManager(_notificacion);
-                    _notificaciones.Remove(_notificacion);
-                    _adaptador.ActualizarDatos();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
+                AlertDialog alert = dialog.Create();
+                alert.SetTitle("Eliminar");
+                alert.SetMessage("Está seguro?");
 
-                }
-                else
+                alert.SetButton("Sí", (c, ev) =>
                 {
-                    Toast.MakeText(_context, "No se pudo eliminar", ToastLength.Long).Show();
-                }
+                    var eliminarNotificacion = new NotificacionesServices();
+                    var eliminado = eliminarNotificacion.DeleteNotificaciones(_notificacion);
+                    if (eliminado)
+                    {
+                        EliminarAlarmManager(_notificacion);
+                        _notificaciones.Remove(_notificacion);
+                        _adaptador.ActualizarDatos();
 
-            });
-            alert.SetButton2("Cancelar", (c, ev) => { });
-            alert.Show();
+                    }
+                    else
+                    {
+                        Toast.MakeText(_context, "No se pudo eliminar", ToastLength.Long).Show();
+                    }
+
+                });
+                alert.SetButton2("Cancelar", (c, ev) => { });
+                alert.Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
         }
         private void EliminarAlarmManager(Notificaciones notificacion)
         {
@@ -101,9 +111,18 @@ namespace SAEEAPP.Listener
         }
 
         private void OnClick_Editar() {
-            AENotificacionesActivity editarEstudiante =
-                new AENotificacionesActivity(_context, _adaptador, _notificaciones, _notificacion);
-            editarEstudiante.Show();
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                AENotificacionesActivity editarEstudiante =
+                    new AENotificacionesActivity(_context, _adaptador, _notificaciones, _notificacion);
+                editarEstudiante.Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
 
         }
     }

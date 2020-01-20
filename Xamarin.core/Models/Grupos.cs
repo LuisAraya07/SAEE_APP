@@ -21,7 +21,7 @@ namespace Xamarin.core.Models
             CursosGrupos = new HashSet<CursosGrupos>();
             EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
         }
-        [Key("Id")]
+        //[Key("Id")]
         public int Id { get; set; }
         public int IdProfesor { get; set; }
         public string Grupo { get; set; }

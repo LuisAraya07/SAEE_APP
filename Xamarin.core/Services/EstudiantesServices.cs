@@ -10,38 +10,112 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Microsoft.EntityFrameworkCore;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
+using Xamarin.core.Offline;
 
 namespace Xamarin.core.Services
 {
     public class EstudiantesServices
     {
         private readonly EstudiantesRepositorio _estudiantesR;
+
+        //Offline
+        private readonly int idProfesor;
+        private readonly DatabaseContextSistema db;
+
         public EstudiantesServices()
         {
             _estudiantesR = new EstudiantesRepositorio();
 
         }
 
+        //Servicio offline
+        public EstudiantesServices(int idProfesor)
+        {
+            db = new DatabaseContextSistema();
+            this.idProfesor = idProfesor;
+
+        }
+        //Obtener Estudiantes
+        public async Task<List<Estudiantes>> GetOffline()
+        {
+            await db.Database.MigrateAsync();
+            return await db.Estudiantes.Include(grupo => grupo.EstudiantesXgrupos)
+            .Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
+        }
+        //Agregar estudiante
+        public async Task<Estudiantes> PostOffline(Estudiantes estudiante)
+        {
+            await db.Database.MigrateAsync();
+            estudiante.IdProfesor = idProfesor;
+            db.Estudiantes.Add(estudiante);
+            await db.SaveChangesAsync();
+            return estudiante;
+
+        }
+        //Agregar TODOS estudiantes
+        public async Task<Boolean> PostAllOffline(List<Estudiantes> estudiantes)
+        {
+            await db.Database.MigrateAsync();
+            db.Estudiantes.AddRange(estudiantes);
+            await db.SaveChangesAsync();
+            return true;
+
+        }
+        //Modificar estudiante
+        public async Task<bool> PutOffline(Estudiantes estudiante)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                db.Entry(estudiante).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+
+
+        }
+        //Eliminar estudiante
+        public async Task<bool> DeleteEstudiantesOffline(Estudiantes estudiante)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                db.Estudiantes.Remove(estudiante);
+                await db.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+
+
+        /*      Termina Offline        */
         public async Task<List<Estudiantes>> GetAsync()
         {
             return await _estudiantesR.GetAsync();
         }
 
-
-        public async Task<Estudiantes> GetEstudiante()
-        {
-            return await _estudiantesR.GetEstudianteAsync();
-
-        }
+       
         //Agregar estudiantes
         public async Task<HttpResponseMessage> PostAsync(Estudiantes estudiante)
         {
             return await _estudiantesR.PostAsync(estudiante);
         }
 
-        //Modificar grupo
+        //Modificar estudiante
         public async Task<bool> PutAsync(Estudiantes estudiante)
         {
             return await _estudiantesR.PutAsync(estudiante);

@@ -6,6 +6,7 @@ using Java.Lang.Reflect;
 using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -67,25 +68,34 @@ namespace SAEEAPP.Listeners
 
         private void OnClick_Eliminar()
         {
-            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-            alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
-              .SetCancelable(false)
-              .SetTitle("¿Está seguro?")
-              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
-              .SetPositiveButton("Sí", async delegate
-              {
-                  EstudiantesServices gruposServices = new EstudiantesServices();
-                  await gruposServices.DeleteEstudiantesAsync(estudiante);
-                  Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                  _estudiantes.Remove(estudiante);
-                  listEstudiantesAdaptador.ActualizarDatos();
-              })
-              .SetNegativeButton("No", delegate
-              {
-                  alertDialogBuilder.Dispose();
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+                alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
+                  .SetCancelable(false)
+                  .SetTitle("¿Está seguro?")
+                  .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
+                  .SetPositiveButton("Sí", async delegate
+                  {
+                      EstudiantesServices gruposServices = new EstudiantesServices();
+                      await gruposServices.DeleteEstudiantesAsync(estudiante);
+                      Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                      _estudiantes.Remove(estudiante);
+                      listEstudiantesAdaptador.ActualizarDatos();
+                  })
+                  .SetNegativeButton("No", delegate
+                  {
+                      alertDialogBuilder.Dispose();
 
-              })
-              .Show();
+                  })
+                  .Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
         }
 
         private void OnClick_Editar()

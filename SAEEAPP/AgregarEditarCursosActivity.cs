@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -58,13 +59,9 @@ namespace SAEEAPP
             this.cursosAdapter = cursosAdapter;
             this.cursos = cursos;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
-#pragma warning disable CS0117 // 'Resource.Layout' no contiene una definición para 'Dialogo_Agregar_Curso'
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Curso, null);
-#pragma warning restore CS0117 // 'Resource.Layout' no contiene una definición para 'Dialogo_Agregar_Curso'
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
-#pragma warning disable CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             etCantidadPeriodos = VistaAgregar.FindViewById<EditText>(Resource.Id.etCantidadPeriodos);
-#pragma warning restore CS0117 // 'Resource.Id' no contiene una definición para 'etCantidadPeriodos'
             alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
@@ -88,26 +85,30 @@ namespace SAEEAPP
                     Nombre = etNombre.Text,
                     CantidadPeriodos = int.Parse(etCantidadPeriodos.Text)
                 };
-                HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
-
-                if (resultado.IsSuccessStatusCode)
+                VerificarConexion vc = new VerificarConexion(context);
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    // Se obtiene el elemento insertado
-                    string resultadoString = await resultado.Content.ReadAsStringAsync();
-                    cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
-                    // Se actualiza la lista de cursos
-                    cursos.Add(cursoNuevo);
-                    cursosAdapter.ActualizarDatos();
+                    HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
+                    if (resultado.IsSuccessStatusCode)
+                    {
+                        // Se obtiene el elemento insertado
+                        string resultadoString = await resultado.Content.ReadAsStringAsync();
+                        cursoNuevo = JsonConvert.DeserializeObject<Cursos>(resultadoString);
+                        // Se actualiza la lista de cursos
+                        cursos.Add(cursoNuevo);
+                        cursosAdapter.ActualizarDatos();
 
-                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.Dismiss();
-                }
-                else
-                {
-                    // Se restablecen los botones
-                    ActivarDesactivarBotones(true);
-                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
-                }
+                        Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+                    }
+                    else
+                    {
+                        // Se restablecen los botones
+                        ActivarDesactivarBotones(true);
+                        Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
+                    }
+                }else Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Short).Show();
             }
         }
 
@@ -118,33 +119,43 @@ namespace SAEEAPP
 
         private async void Editar(object sender, EventArgs e)
         {
-            if (EntradaValida())
+            VerificarConexion vc = new VerificarConexion(context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                // Se bloquean los botones
-                ActivarDesactivarBotones(false);
-                Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
-                CursosServices servicioCursos = new CursosServices();
-                cursoTemp.Nombre = etNombre.Text;
-                cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
-                bool resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
-
-                if (resultado)
+                if (EntradaValida())
                 {
-                    curso.Nombre = cursoTemp.Nombre;
-                    curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
-                    // Se actualiza la lista de cursos
-                    cursosAdapter.ActualizarDatos();
+                    // Se bloquean los botones
+                    ActivarDesactivarBotones(false);
+                    Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
-                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.Dismiss();
+                    CursosServices servicioCursos = new CursosServices();
+                    cursoTemp.Nombre = etNombre.Text;
+                    cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
+                    bool resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
+
+                    if (resultado)
+                    {
+                        curso.Nombre = cursoTemp.Nombre;
+                        curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
+                        // Se actualiza la lista de cursos
+                        cursosAdapter.ActualizarDatos();
+
+                        Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+                    }
+                    else
+                    {
+                        // Se restablecen los botones
+                        ActivarDesactivarBotones(true);
+                        Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                    }
                 }
-                else
-                {
-                    // Se restablecen los botones
-                    ActivarDesactivarBotones(true);
-                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
-                }
+            }
+            else {
+                ActivarDesactivarBotones(true);
+                Toast.MakeText(context, "Necesita conexión a internet", ToastLength.Short).Show();
             }
         }
 

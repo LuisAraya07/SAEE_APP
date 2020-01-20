@@ -16,15 +16,18 @@ using Environment = System.Environment;
 
 namespace Xamarin.core.Offline
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContextSistema : DbContext
     {
+        public DbSet<Grupos> Grupos { get; set; }
+        public DbSet<Estudiantes> Estudiantes { get; set; }
+        public DbSet<Profesores> Profesores { get; set; }
+        public DbSet<Cursos> Cursos { get; set; }
+        public DbSet<CursosGrupos> CursosGrupos { get; set; }
+        public DbSet<EstudiantesXgrupos> EG { get; set; }
+        private string _DatabasePath { get; set; } = "dbSistema.db";
 
-        public DbSet<Notificaciones> Notificaciones { get; set; }
-        public DbSet<Profesores> ProfesorConectado { get; set; }
-        private string _DatabasePath { get; set; } = "dbNotificaciones.db";
 
-
-        public DatabaseContext()
+        public DatabaseContextSistema()
         {
             Database.EnsureCreated();
         }

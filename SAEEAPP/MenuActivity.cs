@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 using System;
+using Xamarin.core;
 using Xamarin.core.Data;
 
 namespace SAEEAPP
@@ -44,38 +45,97 @@ namespace SAEEAPP
 
         public void OnClick_Usuario(object sender, EventArgs e)
         {
-            Intent usuario = new Intent(this, typeof(UsuarioActivity));
-            StartActivity(usuario);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado) {
+                Intent usuario = new Intent(this, typeof(UsuarioActivity));
+                StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Long).Show();
+            }
+                
         }
 
         public void OnClick_Cursos(object sender, EventArgs e)
         {
-            Intent cursos = new Intent(this, typeof(CursosActivity));
-            StartActivity(cursos);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent cursos = new Intent(this, typeof(CursosActivity));
+                StartActivity(cursos);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+            
         }
 
         public void OnClick_Grupos(object sender, EventArgs e)
         {
-            Intent grupos = new Intent(this, typeof(GruposActivity));
-            StartActivity(grupos);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent grupos = new Intent(this, typeof(GruposActivity));
+                StartActivity(grupos);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+            
         }
 
         public void OnClick_Profesores(object sender, EventArgs e)
         {
-            Intent profesores = new Intent(this, typeof(ProfesoresActivity));
-            StartActivity(profesores);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent profesores = new Intent(this, typeof(ProfesoresActivity));
+                StartActivity(profesores);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+            
         }
 
         public void OnClick_Estudiantes(object sender, EventArgs e)
         {
-            Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
-            StartActivity(estudiantes);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+                StartActivity(estudiantes);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+            
         }
 
         public void OnClick_Notificaciones(object sender, EventArgs e)
         {
-            Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
-            StartActivity(notificaciones);
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
+                StartActivity(notificaciones);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+            
         }
     }
 }

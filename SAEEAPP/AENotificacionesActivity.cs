@@ -11,6 +11,8 @@ using Android.Views;
 using Android.Widget;
 using SAEEAPP.Adaptadores;
 using SAEEP.ManejoNotificaciones;
+using Xamarin.core;
+using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.OfflineServices;
 
@@ -90,26 +92,36 @@ namespace SAEEAPP
             DateTime selectedDT = Convert.ToDateTime(notificacion.Date + " " + notificacion.Time);
             if (Validar())
             {
-                if (selectedDT > currentDT && selecteDiasAntes > currentDT)
+                VerificarConexion vc = new VerificarConexion(context);
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    notificacion.IdProfesor = 1;
-                    notificacion.DiasAntes = Convert.ToDateTime(notificacion.Date).AddDays(- Convert.ToInt32(spinner.SelectedItem.ToString())).ToShortDateString();
-                    //Estado true
-                    notificacion.Estado = 1;
-                    var notificacionIns = new NotificacionesServices("dbNotificaciones.db");
-                    Notificaciones notificacionId =  notificacionIns.PostNotificaciones(notificacion);
-                    //Obtengo todos las notificaciones de ese profesor
-                    // List<Reminder> listitem = ReminderHelper.GetReminderList(context, 1);
-                    //ScheduleReminder(listitem.LastOrDefault());
-                    new CrearEliminarNotificaciones(context, notificacionId, true);
-                    notificaciones.Add(notificacion);
-                    
-                    notificacionesAdapter.ActualizarDatos();
-                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.Dismiss();
+                    if (selectedDT > currentDT && selecteDiasAntes > currentDT)
+                    {
+                        notificacion.IdProfesor = ClienteHttp.Usuario.Profesor.Id;
+                        notificacion.DiasAntes = Convert.ToDateTime(notificacion.Date).AddDays(-Convert.ToInt32(spinner.SelectedItem.ToString())).ToShortDateString();
+                        //Estado true
+                        notificacion.Estado = 1;
+                        var notificacionIns = new NotificacionesServices();
+                        Notificaciones notificacionId = notificacionIns.PostNotificaciones(notificacion);
+                        //Obtengo todos las notificaciones de ese profesor
+                        // List<Reminder> listitem = ReminderHelper.GetReminderList(context, 1);
+                        //ScheduleReminder(listitem.LastOrDefault());
+                        new CrearEliminarNotificaciones(context, notificacionId, true);
+                        notificaciones.Add(notificacion);
+                        notificacionesAdapter.ActualizarDatos();
+                        Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+                    }
+                    else
+                    {
+                        Toast.MakeText(context, "Error en las fechas", ToastLength.Long).Show();
+                    }
                 }
                 else
-                    Toast.MakeText(context,"Error en las fechas",ToastLength.Long).Show();
+                {
+                    Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                }
                 
             }
         }
@@ -121,27 +133,38 @@ namespace SAEEAPP
             DateTime selectedDT = Convert.ToDateTime(notificacion.Date + " " + notificacion.Time);
             if (Validar())
             {
-                if (selectedDT > currentDT && selecteDiasAntes > currentDT)
+                VerificarConexion vc = new VerificarConexion(context);
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    //notificacion.IdProfesor = 1;
-                    notificacion.DiasAntes = Convert.ToDateTime(notificacion.Date).AddDays(- valorSpinner).ToShortDateString();
-                    //Estado true
-                    notificacion.Estado = 1;
-                    var notificacionIns = new NotificacionesServices("dbNotificaciones.db");
-                    var modificado =  notificacionIns.PutNotificaciones(notificacion);
-                    if (modificado)
+                    if (selectedDT > currentDT && selecteDiasAntes > currentDT)
                     {
-                        
-                        new CrearEliminarNotificaciones(context, notificacionSinEditar, false);
-                        new CrearEliminarNotificaciones(context, notificacion, true);
-                        notificacionesAdapter.ActualizarDatos();
-                        Toast.MakeText(context, "Modificado correctamente", ToastLength.Long).Show();
-                        alertDialogAndroid.Dismiss();
+                        //notificacion.IdProfesor = 1;
+                        notificacion.DiasAntes = Convert.ToDateTime(notificacion.Date).AddDays(-valorSpinner).ToShortDateString();
+                        //Estado true
+                        notificacion.Estado = 1;
+                        var notificacionIns = new NotificacionesServices();
+                        var modificado = notificacionIns.PutNotificaciones(notificacion);
+                        if (modificado)
+                        {
 
+                            new CrearEliminarNotificaciones(context, notificacionSinEditar, false);
+                            new CrearEliminarNotificaciones(context, notificacion, true);
+                            notificacionesAdapter.ActualizarDatos();
+                            Toast.MakeText(context, "Modificado correctamente", ToastLength.Long).Show();
+                            alertDialogAndroid.Dismiss();
+
+                        }
+                    }
+                    else
+                    {
+                        Toast.MakeText(context, "Error en las fechas", ToastLength.Long).Show();
                     }
                 }
                 else
-                    Toast.MakeText(context, "Error en las fechas", ToastLength.Long).Show();
+                {
+                    Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                }
                 
             }
         }

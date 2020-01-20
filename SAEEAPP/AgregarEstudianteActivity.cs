@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -101,20 +102,29 @@ namespace SAEEAPP
                 PrimerApellido = etApellido1.Text,
                 SegundoApellido = etApellido2.Text
             };
-            HttpResponseMessage resultado = await servicioEstudiantes.PostAsync(estudiante);
-            if (resultado.IsSuccessStatusCode)
+            VerificarConexion vc = new VerificarConexion(context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                string resultadoString = await resultado.Content.ReadAsStringAsync();
-                var estudianteNuevo = JsonConvert.DeserializeObject<Estudiantes>(resultadoString);
-                listaEstudiantes.Add(estudianteNuevo);
-                adaptadorEstudiantes.NotifyDataSetChanged();
-                alertDialogBuilder.Dispose();
-                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
+                HttpResponseMessage resultado = await servicioEstudiantes.PostAsync(estudiante);
+                if (resultado.IsSuccessStatusCode)
+                {
+                    string resultadoString = await resultado.Content.ReadAsStringAsync();
+                    var estudianteNuevo = JsonConvert.DeserializeObject<Estudiantes>(resultadoString);
+                    listaEstudiantes.Add(estudianteNuevo);
+                    adaptadorEstudiantes.NotifyDataSetChanged();
+                    alertDialogBuilder.Dispose();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
             else
             {
-                Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Long).Show();
+                Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
             }
         }
         private void Editar(object sender, EventArgs e)
@@ -136,19 +146,28 @@ namespace SAEEAPP
             _estudiante.PrimerApellido = etApellido1.Text;
             _estudiante.SegundoApellido = etApellido2.Text;
             _estudiante.Pin = etContrasenia.Text;
-            bool resultado = await servicioEstudiantes.PutAsync(_estudiante);
-
-            if (resultado)
+            VerificarConexion vc = new VerificarConexion(context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                // Se actualiza la lista de profesores
-                adaptadorEstudiantes.ActualizarDatos();
+                bool resultado = await servicioEstudiantes.PutAsync(_estudiante);
 
-                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
+                if (resultado)
+                {
+                    // Se actualiza la lista de profesores
+                    adaptadorEstudiantes.ActualizarDatos();
+
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                }
             }
             else
             {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
             }
         }
         private bool EntradaValida()

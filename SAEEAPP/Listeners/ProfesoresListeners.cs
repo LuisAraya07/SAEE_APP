@@ -7,6 +7,7 @@ using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -15,12 +16,12 @@ namespace SAEEAPP.Listeners
 
     class ProfesoresListener:Java.Lang.Object, View.IOnClickListener
     {
-        private Activity _context;
-        private List<Profesores> _profesores;
-        private Profesores _profesor;
-        private ProfesoresListAdapter _profesoresListAdapter;
-        private Button _btnOpciones;
-        private AlertDialog alertDialogAndroid;
+        private readonly Activity _context;
+        private readonly List<Profesores> _profesores;
+        private readonly Profesores _profesor;
+        private readonly ProfesoresListAdapter _profesoresListAdapter;
+        private readonly Button _btnOpciones;
+        private  AlertDialog alertDialogAndroid;
         public ProfesoresListener(Activity context, List<Profesores> profesores, Profesores profesor, ProfesoresListAdapter profesoresListAdapter, Button btnOpciones)
         {
             _context = context;
@@ -53,7 +54,6 @@ namespace SAEEAPP.Listeners
                     case Resource.Id.item2://Borrar
                         OnClick_Borrar();
                         break;
-
                     default://ERROR
                         Toast.MakeText(_context, "ERROR", ToastLength.Short).Show();
                         break;
@@ -69,21 +69,39 @@ namespace SAEEAPP.Listeners
 
         private void OnClick_Editar()
         {
-            AgregarEditarProfesorActivity agregarProfesorActivity =
-                 new AgregarEditarProfesorActivity(_context, _profesoresListAdapter, _profesores, _profesor);
-            agregarProfesorActivity.Show();
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                AgregarEditarProfesorActivity agregarProfesorActivity =
+                     new AgregarEditarProfesorActivity(_context, _profesoresListAdapter, _profesores, _profesor);
+                agregarProfesorActivity.Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
+            }
         }
 
         private void OnClick_Borrar()
         {
-            alertDialogAndroid = new AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle)
-              .SetIcon(Resource.Drawable.trash_can_outline)
-              .SetTitle("Eliminando profesor")
-              .SetMessage($"¿Realmente desea borrar al profesor \"{_profesor.Nombre} {_profesor.PrimerApellido} {_profesor.SegundoApellido}\" y toda su información relacionada?")
-              .SetPositiveButton("Borrar", Borrar)
-              .SetNegativeButton("Cancelar", Cancelar)
-              .Create();
-            alertDialogAndroid.Show();
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                alertDialogAndroid = new AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle)
+                  .SetIcon(Resource.Drawable.trash_can_outline)
+                  .SetTitle("Eliminando profesor")
+                  .SetMessage($"¿Realmente desea borrar al profesor \"{_profesor.Nombre} {_profesor.PrimerApellido} {_profesor.SegundoApellido}\" y toda su información relacionada?")
+                  .SetPositiveButton("Borrar", Borrar)
+                  .SetNegativeButton("Cancelar", Cancelar)
+                  .Create();
+                alertDialogAndroid.Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
         }
         private void Cancelar(object sender, DialogClickEventArgs e)
         {
@@ -92,17 +110,26 @@ namespace SAEEAPP.Listeners
 
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
-            ProfesoresServices servicioProfesores = new ProfesoresServices();
-            bool resultado = await servicioProfesores.DeleteProfesorAsync(_profesor.Id);
-            if (resultado)
+            VerificarConexion vc = new VerificarConexion(_context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                _profesores.Remove(_profesor);
-                _profesoresListAdapter.ActualizarDatos();
+                ProfesoresServices servicioProfesores = new ProfesoresServices();
+                bool resultado = await servicioProfesores.DeleteProfesorAsync(_profesor.Id);
+                if (resultado)
+                {
+                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                    _profesores.Remove(_profesor);
+                    _profesoresListAdapter.ActualizarDatos();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "Error al eliminar, intente nuevamente.", ToastLength.Short).Show();
+                }
             }
             else
             {
-                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
+                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
             }
         }
     }

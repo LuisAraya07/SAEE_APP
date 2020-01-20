@@ -7,6 +7,7 @@ using Android.Widget;
 using Newtonsoft.Json;
 using SAEEP.ManejoNotificaciones;
 using System;
+using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.OfflineServices;
@@ -21,7 +22,7 @@ namespace SAEEAPP
         private EditText etContrasenia;
         private Button btnIngresar;
         private ProgressBar pbInicioSesion;
-
+        private CheckBox cbOffline;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -30,8 +31,9 @@ namespace SAEEAPP
             SetContentView(Resource.Layout.activity_main);
             etCedula = FindViewById<EditText>(Resource.Id.etCedula);
             etContrasenia = FindViewById<EditText>(Resource.Id.etContrasenia);
-            btnIngresar = FindViewById<Button>(Resource.Id.btAceptar);
+            btnIngresar = FindViewById<Button>(Resource.Id.button1);
             pbInicioSesion = FindViewById<ProgressBar>(Resource.Id.pbInicioSesion);
+            cbOffline = FindViewById<CheckBox>(Resource.Id.checkBox1);
             btnIngresar.Click += OnClick_Ingresar;
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -44,29 +46,40 @@ namespace SAEEAPP
         public async void OnClick_Ingresar(object sender, EventArgs e)
         {
             etCedula.Text = "701110111";
-            etContrasenia.Text = "12";
+            etContrasenia.Text = "123";
             if (EntradaValida())
             {
                 // Se bloquean los controles y se activa el progress bar
                 ActivarDesactivarControles(false);
-                Toast.MakeText(this, "Ingresando", ToastLength.Short).Show();
+                //Toast.MakeText(this, "Ingresando", ToastLength.Short).Show();
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Visible;
 
                 InicioSesionServices inicioSesionServices = new InicioSesionServices();
-                var response = await inicioSesionServices.IniciarSesion(etCedula.Text, etContrasenia.Text);
-                ModificarNotificaciones(ClienteHttp.Usuario.Profesor.Id);
-                if (response.IsSuccessStatusCode)
+                VerificarConexion vc = new VerificarConexion(this);
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    //Se abre el menu
-                    Intent siguiente = new Intent(this, typeof(MenuActivity));
-                    StartActivity(siguiente);
-                    Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Short).Show();
                     
+                    var response = await inicioSesionServices.IniciarSesion(etCedula.Text, etContrasenia.Text);
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
+                        //Se abre el menu
+                        Intent siguiente = new Intent(this, typeof(MenuActivity));
+                        StartActivity(siguiente);
+                        Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Long).Show();
+
+                    }
+                    else
+                    {
+                        ClienteHttp.Usuario = null;
+                        Toast.MakeText(this, $"Cédula o contraseña incorrecta", ToastLength.Short).Show();
+                    }
                 }
                 else
                 {
-                    ClienteHttp.Usuario = null;
-                    Toast.MakeText(this, $"Cédula o contraseña incorrecta", ToastLength.Short).Show();
+                    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
                 }
                 // Se restablecen los controles y se oculta la barra
                 pbInicioSesion.Visibility = Android.Views.ViewStates.Invisible;
@@ -75,13 +88,21 @@ namespace SAEEAPP
             }
         }
         //Se eliminar temporalmente las notificaciones que no son del profesor ingresado
-        private async void ModificarNotificaciones(int id)
+        private async void ModificarNotificaciones(Profesores profesor)
         {
 
-            var notificacionIns = new NotificacionesServices("dbNotificaciones.db");
+            var notificacionIns = new NotificacionesServices();
+            //Verifico si le dio check
+            if (cbOffline.Checked)
+            {
+                //Cargamos todos los datos
+                //Aquí agregamos al profesor conectado
+                notificacionIns.PostProfesorConectado(profesor);
+                CargarBDLocal(profesor);
+            }
             //Id del profesor
-            var listNotasAgregar = await notificacionIns.GetNotificaciones(id);
-            var listNotasEliminar = await notificacionIns.GetNotificacionesEliminar(id);
+            var listNotasAgregar = await notificacionIns.GetNotificaciones(profesor.Id);
+            var listNotasEliminar = await notificacionIns.GetNotificacionesEliminar(profesor.Id);
             foreach (Notificaciones nota in listNotasEliminar)
             {
                 if (DateTime.Now < Convert.ToDateTime(nota.Date))
@@ -106,6 +127,33 @@ namespace SAEEAPP
                     notificacionIns.PutNotificaciones(nota);
                 }
             }
+        }
+
+        private async void CargarBDLocal(Profesores profesor)
+        {
+            var idProfesor = profesor.Id;
+            GruposServices gruposServicio = new GruposServices();
+            GruposServices gruposServicioOffline = new GruposServices(idProfesor);
+            CursosServices cursosServicio = new CursosServices();
+            CursosServices cursosServicioOffline = new CursosServices(idProfesor);
+            ProfesoresServices profesoresServicio = new ProfesoresServices();
+            EstudiantesServices estudiantesServicio = new EstudiantesServices();
+            EstudiantesServices estudiantesServicioOffline = new EstudiantesServices(idProfesor);
+            var listaGrupos = await gruposServicio.GetAsync();
+            await gruposServicioOffline.PostAllOffline(listaGrupos);
+            var listaGruposOffline = await gruposServicioOffline.GetOffline();
+            //var listaEG = await gruposServicio.GetAllEGAsync();
+            //await gruposServicioOffline.PostAllEGOffline(listaEG);
+            //var listaCursos = await cursosServicio.GetAsync();
+            //await cursosServicioOffline.PostAllOffline(listaCursos);
+            //var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
+            //await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
+            ////var listaProfesores = await profesoresServicio.GetAsync();
+            //var listaEstudiantes = await estudiantesServicio.GetAsync();
+            //await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
+
+
+
         }
 
         private bool EntradaValida()
