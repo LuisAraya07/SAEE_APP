@@ -7,6 +7,7 @@ using Android.Widget;
 using Newtonsoft.Json;
 using SAEEP.ManejoNotificaciones;
 using System;
+using System.Threading.Tasks;
 using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
@@ -64,7 +65,7 @@ namespace SAEEAPP
                     if (response.IsSuccessStatusCode)
                     {
 
-                        ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
+                        await ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
                         //Se abre el menu
                         Intent siguiente = new Intent(this, typeof(MenuActivity));
                         StartActivity(siguiente);
@@ -88,7 +89,7 @@ namespace SAEEAPP
             }
         }
         //Se eliminar temporalmente las notificaciones que no son del profesor ingresado
-        private async void ModificarNotificaciones(Profesores profesor)
+        private async Task<Boolean> ModificarNotificaciones(Profesores profesor)
         {
 
             var notificacionIns = new NotificacionesServices();
@@ -97,7 +98,7 @@ namespace SAEEAPP
             {
                 //Cargamos todos los datos
                 //Aquí agregamos al profesor conectado
-                CargarBDLocal(profesor);
+                var rs = await CargarBDLocal(profesor);
             }
             //Id del profesor
             var listNotasAgregar = await notificacionIns.GetNotificaciones(profesor.Id);
@@ -126,9 +127,10 @@ namespace SAEEAPP
                     notificacionIns.PutNotificaciones(nota);
                 }
             }
+            return true;
         }
 
-        private async void CargarBDLocal(Profesores profesor)
+        private async Task<Boolean> CargarBDLocal(Profesores profesor)
         {
             var idProfesor = profesor.Id;
             GruposServices gruposServicio = new GruposServices();
@@ -141,17 +143,14 @@ namespace SAEEAPP
 
             //Guardamos el profesor en local
             await profesoresServicioOffline.PostOffline(profesor);
-            //Agregar grupos
-            var listaGrupos = await gruposServicio.GetAsync();
-            await gruposServicioOffline.PostAllOffline(listaGrupos);
 
             //Agregar Estudiantes
             var listaEstudiantes = await estudiantesServicio.GetAsync();
             await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
 
-            //Agregar EG
-            var listaEG = await gruposServicio.GetAllEGAsync();
-            await gruposServicioOffline.PostAllEGOffline(listaEG);
+            //Agregar grupos
+            var listaGrupos = await gruposServicio.GetAsync();
+            await gruposServicioOffline.PostAllOffline(listaGrupos);
 
             //Agregar cursos
             var listaCursos = await cursosServicio.GetAsync();
@@ -161,10 +160,11 @@ namespace SAEEAPP
             var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
             await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
             ////var listaProfesores = await profesoresServicio.GetAsync();
-            
 
-
-
+            //Agregar EG
+            //   var listaEG = await gruposServicio.GetAllEGAsync();
+            // await gruposServicioOffline.PostAllEGOffline(listaEG);
+            return true;
         }
 
         private bool EntradaValida()

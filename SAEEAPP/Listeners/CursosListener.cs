@@ -71,19 +71,10 @@ namespace SAEEAPP.Listeners
         }
 
         private void OnClick_Grupos()
-        {
-            VerificarConexion vc = new VerificarConexion(_context);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                CursosGruposAgregadosActivity agregarCursoActivity =
+        { CursosGruposAgregadosActivity agregarCursoActivity =
                 new CursosGruposAgregadosActivity(_context, _cursosListAdapter, _curso);
                 agregarCursoActivity.Show();
-            }
-            else
-            {
-                Toast.MakeText(_context,"Necesita conexión a internet.",ToastLength.Short).Show();
-            }
+           
                 
         }
 

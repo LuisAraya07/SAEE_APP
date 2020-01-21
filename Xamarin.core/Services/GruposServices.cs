@@ -65,7 +65,7 @@ namespace Xamarin.core.Services
                 
                 await db.Database.MigrateAsync();
                 //db.Grupos.AddRange(listaGrupos);
-                
+                List<EstudiantesXgrupos> ListaEG = new List<EstudiantesXgrupos>();
                 foreach (Grupos cg in listaGrupos)
                 {
                     var grupoNuevo = new Grupos()
@@ -73,13 +73,15 @@ namespace Xamarin.core.Services
                         Id = cg.Id,
                         Anio = cg.Anio,
                         IdProfesor = cg.IdProfesor,
-                        Grupo = cg.Grupo,
+                        Grupo = cg.Grupo
+                        //EstudiantesXgrupos = cg.EstudiantesXgrupos
                     };
+                    ListaEG.AddRange(cg.EstudiantesXgrupos.ToList());
                     db.Grupos.Add(grupoNuevo);
                     
                 }
                 await db.SaveChangesAsync();
-
+                await PostAllEGOffline(ListaEG);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -165,8 +167,8 @@ namespace Xamarin.core.Services
                     {
                         var egNuevo = new EstudiantesXgrupos()
                         {
-                            IdGrupo = eg.IdGrupo,
                             Id = eg.Id,
+                            IdGrupo = eg.IdGrupo,
                             IdEstudiante = eg.IdEstudiante
                          
                         }; 
