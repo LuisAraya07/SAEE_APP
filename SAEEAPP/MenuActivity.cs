@@ -31,6 +31,13 @@ namespace SAEEAPP
             btEstudiantes.Click += OnClick_Estudiantes;
             Button btNotificaciones = FindViewById<Button>(Resource.Id.btNotificaciones);
             btNotificaciones.Click += OnClick_Notificaciones;
+
+
+            //nuevo
+            Button btAsignaciones = FindViewById<Button>(Resource.Id.btAsignaciones);
+            btNotificaciones.Click += OnClick_Asignaciones;
+
+
             if (!ClienteHttp.Usuario.Profesor.Administrador)
             {
                 btProfesores.Visibility = Android.Views.ViewStates.Gone;
@@ -51,6 +58,24 @@ namespace SAEEAPP
             {
                 Intent usuario = new Intent(this, typeof(UsuarioActivity));
                 StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+
+        }
+
+
+        //NUEVO ASIGNACIONES
+        public void OnClick_Asignaciones(object sender, EventArgs e)
+        {
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent asignacion = new Intent(this, typeof(AsignacionesActivity));
+                StartActivity(asignacion);
             }
             else
             {

@@ -64,9 +64,11 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adaptadores\AsignacionesAdaptador.cs" />
     <Compile Include="Adaptadores\CursosGruposAgregadosAdapter.cs" />
     <Compile Include="Adaptadores\CursosGruposAgregarAdapter.cs" />
     <Compile Include="Adaptadores\CursosListAdapter.cs" />
+    <Compile Include="AsignacionesActivity.cs" />
     <Compile Include="Listeners\EstudiantesListener.cs" />
     <Compile Include="Listeners\GruposListener.cs" />
     <Compile Include="Adaptadores\ListAgregarEGAdaptador.cs" />
@@ -334,6 +336,16 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\button_options.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_asignaciones.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\AsignacionesListRow.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
