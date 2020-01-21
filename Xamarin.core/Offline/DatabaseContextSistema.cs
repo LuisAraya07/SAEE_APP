@@ -24,6 +24,9 @@ namespace Xamarin.core.Offline
         public DbSet<Cursos> Cursos { get; set; }
         public DbSet<CursosGrupos> CursosGrupos { get; set; }
         public DbSet<EstudiantesXgrupos> EG { get; set; }
+
+        public DbSet<Asignaciones> Asignaciones{ get; set; }
+
         private string _DatabasePath { get; set; } = "dbSistema.db";
 
 
