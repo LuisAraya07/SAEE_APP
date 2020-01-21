@@ -68,7 +68,9 @@
     <Compile Include="Adaptadores\CursosGruposAgregadosAdapter.cs" />
     <Compile Include="Adaptadores\CursosGruposAgregarAdapter.cs" />
     <Compile Include="Adaptadores\CursosListAdapter.cs" />
+    <Compile Include="AgregarEditarAsignacionesActivity.cs" />
     <Compile Include="AsignacionesActivity.cs" />
+    <Compile Include="Listeners\AsignacionesListener.cs" />
     <Compile Include="Listeners\EstudiantesListener.cs" />
     <Compile Include="Listeners\GruposListener.cs" />
     <Compile Include="Adaptadores\ListAgregarEGAdaptador.cs" />
@@ -346,6 +348,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\AsignacionesListRow.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Agregar_Asignacion.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

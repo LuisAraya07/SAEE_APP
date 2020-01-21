@@ -49,7 +49,16 @@ namespace SAEEAPP.Adaptadores
             tvFecha.Text = asignacion.Fecha.ToShortDateString();
             tvPuntos.Text = asignacion.Puntos.ToString();
             tvPorcentaje.Text = asignacion.Porcentaje.ToString();
+            DefinirBotones(convertView,asignacion);
             return convertView;
+        }
+        private void DefinirBotones(View row, Asignaciones asignacion)
+        {
+            Button btnOpciones = row.FindViewById<Button>(Resource.Id.btnOpcionesC);
+            btnOpciones.SetTag(Resource.Id.btnOpcionesC, btnOpciones);
+            var draw = ContextCompat.GetDrawable(_context, Resource.Drawable.dots_vertical);
+            btnOpciones.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
+            btnOpciones.SetOnClickListener(new AsignacionesListener(_context, _asignaciones, asignacion, this, btnOpciones));
         }
         public void ActualizarDatos()
         {
