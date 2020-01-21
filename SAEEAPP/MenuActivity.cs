@@ -35,7 +35,7 @@ namespace SAEEAPP
 
             //nuevo
             Button btAsignaciones = FindViewById<Button>(Resource.Id.btAsignaciones);
-            btNotificaciones.Click += OnClick_Asignaciones;
+            btAsignaciones.Click += OnClick_Asignaciones;
 
 
             if (!ClienteHttp.Usuario.Profesor.Administrador)

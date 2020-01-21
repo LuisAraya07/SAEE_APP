@@ -53,9 +53,9 @@ namespace SAEEAPP
         }
         private void AgregarAsignacion(object sender, EventArgs e)
         {
-         /*   AgregarEditarCursosActivity agregarCursoActivity =
-                new AgregarEditarCursosActivity(this, AdaptadorAsignaciones, asignaciones);
-            agregarCursoActivity.Show();*/
+           AgregarEditarAsignacionesActivity agregarCursoActivity =
+                new AgregarEditarAsignacionesActivity(this, AdaptadorAsignaciones, asignaciones);
+            agregarCursoActivity.Show();
         }
     }
 }

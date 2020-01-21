@@ -136,7 +136,7 @@ namespace Xamarin.core.Services
             return await _asignacionesR.UpdateAsignacionesAsync(asignacion);
         }
 
-        public async Task<bool> DeleteCursoAsync(int id)
+        public async Task<bool> DeleteAsignacionAsync(int id)
         {
             return await _asignacionesR.DeleteAsignacionAsync(id);
         }
