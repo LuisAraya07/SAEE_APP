@@ -179,45 +179,52 @@ namespace SAEEAPP.Listeners
         private async void OnClick_Estudiantes()
         {
             VerificarConexion vc = new VerificarConexion(_context);
+            List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
+            List<EstudiantesXgrupos> listaEG = new List<EstudiantesXgrupos>();
+            GruposServices gruposServicios;
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
-                List<EstudiantesXgrupos> listaEG = new List<EstudiantesXgrupos>();
-                GruposServices gruposServicios = new GruposServices();
+                gruposServicios = new GruposServices();
                 //Cada vez vamos a obtener los estudiantes de ese grupo
                 listaEG = await gruposServicios.GetEGAsync(grupo.Id);//grupo.EstudiantesXgrupos.Select(x => x.IdEstudianteNavigation).ToList();
-                listaEstudiantes = listaEG.Select(x => x.IdEstudianteNavigation).ToList();
-                var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEG);
-                ListEGAdaptador adaptadorEG = new ListEGAdaptador(_context, listaEstudiantes, listaEG);
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-                alertDialogBuilder.SetCancelable(true)
-                .SetTitle("Estudiantes del Grupo")
-                .SetView(estudiantesListView)
-                .SetAdapter(adaptadorEG, (s, e) =>
-                {
-                    var index = e.Which;
-                })
-                .SetNegativeButton("Cerrar", delegate
-                {
-                    alertDialogBuilder.Dispose();
+                
+            }
+            else
+            {
+                //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                gruposServicios = new GruposServices(profesor.Id);
+                //Cada vez vamos a obtener los estudiantes de ese grupo
+                listaEG = await gruposServicios.GetEGOffline(grupo.Id);//grupo.EstudiantesXgrupos.Select(x => x.IdEstudianteNavigation).ToList();
+            }
+            listaEstudiantes = listaEG.Select(x => x.IdEstudianteNavigation).ToList();
+            var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEG);
+            ListEGAdaptador adaptadorEG = new ListEGAdaptador(_context, listaEstudiantes, listaEG);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+            alertDialogBuilder.SetCancelable(true)
+            .SetTitle("Estudiantes del Grupo")
+            .SetView(estudiantesListView)
+            .SetAdapter(adaptadorEG, (s, e) =>
+            {
+                var index = e.Which;
+            })
+            .SetNegativeButton("Cerrar", delegate
+            {
+                alertDialogBuilder.Dispose();
 
-                })
-                .SetPositiveButton("Añadir", delegate
-                {
+            })
+            .SetPositiveButton("Añadir", delegate
+            {
                     //Toast.MakeText(_context,"Aqui agregamos",ToastLength.Short).Show();
                     MostrarLVAgregarAsync(listaEstudiantes, listaEG);
 
 
-                });
+            });
 
-                Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
-                alertDialogAndroid.Show();
-            }
-            else
-            {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
+            alertDialogAndroid.Show();
         }
 
         private async void MostrarLVAgregarAsync(List<Estudiantes> listaAgregados, List<EstudiantesXgrupos> listaEG)

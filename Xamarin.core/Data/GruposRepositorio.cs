@@ -34,6 +34,7 @@ namespace Xamarin.core.Data
             var json = await client.GetStringAsync($"Grupos/GetGrupos");
             return JsonConvert.DeserializeObject<List<Grupos>>(json);
         }
+      
 
         public async Task<List<Estudiantes>> GetGrupoAsync(int id)
         {

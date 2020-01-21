@@ -46,7 +46,7 @@ namespace SAEEAPP
         public async void OnClick_Ingresar(object sender, EventArgs e)
         {
             etCedula.Text = "701110111";
-            etContrasenia.Text = "123";
+            etContrasenia.Text = "12";
             if (EntradaValida())
             {
                 // Se bloquean los controles y se activa el progress bar
@@ -97,7 +97,6 @@ namespace SAEEAPP
             {
                 //Cargamos todos los datos
                 //Aquí agregamos al profesor conectado
-                notificacionIns.PostProfesorConectado(profesor);
                 CargarBDLocal(profesor);
             }
             //Id del profesor
@@ -136,21 +135,33 @@ namespace SAEEAPP
             GruposServices gruposServicioOffline = new GruposServices(idProfesor);
             CursosServices cursosServicio = new CursosServices();
             CursosServices cursosServicioOffline = new CursosServices(idProfesor);
-            ProfesoresServices profesoresServicio = new ProfesoresServices();
+            ProfesoresServices profesoresServicioOffline = new ProfesoresServices(idProfesor);
             EstudiantesServices estudiantesServicio = new EstudiantesServices();
             EstudiantesServices estudiantesServicioOffline = new EstudiantesServices(idProfesor);
+
+            //Guardamos el profesor en local
+            await profesoresServicioOffline.PostOffline(profesor);
+            //Agregar grupos
             var listaGrupos = await gruposServicio.GetAsync();
             await gruposServicioOffline.PostAllOffline(listaGrupos);
-            var listaGruposOffline = await gruposServicioOffline.GetOffline();
-            //var listaEG = await gruposServicio.GetAllEGAsync();
-            //await gruposServicioOffline.PostAllEGOffline(listaEG);
-            //var listaCursos = await cursosServicio.GetAsync();
-            //await cursosServicioOffline.PostAllOffline(listaCursos);
-            //var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
-            //await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
+
+            //Agregar Estudiantes
+            var listaEstudiantes = await estudiantesServicio.GetAsync();
+            await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
+
+            //Agregar EG
+            var listaEG = await gruposServicio.GetAllEGAsync();
+            await gruposServicioOffline.PostAllEGOffline(listaEG);
+
+            //Agregar cursos
+            var listaCursos = await cursosServicio.GetAsync();
+            await cursosServicioOffline.PostAllOffline(listaCursos);
+
+            //Agregar CursosGrupos
+            var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
+            await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
             ////var listaProfesores = await profesoresServicio.GetAsync();
-            //var listaEstudiantes = await estudiantesServicio.GetAsync();
-            //await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
+            
 
 
 

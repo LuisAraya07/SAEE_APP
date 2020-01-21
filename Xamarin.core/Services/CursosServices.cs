@@ -55,10 +55,20 @@ namespace Xamarin.core.Services
         {
             try
             {
-                await db.Database.MigrateAsync();
-                db.Cursos.AddRange(listaCursos);
+                foreach (Cursos curso in listaCursos)
+                {
+                    var cursoNuevo = new Cursos()
+                    {
+                        Id = curso.Id,
+                        CantidadPeriodos = curso.CantidadPeriodos,
+                        IdProfesor = curso.IdProfesor,
+                        Nombre = curso.Nombre
+                    };
+                    db.Cursos.Add(cursoNuevo);
+
+                }
                 await db.SaveChangesAsync();
-                
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -134,10 +144,24 @@ namespace Xamarin.core.Services
         //Agregar CG
         public async Task<bool> AgregarCursosGruposAllOffline(List<CursosGrupos> cursosGrupos)
         {
-            await db.Database.MigrateAsync();
-            db.CursosGrupos.AddRange(cursosGrupos);
+           
             try
             {
+                await db.Database.MigrateAsync();
+                foreach (CursosGrupos cg in cursosGrupos)
+                {
+                    if (!(db.Cursos.FindAsync(cg.IdCurso) == null))
+                    {
+                        var cgNuevo = new CursosGrupos()
+                        {
+                            IdGrupo = cg.IdGrupo,
+                            Id = cg.Id,
+                            IdCurso = cg.IdCurso
+                        };
+                        db.CursosGrupos.Add(cgNuevo);
+                    }
+                }
+                // db.EG.AddRange(listaEG);
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

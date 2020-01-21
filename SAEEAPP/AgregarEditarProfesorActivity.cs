@@ -143,7 +143,6 @@ namespace SAEEAPP
                 profesorTemp.Correo = etCorreo.Text;
                 profesorTemp.Contrasenia = etContrasenia.Text;
                 bool resultado = await servicioProfesores.UpdateProfesorAsync(profesorTemp);
-
                 if (resultado)
                 {
                     if (profesor.Id == ClienteHttp.Usuario.Profesor.Id)

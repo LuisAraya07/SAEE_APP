@@ -7,6 +7,7 @@ using Android.Widget;
 using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -22,7 +23,7 @@ namespace SAEEAPP
         CursosServices servicioCursos;
         ProgressBar pbCargandoCursos;
         FloatingActionButton btAgregar;
-
+        VerificarConexion vc;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -36,6 +37,7 @@ namespace SAEEAPP
             btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
             pbCargandoCursos = FindViewById<ProgressBar>(Resource.Id.pbCargandoCursos);
             btAgregar.Click += AgregarCurso;
+            vc = new VerificarConexion(this);
         }
 
         protected override async void OnStart()
@@ -44,7 +46,19 @@ namespace SAEEAPP
 
             if (cursos == null)
             {
-                cursos = await servicioCursos.GetAsync();
+                var conectado = vc.IsOnline();
+                if (conectado)
+                {
+                    cursos = await servicioCursos.GetAsync();
+                }
+                else
+                {
+                    
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    CursosServices servicioOffline = new CursosServices(profesor.Id);
+                    cursos = await servicioOffline.GetOffline();
+                }
                 if (cursos.Count > 0)
                 {
                     tvCargando.Visibility = ViewStates.Invisible;

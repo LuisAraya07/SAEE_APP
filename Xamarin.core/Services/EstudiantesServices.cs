@@ -56,10 +56,26 @@ namespace Xamarin.core.Services
 
         }
         //Agregar TODOS estudiantes
-        public async Task<Boolean> PostAllOffline(List<Estudiantes> estudiantes)
+        public async Task<Boolean> PostAllOffline(List<Estudiantes> listaEstudiantes)
         {
             await db.Database.MigrateAsync();
-            db.Estudiantes.AddRange(estudiantes);
+            foreach (Estudiantes estudiante in listaEstudiantes)
+            {
+                var estudianteNuevo = new Estudiantes()
+                {
+                    Id = estudiante.Id,
+                    Nombre = estudiante.Nombre,
+                    IdProfesor = estudiante.IdProfesor,
+                    Cedula = estudiante.Cedula,
+                    Pin = estudiante.Pin,
+                    PrimerApellido = estudiante.PrimerApellido,
+                    SegundoApellido = estudiante.SegundoApellido
+                    
+                    
+                };
+                db.Estudiantes.Add(estudianteNuevo);
+
+            }
             await db.SaveChangesAsync();
             return true;
 
