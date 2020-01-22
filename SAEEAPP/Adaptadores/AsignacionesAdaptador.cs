@@ -13,11 +13,13 @@ namespace SAEEAPP.Adaptadores
         private readonly Activity _context;
         private readonly List<Asignaciones> _asignaciones;
         private readonly TextView _tvCargando;
-        public AsignacionesAdaptador(Activity context, List<Asignaciones> asignaciones, TextView tvCargando)
+        private readonly List<Cursos> _cursos;
+        public AsignacionesAdaptador(Activity context, List<Asignaciones> asignaciones, TextView tvCargando,List<Cursos>cursos)
         {
             _context = context;
             _asignaciones = asignaciones;
             _tvCargando = tvCargando;
+            _cursos = cursos;
             tvCargando.Text = "No hay datos";//Si no hay datos, se muestra el mensaje, y si se eliminan todos tambien
         }
         public override Asignaciones this[int position] => _asignaciones[position];
@@ -58,7 +60,7 @@ namespace SAEEAPP.Adaptadores
             btnOpciones.SetTag(Resource.Id.btnOpcionesC, btnOpciones);
             var draw = ContextCompat.GetDrawable(_context, Resource.Drawable.dots_vertical);
             btnOpciones.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
-            btnOpciones.SetOnClickListener(new AsignacionesListener(_context, _asignaciones, asignacion, this, btnOpciones));
+            btnOpciones.SetOnClickListener(new AsignacionesListener(_context, _asignaciones, asignacion, this, btnOpciones,_cursos));
         }
         public void ActualizarDatos()
         {

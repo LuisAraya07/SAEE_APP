@@ -21,13 +21,16 @@ namespace SAEEAPP.Listeners
         private AsignacionesAdaptador _adapter;
         private Button _btnOpciones;
         private AlertDialog alertDialogAndroid;
-        public AsignacionesListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter, Button btnOpciones)
+
+        private List<Cursos> _cursos;
+        public AsignacionesListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter, Button btnOpciones,List<Cursos> cursos)
         {
             _context = context;
             _asignaciones = asignaciones;
             _asignacion = asignacion;
             _adapter = adapter;
             _btnOpciones = btnOpciones;
+            _cursos = cursos;
         }
 
         public void OnClick(View v)
@@ -84,10 +87,16 @@ namespace SAEEAPP.Listeners
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
             AsignacionesServices servicioAsignaciones = new AsignacionesServices();
+            EvaluacionesServices servicioEvaluaciones = new EvaluacionesServices();
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
             if (conectado)
             {
+                List<Evaluaciones> evaluaciones = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(_asignacion.Id);
+                foreach(Evaluaciones eva in evaluaciones)
+                {
+                    await servicioEvaluaciones.DeleteEvaluacionAsync(eva.Id);
+                }
                 bool resultado = await servicioAsignaciones.DeleteAsignacionAsync(_asignacion.Id);
                 if (resultado)
                 {
@@ -109,7 +118,7 @@ namespace SAEEAPP.Listeners
         {
 
             AgregarEditarAsignacionesActivity agregarAsignacionActivity =
-                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion);
+                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion,_cursos);
             agregarAsignacionActivity.Show();
           
         }
@@ -173,19 +182,21 @@ namespace SAEEAPP.Listeners
         private readonly List<Asignaciones> _asignaciones;
         private readonly Asignaciones _asignacion;
         private readonly AsignacionesAdaptador _adapter;
+        private readonly List<Cursos> _cursos;
 
-        public EditarAListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter)
+        public EditarAListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter,List<Cursos> cursos)
         {
             _context = context;
             _asignaciones = asignaciones;
             _asignacion = asignacion;
             _adapter = adapter;
+            _cursos = cursos;
         }
 
         public void OnClick(View v)
         {
             AgregarEditarAsignacionesActivity agregarAsignacionActivity =
-                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion);
+                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion,_cursos);
             agregarAsignacionActivity.Show();
         }
     }

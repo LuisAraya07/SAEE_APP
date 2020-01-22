@@ -70,6 +70,7 @@
     <Compile Include="Adaptadores\CursosListAdapter.cs" />
     <Compile Include="AgregarEditarAsignacionesActivity.cs" />
     <Compile Include="AsignacionesActivity.cs" />
+    <Compile Include="EvaluacionesActivity.cs" />
     <Compile Include="Listeners\AsignacionesListener.cs" />
     <Compile Include="Listeners\EstudiantesListener.cs" />
     <Compile Include="Listeners\GruposListener.cs" />
@@ -104,7 +105,6 @@
     <Compile Include="ProfesoresActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="SincronizarActivity.cs" />
     <Compile Include="UsuarioActivity.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -359,7 +359,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_sync.xml" />
+    <AndroidResource Include="Resources\layout\activity_evaluaciones.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
