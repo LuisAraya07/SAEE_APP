@@ -37,6 +37,7 @@ namespace SAEEAPP
         string rubro= "";
         int grupoid = 0;
         int cursoid = 0;
+        int periodos = 0;
         private void spTipo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             var spinner = sender as Spinner;
@@ -47,12 +48,14 @@ namespace SAEEAPP
         {
             var spinner = sender as Spinner;
             grupoid = gruposporcurso[e.Position].Id;
+            
             //  Toast.MakeText(context, "You choose:" + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
         }
         private void spCurso_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             var spinner = sender as Spinner;
             cursoid = cursos[e.Position].Id;
+            periodos = cursos[e.Position].CantidadPeriodos;
             getgruposCurso(cursoid);
 
             //           Toast.MakeText(context, "Curso: " + spinner.GetItemAtPosition(e.Position)+" ID: "+cursos[e.Position].Id+" GRUPOS EN CURSO : "+ gruposporcurso.Count, ToastLength.Short).Show();
@@ -195,6 +198,25 @@ namespace SAEEAPP
                         // Se obtiene el elemento insertado
                         string resultadoString = await resultado.Content.ReadAsStringAsync();
                         asignNueva = JsonConvert.DeserializeObject<Asignaciones>(resultadoString);
+                        var servicioEvaluaciones = new EvaluacionesServices();
+                        var serviciogrupos = new GruposServices();
+                        List<EstudiantesXgrupos> estudiantes = await serviciogrupos.GetEGAsync(grupoid);
+                        foreach (EstudiantesXgrupos estu in estudiantes)
+                          {
+                              for (int i = 1; i <= periodos; i++)
+                              {
+                                  Evaluaciones eva = new Evaluaciones();
+                                  eva.Profesor = 1;
+                                  eva.Asignacion = asignNueva.Id;
+                                  eva.Estudiante = estu.IdEstudiante;
+                                  eva.Puntos = 0;
+                                  eva.Porcentaje = 0;
+                                  eva.Nota = 0;
+                                  eva.Estado = "Ninguno";
+                                  eva.Periodo = i;
+                                  await servicioEvaluaciones.PostAsync(eva);
+                              }
+                          }
                         // Se actualiza la lista de asignaciones
                         asignaciones.Add(asignNueva);
                         AdaptadorAsignaciones.ActualizarDatos();

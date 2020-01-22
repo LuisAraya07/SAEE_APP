@@ -37,6 +37,9 @@ namespace SAEEAPP
             Button btAsignaciones = FindViewById<Button>(Resource.Id.btAsignaciones);
             btAsignaciones.Click += OnClick_Asignaciones;
 
+            Button btEvaluaciones = FindViewById<Button>(Resource.Id.btEvaluaciones);
+            btEvaluaciones.Click += OnClick_Evaluaciones;
+
 
             if (!ClienteHttp.Usuario.Profesor.Administrador)
             {
@@ -74,6 +77,22 @@ namespace SAEEAPP
             if (conectado)
             {
                 Intent asignacion = new Intent(this, typeof(AsignacionesActivity));
+                StartActivity(asignacion);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            }
+
+        }
+
+        public void OnClick_Evaluaciones(object sender, EventArgs e)
+        {
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent asignacion = new Intent(this, typeof(EvaluacionesActivity));
                 StartActivity(asignacion);
             }
             else

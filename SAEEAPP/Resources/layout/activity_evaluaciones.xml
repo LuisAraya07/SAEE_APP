@@ -1,0 +1,84 @@
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spCurso" />
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spGrupo" />
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spPeriodo" />
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spTipo" />
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spAsignacion" />
+        <Button
+            android:textColor="#3282b8"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_border_edit"
+            android:text="Ver Notas"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:id="@+id/btVerNotas"
+            android:layout_marginTop="30dp" />
+    </LinearLayout>
+
+</RelativeLayout>

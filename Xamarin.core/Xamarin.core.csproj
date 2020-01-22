@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Data\EvaluacionesRepositorio.cs" />
     <Compile Include="Data\AsignacionesRepositorio.cs" />
     <Compile Include="Data\ClienteHttp.cs" />
     <Compile Include="Data\CursosRepositorio.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Data\GruposRepositorio.cs" />
     <Compile Include="Data\InicioSesionRepositorio.cs" />
     <Compile Include="Data\ProfesoresRepositorio.cs" />
+    <Compile Include="Models\Evaluaciones.cs" />
     <Compile Include="Models\Asignaciones.cs" />
     <Compile Include="Models\Cursos.cs" />
     <Compile Include="Models\CursosGrupos.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Offline\DatabaseContextSistema.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EvaluacionesServices.cs" />
     <Compile Include="Services\AsignacionesServices.cs" />
     <Compile Include="Services\CursosServices.cs" />
     <Compile Include="Services\EstudiantesServices.cs" />
