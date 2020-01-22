@@ -11,6 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp">
+        <TextView
+            android:text="Curso"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvCurso"
+            android:textColor="#FFF"
+        />
         <Spinner
             android:spinnerMode="dialog"
             android:layout_width="match_parent"
@@ -22,6 +32,16 @@
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
             android:id="@+id/spCurso" />
+        <TextView
+            android:text="Grupo"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvCurso"
+            android:textColor="#FFF"
+        />
         <Spinner
             android:spinnerMode="dialog"
             android:layout_width="match_parent"
@@ -33,6 +53,16 @@
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
             android:id="@+id/spGrupo" />
+        <TextView
+            android:text="Periodo"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvPeriodo"
+            android:textColor="#FFF"
+        />
         <Spinner
             android:spinnerMode="dialog"
             android:layout_width="match_parent"
@@ -44,6 +74,16 @@
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
             android:id="@+id/spPeriodo" />
+        <TextView
+            android:text="Rubro"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvRubro"
+            android:textColor="#FFF"
+        />
         <Spinner
             android:spinnerMode="dialog"
             android:layout_width="match_parent"
@@ -55,6 +95,16 @@
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
             android:id="@+id/spTipo" />
+        <TextView
+            android:text="Asignación"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvAsignacion"
+            android:textColor="#FFF"
+        />
         <Spinner
             android:spinnerMode="dialog"
             android:layout_width="match_parent"
