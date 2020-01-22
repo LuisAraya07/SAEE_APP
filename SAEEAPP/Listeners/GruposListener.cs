@@ -79,8 +79,7 @@ namespace SAEEAPP.Listeners
         {
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
-            if (conectado)
-            {
+            
                 Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
                 alertDialogBuilder.SetCancelable(false)
                 .SetIcon(Resource.Drawable.trash_can_outline)
@@ -88,53 +87,56 @@ namespace SAEEAPP.Listeners
                    .SetMessage("Quiere eliminar el grupo: " + grupo.Grupo)
                    .SetPositiveButton("Sí", async delegate
                    {
-                       GruposServices gruposServices = new GruposServices();
-                       await gruposServices.DeleteGruposAsync(grupo);
-                       Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                       _grupos.Remove(grupo);
-                       listGruposAdaptador.ActualizarDatos();
+                       if (conectado)
+                       {
+                           GruposServices gruposServices = new GruposServices();
+                           await gruposServices.DeleteGruposAsync(grupo);
+                           Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                           _grupos.Remove(grupo);
+                           listGruposAdaptador.ActualizarDatos();
+                       }
+                       else
+                       {
+                           // Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                           ProfesoresServices ns = new ProfesoresServices(1);
+                           Profesores profesor = await ns.GetProfesorConectado();
+                           GruposServices grupoServicio = new GruposServices(profesor.Id);
+                           await grupoServicio.DeleteOffline(grupo);
+                           Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                           _grupos.Remove(grupo);
+                           listGruposAdaptador.ActualizarDatos();
+                       }
                    })
                    .SetNegativeButton("No", delegate
                    {
                        alertDialogBuilder.Dispose();
                    })
                    .Show();
-            }
-            else
-            {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            
         }
 
         private void OnClick_Editar()
         {
-            VerificarConexion vc = new VerificarConexion(_context);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                LayoutInflater layoutInflater = LayoutInflater.From(_context);
-                View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos, null);
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-                alertDialogBuilder.SetView(mView);
-                mView.FindViewById<EditText>(Resource.Id.etGrupo).Text = grupo.Grupo;
-                alertDialogBuilder.SetTitle("Editando Grupo");
-                alertDialogBuilder.SetCancelable(false)
-                .SetPositiveButton("Guardar", delegate
-                {
-                    EditarGrupoAsync(alertDialogBuilder, mView);
-                })
-                .SetNegativeButton("Cancelar", delegate
-                {
-                    alertDialogBuilder.Dispose();
 
-                });
-                Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
-                alertDialogAndroid.Show();
-            }
-            else
+            LayoutInflater layoutInflater = LayoutInflater.From(_context);
+            View mView = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Grupos, null);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+            alertDialogBuilder.SetView(mView);
+            mView.FindViewById<EditText>(Resource.Id.etGrupo).Text = grupo.Grupo;
+            alertDialogBuilder.SetTitle("Editando Grupo");
+            alertDialogBuilder.SetCancelable(false)
+            .SetPositiveButton("Guardar", delegate
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+                EditarGrupoAsync(alertDialogBuilder, mView);
+            })
+            .SetNegativeButton("Cancelar", delegate
+            {
+                alertDialogBuilder.Dispose();
+
+            });
+            Android.Support.V7.App.AlertDialog alertDialogAndroid = alertDialogBuilder.Create();
+            alertDialogAndroid.Show();
+
         }
 
         private async void EditarGrupoAsync(Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder, View mView)
@@ -166,7 +168,16 @@ namespace SAEEAPP.Listeners
                 }
                 else
                 {
-                    Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                    //AQUI OFFLINE
+                    //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    GruposServices grupoServicio = new GruposServices(profesor.Id);
+                    await grupoServicio.PutOffline(grupo);
+                    _grupos.Where(x => x.Id == grupo.Id).FirstOrDefault().Grupo = etGrupo;
+                    listGruposAdaptador.ActualizarDatos();
+                    alertDialogBuilder.Dispose();
+                    Toast.MakeText(_context, "Se ha editado con éxito.", ToastLength.Long).Show();
 
                 }
 
@@ -178,6 +189,7 @@ namespace SAEEAPP.Listeners
         }
         private async void OnClick_Estudiantes()
         {
+            
             VerificarConexion vc = new VerificarConexion(_context);
             List<Estudiantes> listaEstudiantes = new List<Estudiantes>();
             List<EstudiantesXgrupos> listaEG = new List<EstudiantesXgrupos>();
@@ -187,17 +199,18 @@ namespace SAEEAPP.Listeners
             {
                 gruposServicios = new GruposServices();
                 //Cada vez vamos a obtener los estudiantes de ese grupo
-                listaEG = await gruposServicios.GetEGAsync(grupo.Id);//grupo.EstudiantesXgrupos.Select(x => x.IdEstudianteNavigation).ToList();
+                listaEG = await gruposServicios.GetEGAsync(grupo.Id);
                 
             }
             else
             {
+                //AQUI OFFLINE
                 //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
                 gruposServicios = new GruposServices(profesor.Id);
                 //Cada vez vamos a obtener los estudiantes de ese grupo
-                listaEG = await gruposServicios.GetEGOffline(grupo.Id);//grupo.EstudiantesXgrupos.Select(x => x.IdEstudianteNavigation).ToList();
+                listaEG = await gruposServicios.GetEGOffline(grupo.Id);
             }
             listaEstudiantes = listaEG.Select(x => x.IdEstudianteNavigation).ToList();
             var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEG);
@@ -229,34 +242,41 @@ namespace SAEEAPP.Listeners
 
         private async void MostrarLVAgregarAsync(List<Estudiantes> listaAgregados, List<EstudiantesXgrupos> listaEG)
         {
+            Toast.MakeText(_context, "Obteniendo los estudiantes, espere", ToastLength.Short).Show();
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
+            EstudiantesServices estudiantesServicios;
+            List<Estudiantes> listaTemporal = new List<Estudiantes>();
             if (conectado)
             {
-                EstudiantesServices estudiantesServicios = new EstudiantesServices();
-                List<Estudiantes> listaTemporal = new List<Estudiantes>();
+                estudiantesServicios = new EstudiantesServices();
                 listaTemporal = await estudiantesServicios.GetAsync();
-                var listaAgregar = listaTemporal.Where(st => !(listaAgregados.Select(x => x.Id).Contains(st.Id))).ToList();
-                var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEGA);
-                ListAgregarEGAdaptador adaptadorEG = new ListAgregarEGAdaptador(_context, listaAgregar, listaEG, grupo.Id);
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilderAgregar = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-                alertDialogBuilderAgregar.SetCancelable(true)
-                .SetTitle("Estudiantes Para Agregar")
-                .SetAdapter(adaptadorEG, (s, e) =>
-                {
-                    var index = e.Which;
-                })
-                .SetNegativeButton("Cerrar", delegate
-                {
-                    alertDialogBuilderAgregar.Dispose();
-                });
-                Android.Support.V7.App.AlertDialog alertDialogAndroidAgregar = alertDialogBuilderAgregar.Create();
-                alertDialogAndroidAgregar.Show();
             }
             else
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                estudiantesServicios = new EstudiantesServices(profesor.Id);
+                listaTemporal = await estudiantesServicios.GetOffline();
             }
+
+            var listaAgregar = listaTemporal.Where(st => !(listaAgregados.Select(x => x.Id).Contains(st.Id))).ToList();
+            var estudiantesListView = _context.FindViewById<ListView>(Resource.Id.listViewEGA);
+            ListAgregarEGAdaptador adaptadorEG = new ListAgregarEGAdaptador(_context, listaAgregar, listaEG, grupo.Id);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilderAgregar = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+            alertDialogBuilderAgregar.SetCancelable(true)
+            .SetTitle("Estudiantes Para Agregar")
+            .SetAdapter(adaptadorEG, (s, e) =>
+            {
+                var index = e.Which;
+            })
+            .SetNegativeButton("Cerrar", delegate
+            {
+                alertDialogBuilderAgregar.Dispose();
+            });
+            Android.Support.V7.App.AlertDialog alertDialogAndroidAgregar = alertDialogBuilderAgregar.Create();
+            alertDialogAndroidAgregar.Show();
 
         }
     }

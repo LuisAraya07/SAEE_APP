@@ -54,6 +54,17 @@ namespace Xamarin.core.Data
             return await Task.Run(() => JsonConvert.DeserializeObject<List<EstudiantesXgrupos>>(json));
         }
 
+        public async Task<Boolean> DeleteAllGruposAsync()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Grupos/DeleteAllGrupos")
+            };
+            var response = await client.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
+
         //Agregar Grupo
         public async Task<HttpResponseMessage> PostAsync(Grupos grupo)
         {

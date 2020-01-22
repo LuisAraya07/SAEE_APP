@@ -69,5 +69,17 @@ namespace Xamarin.core.Data
             return response.IsSuccessStatusCode;
         }
 
+
+        public async Task<Boolean> DeleteAllEstudiantesAsync()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Estudiantes/DeleteAllEstudiantes")
+            };
+            var response = await client.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

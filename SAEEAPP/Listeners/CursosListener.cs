@@ -96,27 +96,35 @@ namespace SAEEAPP.Listeners
 
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
-            CursosServices servicioCursos = new CursosServices();
+            CursosServices servicioCursos;
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
+            bool resultado;
             if (conectado)
             {
-                bool resultado = await servicioCursos.DeleteCursoAsync(_curso.Id);
-                if (resultado)
-                {
-                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                    _cursos.Remove(_curso);
-                    _cursosListAdapter.ActualizarDatos();
-                }
-                else
-                {
-                    Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
-                }
+                servicioCursos = new CursosServices();
+                resultado = await servicioCursos.DeleteCursoAsync(_curso.Id);
             }
             else
             {
-                Toast.MakeText(_context,"Necesita conexión a internet.",ToastLength.Long).Show();
+                //AQUI OFFLINE
+                //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                servicioCursos = new CursosServices(profesor.Id);
+                resultado = await servicioCursos.DeleteCursoOffline(_curso.Id);
             }
+            if (resultado)
+            {
+                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                _cursos.Remove(_curso);
+                _cursosListAdapter.ActualizarDatos();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
+            }
+
         }
         private void OnClick_Editar()
         {

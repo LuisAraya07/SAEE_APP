@@ -54,6 +54,7 @@ namespace Xamarin.core.Services
             await db.SaveChangesAsync();
             return estudiante;
 
+
         }
         //Agregar TODOS estudiantes
         public async Task<Boolean> PostAllOffline(List<Estudiantes> listaEstudiantes)
@@ -139,6 +140,12 @@ namespace Xamarin.core.Services
         public async Task<bool> DeleteEstudiantesAsync(Estudiantes estudiante)
         {
             return await _estudiantesR.DeleteEstudiantesAsync(estudiante);
+        }
+
+        //ELIMINAMOS TODOS LOS Estudiantes
+        public async Task<Boolean> DeleteAllEstudiantesAsync()
+        {
+            return await _estudiantesR.DeleteAllEstudiantesAsync();
         }
 
 

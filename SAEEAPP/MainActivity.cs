@@ -64,12 +64,15 @@ namespace SAEEAPP
                     var response = await inicioSesionServices.IniciarSesion(etCedula.Text, etContrasenia.Text);
                     if (response.IsSuccessStatusCode)
                     {
-
-                        await ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
+                        var finalizadoNotificaciones = await ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
                         //Se abre el menu
-                        Intent siguiente = new Intent(this, typeof(MenuActivity));
-                        StartActivity(siguiente);
-                        Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Long).Show();
+                        if (finalizadoNotificaciones)
+                        {
+                            Intent siguiente = new Intent(this, typeof(MenuActivity));
+                            StartActivity(siguiente);
+                            Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Long).Show();
+
+                        }
 
                     }
                     else
@@ -93,13 +96,7 @@ namespace SAEEAPP
         {
 
             var notificacionIns = new NotificacionesServices();
-            //Verifico si le dio check
-            if (cbOffline.Checked)
-            {
-                //Cargamos todos los datos
-                //Aquí agregamos al profesor conectado
-                var rs = await CargarBDLocal(profesor);
-            }
+            
             //Id del profesor
             var listNotasAgregar = await notificacionIns.GetNotificaciones(profesor.Id);
             var listNotasEliminar = await notificacionIns.GetNotificacionesEliminar(profesor.Id);
@@ -126,6 +123,17 @@ namespace SAEEAPP
                     nota.Estado = 0;
                     notificacionIns.PutNotificaciones(nota);
                 }
+            }
+            //Verifico si le dio check
+            if (cbOffline.Checked)
+            {
+                Toast.MakeText(this, "Sincronizando Datos, espere...", ToastLength.Long).Show();
+                //Cargamos todos los datos
+                //Aquí agregamos al profesor conectado
+                var rs = await CargarBDLocal(profesor);
+                if (rs) return true;
+                Toast.MakeText(this, "No todas las funcionalidades están disponibles.", ToastLength.Short).Show();
+
             }
             return true;
         }

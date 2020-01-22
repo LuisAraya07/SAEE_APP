@@ -29,9 +29,7 @@ namespace SAEEAPP
             base.OnCreate(savedInstanceState);
             // Create your application here
             servicioCursos = new CursosServices();
-#pragma warning disable CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
             SetContentView(Resource.Layout.activity_cursos);
-#pragma warning restore CS0117 // 'Resource.Layout' no contiene una definición para 'activity_cursos'
             lvCursos = FindViewById<ListView>(Resource.Id.lvCursos);
             tvCargando = FindViewById<TextView>(Resource.Id.tvCargando);
             btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
@@ -53,7 +51,7 @@ namespace SAEEAPP
                 }
                 else
                 {
-                    
+                    //AQUI OFFLINE
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
                     CursosServices servicioOffline = new CursosServices(profesor.Id);

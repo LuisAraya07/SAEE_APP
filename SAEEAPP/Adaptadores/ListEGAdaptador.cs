@@ -55,46 +55,60 @@ namespace SAEEAPP.Adaptadores
 
         public void OnClick_Borrar(object sender, EventArgs e)
         {
+            int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarEG);
+            var estudiante = _estudiantes.ElementAt(i);
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+            alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
+              .SetCancelable(false)
+              .SetTitle("¿Está seguro?")
+              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}" + " de este grupo")
+              .SetPositiveButton("Sí", delegate
+              {
+                      //ELIMINAR AQUI 
+                      EliminarEG(estudiante,i);
+
+              })
+              .SetNegativeButton("No", delegate
+              {
+                  alertDialogBuilder.Dispose();
+
+              })
+              .Show();
+
+        }
+
+        public async void EliminarEG(Estudiantes estudiante,int i)
+        {
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
+            var _EGEliminar = _EG.Where(x => x.IdEstudiante == estudiante.Id).FirstOrDefault();
             if (conectado)
             {
-                int i = (int)((Button)sender).GetTag(Resource.Id.btBorrarEG);
-                var estudiante = _estudiantes.ElementAt(i);
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-                alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
-                  .SetCancelable(false)
-                  .SetTitle("¿Está seguro?")
-                  .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}" + " de este grupo")
-                  .SetPositiveButton("Sí", async delegate
-                  {
-                      //ELIMINAR AQUI 
-                      GruposServices gruposServices = new GruposServices();
-                      var _EGEliminar = _EG.Where(x => x.IdEstudiante == estudiante.Id).FirstOrDefault();
-                      var eliminado = await gruposServices.DeleteEGAsync(_EGEliminar);
-                      if (eliminado)
-                      {
-                          Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                          _estudiantes.RemoveAt(i);
-                          _EG.Remove(_EGEliminar);
-                          NotifyDataSetChanged();
-                      }
-                      else
-                      {
-                          Toast.MakeText(_context, "No se ha podido eliminar.", ToastLength.Long).Show();
-                      }
-
-                  })
-                  .SetNegativeButton("No", delegate
-                  {
-                      alertDialogBuilder.Dispose();
-
-                  })
-                  .Show();
+                GruposServices gruposServices = new GruposServices();
+                var eliminado = await gruposServices.DeleteEGAsync(_EGEliminar);
+                if (eliminado)
+                {
+                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                    _estudiantes.RemoveAt(i);
+                    _EG.Remove(_EGEliminar);
+                    NotifyDataSetChanged();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "No se ha podido eliminar.", ToastLength.Long).Show();
+                }
             }
             else
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                GruposServices gruposServicios = new GruposServices(profesor.Id);
+                var eliminado = await gruposServicios.DeleteEGOffline(_EGEliminar);
+                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                _estudiantes.RemoveAt(i);
+                _EG.Remove(_EGEliminar);
+                NotifyDataSetChanged();
             }
         }
 

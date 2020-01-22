@@ -38,8 +38,8 @@ namespace Xamarin.core.Services
         public async Task<List<Grupos>> GetOffline()
         {
             await db.Database.MigrateAsync();
-            var grupos = await db.Grupos.Where(x => x.IdProfesor == idProfesor).ToListAsync();
-            return grupos ?? new List<Grupos>();
+            var grupos = await db.Grupos.Where(x => x.IdProfesor == idProfesor).Include(grupo => grupo.EstudiantesXgrupos).ToListAsync();
+            return grupos;
         }
         //Agregar grupo
         public async Task<Grupos> PostOffline(Grupos grupo)
@@ -225,6 +225,11 @@ namespace Xamarin.core.Services
         public async Task<bool> DeleteGruposAsync(Grupos grupo)
         {
             return await _gruposR.DeleteGrupoAsync(grupo);
+        }
+        //ELIMINAMOS TODOS LOS GRUPOS
+        public async Task<Boolean> DeleteAllGruposAsync()
+        {
+            return await _gruposR.DeleteAllGruposAsync();
         }
         public async Task<List<EstudiantesXgrupos>> GetEGAsync(int id)
         {

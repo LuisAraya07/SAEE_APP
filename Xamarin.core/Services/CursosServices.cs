@@ -47,7 +47,7 @@ namespace Xamarin.core.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                return curso;
+                return null;
             }
         }
         //Agregar todos los cursos
@@ -141,7 +141,7 @@ namespace Xamarin.core.Services
 
             return cursosGrupos;
         }
-        //Agregar CG
+        //Agregar CG TODOS
         public async Task<bool> AgregarCursosGruposAllOffline(List<CursosGrupos> cursosGrupos)
         {
            
@@ -192,7 +192,22 @@ namespace Xamarin.core.Services
 
             return true;
         }
-        //Editar CG
+        //Agregar EG
+        public async Task<bool> AgregarCursosGruposOffline(List<CursosGrupos> cursosGrupos)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                db.CursosGrupos.AddRange(cursosGrupos);
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
 
 
@@ -239,6 +254,12 @@ namespace Xamarin.core.Services
         public async Task<bool> DeleteCursoAsync(int id)
         {
             return await _cursosR.DeleteCursoAsync(id);
+        }
+
+        //ELIMINA TODOS LOS REGISTROS DEL CURSO
+        public async Task<bool> DeleteAllCursosAsync()
+        {
+            return await _cursosR.DeleteAllCursosAsync();
         }
     }
 }

@@ -7,6 +7,7 @@ using Android.Support.V4.View;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Java.Lang;
 using SAEEAPP.Adaptadores;
 using SAEEAPP.JavaHolder;
 using System;
@@ -94,13 +95,22 @@ namespace SAEEAPP
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-
-            if (item.ItemId == Resource.Id.CerrarSesion)
-            {
-                Toast.MakeText(this, "Cerrar Sesión", ToastLength.Short).Show();
+            SincronizarActivity menuOpciones = new SincronizarActivity(this);
+            var itemS = item.ItemId;
+            switch(itemS){
+                case Resource.Id.CerrarSesion:
+                    menuOpciones.CerrarApp();
+                    break;
+                case Resource.Id.Sincronizar:
+                    menuOpciones.Sincronizar();
+                    break;
+                default:
+                    break;
             }
             return base.OnOptionsItemSelected(item);
         }
+
+        
 
 
 

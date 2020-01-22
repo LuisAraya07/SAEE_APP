@@ -92,7 +92,7 @@ namespace SAEEAPP
 
         private async Task AgregarAsync()
         {
-            EstudiantesServices servicioEstudiantes = new EstudiantesServices();
+            EstudiantesServices servicioEstudiantes;
             Estudiantes estudiante = new Estudiantes()
             {
                 //Obtengo el id del profesor
@@ -106,6 +106,7 @@ namespace SAEEAPP
             var conectado = vc.IsOnline();
             if (conectado)
             {
+                servicioEstudiantes = new EstudiantesServices();
                 HttpResponseMessage resultado = await servicioEstudiantes.PostAsync(estudiante);
                 if (resultado.IsSuccessStatusCode)
                 {
@@ -124,7 +125,17 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                //Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                servicioEstudiantes = new EstudiantesServices(profesor.Id);
+                var estudianteNuevo = await servicioEstudiantes.PostOffline(estudiante);
+                listaEstudiantes.Add(estudianteNuevo);
+                adaptadorEstudiantes.NotifyDataSetChanged();
+                alertDialogBuilder.Dispose();
+                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                alertDialogAndroid.Dismiss();
+
             }
         }
         private void Editar(object sender, EventArgs e)
@@ -140,7 +151,7 @@ namespace SAEEAPP
         }
         private async Task EditarAsync()
         {
-            EstudiantesServices servicioEstudiantes = new EstudiantesServices();
+            EstudiantesServices servicioEstudiantes;
             _estudiante.Cedula = etCedula.Text;
             _estudiante.Nombre = etNombre.Text;
             _estudiante.PrimerApellido = etApellido1.Text;
@@ -148,27 +159,33 @@ namespace SAEEAPP
             _estudiante.Pin = etContrasenia.Text;
             VerificarConexion vc = new VerificarConexion(context);
             var conectado = vc.IsOnline();
+            bool resultado;
             if (conectado)
             {
-                bool resultado = await servicioEstudiantes.PutAsync(_estudiante);
-
-                if (resultado)
-                {
-                    // Se actualiza la lista de profesores
-                    adaptadorEstudiantes.ActualizarDatos();
-
-                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.Dismiss();
-                }
-                else
-                {
-                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
-                }
+                servicioEstudiantes = new EstudiantesServices();
+                resultado = await servicioEstudiantes.PutAsync(_estudiante);
             }
             else
             {
-                Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
+
+                //OFFLINE AQUI
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                servicioEstudiantes = new EstudiantesServices(profesor.Id);
+                resultado = await servicioEstudiantes.PutOffline(_estudiante);
             }
+            if (resultado)
+            {
+                // Se actualiza la lista de estudiantes
+                adaptadorEstudiantes.ActualizarDatos();
+                Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+            }
+            else
+            {
+                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+            }
+            alertDialogAndroid.Dismiss();
+
         }
         private bool EntradaValida()
         {
