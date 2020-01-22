@@ -21,13 +21,16 @@ namespace SAEEAPP.Listeners
         private AsignacionesAdaptador _adapter;
         private Button _btnOpciones;
         private AlertDialog alertDialogAndroid;
-        public AsignacionesListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter, Button btnOpciones)
+
+        private List<Cursos> _cursos;
+        public AsignacionesListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter, Button btnOpciones,List<Cursos> cursos)
         {
             _context = context;
             _asignaciones = asignaciones;
             _asignacion = asignacion;
             _adapter = adapter;
             _btnOpciones = btnOpciones;
+            _cursos = cursos;
         }
 
         public void OnClick(View v)
@@ -109,7 +112,7 @@ namespace SAEEAPP.Listeners
         {
 
             AgregarEditarAsignacionesActivity agregarAsignacionActivity =
-                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion);
+                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion,_cursos);
             agregarAsignacionActivity.Show();
           
         }
@@ -173,19 +176,21 @@ namespace SAEEAPP.Listeners
         private readonly List<Asignaciones> _asignaciones;
         private readonly Asignaciones _asignacion;
         private readonly AsignacionesAdaptador _adapter;
+        private readonly List<Cursos> _cursos;
 
-        public EditarAListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter)
+        public EditarAListener(Activity context, List<Asignaciones> asignaciones, Asignaciones asignacion, AsignacionesAdaptador adapter,List<Cursos> cursos)
         {
             _context = context;
             _asignaciones = asignaciones;
             _asignacion = asignacion;
             _adapter = adapter;
+            _cursos = cursos;
         }
 
         public void OnClick(View v)
         {
             AgregarEditarAsignacionesActivity agregarAsignacionActivity =
-                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion);
+                new AgregarEditarAsignacionesActivity(_context, _adapter, _asignaciones, _asignacion,_cursos);
             agregarAsignacionActivity.Show();
         }
     }

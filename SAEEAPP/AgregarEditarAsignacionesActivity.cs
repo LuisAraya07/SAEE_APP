@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
@@ -22,20 +23,84 @@ namespace SAEEAPP
         Activity context;
         AsignacionesAdaptador AdaptadorAsignaciones;
         List<Asignaciones> asignaciones;
+        List<Cursos> cursos;
+        List<string> cursosNombres;
         Asignaciones asignacionTemp, asignacion;
         EditText etNombre, etDescripcion,etFecha,etPuntos,etPorcentaje;
         Button btAgregarEditar, btCancelar;
+        Spinner spTipo,spCurso,spGrupo;
+        View VistaAgregar;
         private readonly bool editando;
+        List<Grupos> gruposporcurso;
+        List<string> gruposNombres;
 
-
-        public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter, List<Asignaciones> asignaciones)
+        string rubro= "";
+        int grupoid = 0;
+        int cursoid = 0;
+        private void spTipo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
+            var spinner = sender as Spinner;
+            rubro = spinner.GetItemAtPosition(e.Position).ToString();
+          //  Toast.MakeText(context, "You choose:" + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
+        }
+        private void spGrupo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            var spinner = sender as Spinner;
+            grupoid = gruposporcurso[e.Position].Id;
+            //  Toast.MakeText(context, "You choose:" + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
+        }
+        private void spCurso_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            var spinner = sender as Spinner;
+            cursoid = cursos[e.Position].Id;
+            getgruposCurso(cursoid);
+
+            //           Toast.MakeText(context, "Curso: " + spinner.GetItemAtPosition(e.Position)+" ID: "+cursos[e.Position].Id+" GRUPOS EN CURSO : "+ gruposporcurso.Count, ToastLength.Short).Show();
+        }
+
+        public async void getgruposCurso(int id)
+        {
+            gruposporcurso = new List<Grupos>();
+            gruposNombres = new List<string>();
+            var serviciogruposCursos = new CursosServices();
+            var serviciogrupos = new GruposServices();
+            var gruposn = await serviciogrupos.GetAsync();
+            var gruposporcursoid = await serviciogruposCursos.GetCursosGruposAsync(id);
+            foreach(CursosGrupos cu in gruposporcursoid)
+            {
+                foreach(Grupos gru in gruposn)
+                {
+                    if(cu.IdGrupo == gru.Id)
+                    {
+                        gruposporcurso.Add(gru);
+                        gruposNombres.Add(gru.Grupo);
+                    }
+                }
+            }
+            spGrupo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spGrupo);
+            spGrupo.Prompt = "Elija Grupo";
+            spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
+            var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem, gruposNombres);
+            dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spGrupo.Adapter = dataAdapter;
+
+        }
+        public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter, List<Asignaciones> asignaciones,List<Cursos> cursos)
+        {
+            gruposporcurso = new List<Grupos>();
+            this.cursos = cursos;
+            gruposNombres = new List<string>();
+            cursosNombres = new List<string>();
             InicializarValores(context, adapter, asignaciones, "Agregando asignación", "Agregar");
             editando = false;
             asignacionTemp = null;
         }
-        public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter,List<Asignaciones> asignaciones, Asignaciones asignacion)
+        public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter,List<Asignaciones> asignaciones, Asignaciones asignacion, List<Cursos> cursos)
         {
+            gruposporcurso = new List<Grupos>();
+            this.cursos = cursos;
+            gruposNombres = new List<string>();
+            cursosNombres = new List<string>();
             InicializarValores(context, adapter, asignaciones, "Editando asignación", "Guardar");
             editando = true;
             etNombre.Text = asignacion.Nombre;
@@ -60,14 +125,31 @@ namespace SAEEAPP
         private void InicializarValores(Activity context, AsignacionesAdaptador adapter,
             List<Asignaciones> asignaciones, string titulo, string textoBotonConfirmacion)
         {
+
+            foreach (Cursos cu in cursos)
+            {
+                cursosNombres.Add(cu.Nombre);
+            }
             this.context = context;
             this.AdaptadorAsignaciones = adapter;
             this.asignaciones = asignaciones;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
+            VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Asignacion, null);
+
+            spTipo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spTipo);
+            spTipo.Prompt = "Elija Rubro";
+            spTipo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spTipo_ItemSelected);
+            var adapter1 = ArrayAdapter.CreateFromResource(context, Resource.Array.listaRubros, Android.Resource.Layout.SimpleSpinnerItem);
+            adapter1.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spTipo.Adapter = adapter1;
 
 
-            View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Asignacion, null);
-
+            spCurso = VistaAgregar.FindViewById<Spinner>(Resource.Id.spCurso);
+            spCurso.Prompt = "Elija Curso";
+            spCurso.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spCurso_ItemSelected);
+            var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem,cursosNombres);
+            dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spCurso.Adapter = dataAdapter;
 
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
             etDescripcion = VistaAgregar.FindViewById<EditText>(Resource.Id.etDescripcion);
@@ -92,10 +174,10 @@ namespace SAEEAPP
                 AsignacionesServices servicioAsignaciones = new AsignacionesServices();
                 Asignaciones asignNueva = new Asignaciones()
                 {
-                    Tipo = "Tareas",
+                    Tipo = rubro,
                     Profesor = 1,// En el api se asigna el correcto
-                    Curso = 5,
-                    Grupo = 32,
+                    Curso = cursoid,
+                    Grupo = grupoid,
                     Nombre = etNombre.Text,
                     Descripcion = etDescripcion.Text,
                     Estado = "Ninguno",
@@ -144,7 +226,7 @@ namespace SAEEAPP
             }
             else if (etFecha.Text.Equals("") || etFecha.Text.StartsWith(" "))
             {
-                Toast.MakeText(context, "Indique la cantidad de periodos", ToastLength.Long).Show();
+                Toast.MakeText(context, "Indique la fecha de la asignación", ToastLength.Long).Show();
                 return false;
             }
             else if (Decimal.Parse(etPuntos.Text) <= 0)

@@ -32,4 +32,11 @@
       <item> 6 </item>
       <item> 7 </item>
     </string-array>
+    <string-array name="listaRubros">
+      <item> Tareas</item>
+      <item> Exámenes </item>
+      <item> Cotidiano</item>
+      <item> Proyecto </item>
+      <item> Asistencia </item>
+    </string-array>  
 </resources>

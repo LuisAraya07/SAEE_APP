@@ -22,6 +22,11 @@ namespace SAEEAPP
         AsignacionesServices servicioAsignaciones;
         ProgressBar pbCargandoAsignaciones;
         FloatingActionButton btAgregar;
+
+
+        List<Cursos> cursos = null;
+        CursosServices cursosServicio;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -33,11 +38,17 @@ namespace SAEEAPP
             btAgregar = FindViewById<FloatingActionButton>(Resource.Id.btAgregar);
             pbCargandoAsignaciones = FindViewById<ProgressBar>(Resource.Id.pbCargandoAsignaciones);
             btAgregar.Click += AgregarAsignacion;
+
+
+            cursosServicio = new CursosServices();
         }
         protected override async void OnStart()
         {
             base.OnStart();
-
+            if(cursos == null)
+            {
+                cursos = await cursosServicio.GetAsync();
+            }
             if (asignaciones == null)
             {
                 asignaciones = await servicioAsignaciones.GetAsync();
@@ -46,7 +57,7 @@ namespace SAEEAPP
                     tvCargando.Visibility = ViewStates.Invisible;
                 }
                 // El mensaje de "no hay datos", lo asigna el Adapter (ya que se pueden eliminar todos los curso)
-                AdaptadorAsignaciones = new AsignacionesAdaptador(this, asignaciones, tvCargando);
+                AdaptadorAsignaciones = new AsignacionesAdaptador(this, asignaciones, tvCargando,cursos);
                 lvAsignaciones.Adapter = AdaptadorAsignaciones;
                 pbCargandoAsignaciones.Visibility = ViewStates.Gone;
             }
@@ -54,7 +65,7 @@ namespace SAEEAPP
         private void AgregarAsignacion(object sender, EventArgs e)
         {
            AgregarEditarAsignacionesActivity agregarCursoActivity =
-                new AgregarEditarAsignacionesActivity(this, AdaptadorAsignaciones, asignaciones);
+                new AgregarEditarAsignacionesActivity(this, AdaptadorAsignaciones, asignaciones,cursos);
             agregarCursoActivity.Show();
         }
     }
