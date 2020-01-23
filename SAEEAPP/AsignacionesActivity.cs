@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
@@ -7,6 +8,7 @@ using Android.Widget;
 using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -42,26 +44,51 @@ namespace SAEEAPP
 
             cursosServicio = new CursosServices();
         }
-        protected override async void OnStart()
+        protected async override void OnStart()
         {
             base.OnStart();
-            if(cursos == null)
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                cursos = await cursosServicio.GetAsync();
-            }
-            if (asignaciones == null)
-            {
-                asignaciones = await servicioAsignaciones.GetAsync();
-                if (asignaciones.Count > 0)
+                if (cursos == null)
                 {
-                    tvCargando.Visibility = ViewStates.Invisible;
+
+                    cursos = await cursosServicio.GetAsync();
                 }
-                // El mensaje de "no hay datos", lo asigna el Adapter (ya que se pueden eliminar todos los curso)
-                AdaptadorAsignaciones = new AsignacionesAdaptador(this, asignaciones, tvCargando,cursos);
-                lvAsignaciones.Adapter = AdaptadorAsignaciones;
-                pbCargandoAsignaciones.Visibility = ViewStates.Gone;
+                if (asignaciones == null)
+                {
+                    asignaciones = await servicioAsignaciones.GetAsync();
+                }
             }
+            else
+            {
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    CursosServices cursosServiciosOffline = new CursosServices(profesor.Id);
+                    AsignacionesServices asignacionesServiciosOffline = new AsignacionesServices(profesor.Id);
+                    cursos = await cursosServiciosOffline.GetOffline();
+                    asignaciones = await asignacionesServiciosOffline.GetOffline();
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+            }
+            if (asignaciones.Count > 0)
+            {
+                tvCargando.Visibility = ViewStates.Invisible;
+            }
+            // El mensaje de "no hay datos", lo asigna el Adapter (ya que se pueden eliminar todos los curso)
+            AdaptadorAsignaciones = new AsignacionesAdaptador(this, asignaciones, tvCargando, cursos);
+            lvAsignaciones.Adapter = AdaptadorAsignaciones;
+            pbCargandoAsignaciones.Visibility = ViewStates.Gone;
+
         }
+      
         private void AgregarAsignacion(object sender, EventArgs e)
         {
            AgregarEditarAsignacionesActivity agregarCursoActivity =
@@ -84,12 +111,29 @@ namespace SAEEAPP
                     menuOpciones.CerrarApp();
                     break;
                 case Resource.Id.Sincronizar:
-                    menuOpciones.Sincronizar();
+                    EnviarSync();
                     break;
                 default:
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        public void EnviarSync()
+        {
+            var vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            //Verificamos que haya conexión
+            if (conectado)
+            {
+                Intent usuario = new Intent(this, typeof(SyncActivity));
+                StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Short).Show();
+            }
+
         }
     }
 }

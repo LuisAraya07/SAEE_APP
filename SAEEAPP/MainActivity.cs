@@ -127,6 +127,8 @@ namespace SAEEAPP
             //Verifico si le dio check
             if (cbOffline.Checked)
             {
+                var GruposServiciosOffline = new GruposServices(1);
+                await GruposServiciosOffline.EliminarDBLocal();
                 Toast.MakeText(this, "Sincronizando Datos, un momento...", ToastLength.Long).Show();
                 //Cargamos todos los datos
                 //Aquí agregamos al profesor conectado

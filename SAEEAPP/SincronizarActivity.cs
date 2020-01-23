@@ -36,12 +36,14 @@ namespace SAEEAPP
 
         public void CerrarApp()
         {
+           
             Toast.MakeText(context, "Saliendo...", ToastLength.Short).Show();
+            Thread.Sleep(1000);
             Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
             
         }
 
-        public async void Sincronizar()
+        public async Task<bool> Sincronizar()
         {
             ProfesoresServices ns = new ProfesoresServices(1);
             InicioSesionServices inicioSesionServices = new InicioSesionServices();
@@ -105,42 +107,48 @@ namespace SAEEAPP
                                                 var bdEliminada = await GruposServiciosOffline.EliminarDBLocal();
                                                 if (bdEliminada)
                                                 {
-                                                    Intent mainActivity = new Intent(context, typeof(MainActivity));
-                                                    context.StartActivity(mainActivity);
+                                                    return true;
                                                 }
                                                 else
                                                 {
                                                     Toast.MakeText(context, "Error al eliminar Base de Datos local.", ToastLength.Long).Show();
+                                                    return false;
                                                 }
                                             }else
-                                                Toast.MakeText(context, "Error al insertar los FK.", ToastLength.Long).Show();
-                                            
-                                        }else
-                                            Toast.MakeText(context, "Error al sincronizar asignaciones.", ToastLength.Long).Show();  
-                                    }else
-                                    Toast.MakeText(context, "Error al sincronizar estudiantes.", ToastLength.Long).Show();
-                                }else
-                                Toast.MakeText(context, "Error al sincronizar grupos.", ToastLength.Long).Show();
-                            }else
-                            Toast.MakeText(context, "Error al sincronizar cursos.", ToastLength.Long).Show();
-                        }else
-                            Toast.MakeText(context, "No se pudieron eliminar.", ToastLength.Long).Show();
+                                                Toast.MakeText(context, "Error al insertar los FK.", ToastLength.Long).Show(); return false;
+
+                                        }
+                                        else
+                                            Toast.MakeText(context, "Error al sincronizar asignaciones.", ToastLength.Long).Show(); return false;
+                                    }
+                                    else
+                                    Toast.MakeText(context, "Error al sincronizar estudiantes.", ToastLength.Long).Show(); return false;
+                                }
+                                else
+                                Toast.MakeText(context, "Error al sincronizar grupos.", ToastLength.Long).Show(); return false;
+                            }
+                            else
+                            Toast.MakeText(context, "Error al sincronizar cursos.", ToastLength.Long).Show(); return false;
+                        }
+                        else
+                            Toast.MakeText(context, "No se pudieron eliminar.", ToastLength.Long).Show(); return false;
 
                     }
                     else
                     {
-                        Toast.MakeText(context, "Error el sincronizar el profesor.", ToastLength.Long).Show();
+                        Toast.MakeText(context, "Error el sincronizar el profesor.", ToastLength.Long).Show(); return false;
                     }
                 }
                 else
                 {
-                    Toast.MakeText(context, "No tiene base de datos local.", ToastLength.Long).Show();
+                    Toast.MakeText(context, "No tiene base de datos local.", ToastLength.Long).Show(); return false;
                 }
                 
             }
             else
             {
                 Toast.MakeText(context,"Necesita conexión a internet.",ToastLength.Long).Show();
+                return false;
             }
         }
 

@@ -116,6 +116,9 @@ namespace Xamarin.core.Services
             try
             {
                 await db.Database.MigrateAsync();
+                var evaluaciones = await db.Evaluaciones.Where(eva => eva.Asignacion == id).ToListAsync();
+                db.Evaluaciones.RemoveRange(evaluaciones);
+                await db.SaveChangesAsync();
                 var asig = await db.Asignaciones.Where(asignacion => asignacion.Id == id).FirstOrDefaultAsync();
                 if (asig == null)
                 {

@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:maxLength="10"
+                
                 android:hint="Descripción"
                 android:textColor="#FFF"
                 android:backgroundTint="#FFF"
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:maxLength="10"
+                
                 android:hint="Fecha"
                 android:textColor="#FFF"
                 android:backgroundTint="#FFF"

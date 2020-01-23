@@ -42,9 +42,7 @@ namespace SAEEAPP.Listeners
             Java.Lang.Object menuPopupHelper = field.Get(menu);
             Method setForceIcons = menuPopupHelper.Class.GetDeclaredMethod("setForceShowIcon", Java.Lang.Boolean.Type);
             setForceIcons.Invoke(menuPopupHelper, true);
-
             menu.Inflate(Resource.Layout.menu_popup);
-
             menu.MenuItemClick += (s, args) =>
             {
                 var botonSeleccionado = args.Item.ItemId;
@@ -86,34 +84,42 @@ namespace SAEEAPP.Listeners
 
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
-            AsignacionesServices servicioAsignaciones = new AsignacionesServices();
+            AsignacionesServices servicioAsignaciones;
           //  EvaluacionesServices servicioEvaluaciones = new EvaluacionesServices();
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
+            bool resultado;
             if (conectado)
             {
-               /* List<Evaluaciones> evaluaciones = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(_asignacion.Id);
-                Toast.MakeText(_context, "LENGTH EVALUACIONEs: "+evaluaciones.Count, ToastLength.Short).Show();
-                foreach (Evaluaciones eva in evaluaciones)
-                {
-                    await servicioEvaluaciones.DeleteEvaluacionAsync(eva.Id);
-                }*/
-                bool resultado = await servicioAsignaciones.DeleteAsignacionAsync(_asignacion.Id);
-                if (resultado)
-                {
-                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                    _asignaciones.Remove(_asignacion);
-                    _adapter.ActualizarDatos();
-                }
-                else
-                {
-                    Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
-                }
+                servicioAsignaciones = new AsignacionesServices();
+                resultado = await servicioAsignaciones.DeleteAsignacionAsync(_asignacion.Id);
             }
             else
             {
-                Toast.MakeText(_context,"Necesita conexión a internet.",ToastLength.Long).Show();
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    servicioAsignaciones = new AsignacionesServices(profesor.Id);
+                    resultado = await servicioAsignaciones.DeleteAsignacionOffline(_asignacion.Id);
+                }
+                else
+                {
+                    resultado = false;
+                }
             }
+            if (resultado)
+            {
+                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                _asignaciones.Remove(_asignacion);
+                _adapter.ActualizarDatos();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Error al eliminar, intente nuevamente", ToastLength.Short).Show();
+            }
+
         }
         private void OnClick_Editar()
         {

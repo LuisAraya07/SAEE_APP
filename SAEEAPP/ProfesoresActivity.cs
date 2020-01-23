@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
@@ -12,6 +13,7 @@ using SAEEAPP.Adaptadores;
 using SAEEAPP.JavaHolder;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -71,14 +73,6 @@ namespace SAEEAPP
             MenuInflater.Inflate(Resource.Menu.main, menu);
 
             var item = menu.FindItem(Resource.Id.searchView1);
-            //var salir = menu.FindItem(Resource.Id.CerrarSesion);
-            //var btnS = MenuItemCompat.GetActionView(salir);
-            ////var draw = ContextCompat.GetDrawable(this, Resource.Drawable.ic_salir);
-            ////btnSalir.SetCompoundDrawablesWithIntrinsicBounds(draw, null, null, null);
-            //btnSalir.Click += delegate
-            //{
-            //    Toast.MakeText(this, "Cerrr Sesión", ToastLength.Short).Show();
-            //};
             var searchView = MenuItemCompat.GetActionView(item);
             _searchView = searchView.JavaCast<Android.Support.V7.Widget.SearchView>();
 
@@ -102,12 +96,29 @@ namespace SAEEAPP
                     menuOpciones.CerrarApp();
                     break;
                 case Resource.Id.Sincronizar:
-                    menuOpciones.Sincronizar();
+                    EnviarSync();
                     break;
                 default:
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        public void EnviarSync()
+        {
+            var vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            //Verificamos que haya conexión
+            if (conectado)
+            {
+                Intent usuario = new Intent(this, typeof(SyncActivity));
+                StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Short).Show();
+            }
+                
         }
 
         

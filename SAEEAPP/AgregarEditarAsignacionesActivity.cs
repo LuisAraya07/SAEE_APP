@@ -67,12 +67,35 @@ namespace SAEEAPP
             gruposNombres = new List<string>();
             var serviciogruposCursos = new CursosServices();
             var serviciogrupos = new GruposServices();
+            List<Grupos> gruposn = null;
+            List<CursosGrupos> gruposporcursoid = null;
             VerificarConexion vc = new VerificarConexion(context);
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                var gruposn = await serviciogrupos.GetAsync();
-                var gruposporcursoid = await serviciogruposCursos.GetCursosGruposAsync(id);
+                gruposn = await serviciogrupos.GetAsync();
+                gruposporcursoid = await serviciogruposCursos.GetCursosGruposAsync(id);
+                
+            }
+            else
+            {
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    CursosServices cursosServiciosOffline = new CursosServices(profesor.Id);
+                    GruposServices gruposServiciosOffline = new GruposServices(profesor.Id);
+                    gruposn = await gruposServiciosOffline.GetOffline();
+                    gruposporcursoid = await cursosServiciosOffline.GetCursosGruposOffline(id);
+                }
+                else
+                {
+                    Toast.MakeText(context, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+            }
+            if(!(gruposporcursoid==null || gruposn == null))
+            {
                 foreach (CursosGrupos cu in gruposporcursoid)
                 {
                     foreach (Grupos gru in gruposn)
@@ -87,14 +110,15 @@ namespace SAEEAPP
                 spGrupo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spGrupo);
                 spGrupo.Prompt = "Elija Grupo";
                 spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
-                var dataAdapter = new ArrayAdapter(context,Resource.Layout.SpinnerItem, gruposNombres);
+                var dataAdapter = new ArrayAdapter(context, Resource.Layout.SpinnerItem, gruposNombres);
                 dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
                 spGrupo.Adapter = dataAdapter;
             }
             else
             {
-                Toast.MakeText(context, "Necesita conexión a internet", ToastLength.Short).Show();
+                Toast.MakeText(context, "Error de datos.", ToastLength.Long).Show();
             }
+                
         }
         public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter, List<Asignaciones> asignaciones,List<Cursos> cursos)
         {
@@ -192,9 +216,10 @@ namespace SAEEAPP
             {
                 // Se bloquean los botones
                 ActivarDesactivarBotones(false);
-                Toast.MakeText(context, "Agregando, un momento", ToastLength.Short).Show();
+                Toast.MakeText(context, "Agregando, un momento..", ToastLength.Short).Show();
 
                 AsignacionesServices servicioAsignaciones = new AsignacionesServices();
+                
                 Asignaciones asignNueva = new Asignaciones()
                 {
                     Tipo = rubro,
@@ -222,21 +247,21 @@ namespace SAEEAPP
                         var serviciogrupos = new GruposServices();
                         List<EstudiantesXgrupos> estudiantes = await serviciogrupos.GetEGAsync(grupoid);
                         foreach (EstudiantesXgrupos estu in estudiantes)
-                          {
-                              for (int i = 1; i <= periodos; i++)
-                              {
-                                  Evaluaciones eva = new Evaluaciones();
-                                  eva.Profesor = 1;
-                                  eva.Asignacion = asignNueva.Id;
-                                  eva.Estudiante = estu.IdEstudiante;
-                                  eva.Puntos = 0;
-                                  eva.Porcentaje = 0;
-                                  eva.Nota = 0;
-                                  eva.Estado = "Ninguno";
-                                  eva.Periodo = i;
-                                  await servicioEvaluaciones.PostAsync(eva);
-                              }
-                          }
+                        {
+                            for (int i = 1; i <= periodos; i++)
+                            {
+                                Evaluaciones eva = new Evaluaciones();
+                                eva.Profesor = 1;
+                                eva.Asignacion = asignNueva.Id;
+                                eva.Estudiante = estu.IdEstudiante;
+                                eva.Puntos = 0;
+                                eva.Porcentaje = 0;
+                                eva.Nota = 0;
+                                eva.Estado = "Ninguno";
+                                eva.Periodo = i;
+                                await servicioEvaluaciones.PostAsync(eva);
+                            }
+                        }
                         // Se actualiza la lista de asignaciones
                         asignaciones.Add(asignNueva);
                         AdaptadorAsignaciones.ActualizarDatos();
@@ -251,7 +276,52 @@ namespace SAEEAPP
                         Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
                     }
                 }
-                else Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Short).Show();
+                else 
+                {
+                    //AQUI OFFLINE
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    if (!(profesor == null))
+                    {
+                        AsignacionesServices asignacionesServiciosOffline = new AsignacionesServices(profesor.Id);
+                        asignNueva = await asignacionesServiciosOffline.PostOffline(asignNueva);
+                        
+                        var servicioEvaluacionesOffline = new EvaluacionesServices(profesor.Id);
+                        var serviciogruposOffline = new GruposServices(profesor.Id);
+                        List<EstudiantesXgrupos> estudiantes = await serviciogruposOffline.GetEGOffline(grupoid);
+                        foreach (EstudiantesXgrupos estu in estudiantes)
+                        {
+                            for (int i = 1; i <= periodos; i++)
+                            {
+                                Evaluaciones eva = new Evaluaciones();
+                                eva.Profesor = 1;
+                                eva.Asignacion = asignNueva.Id;
+                                eva.Estudiante = estu.IdEstudiante;
+                                eva.Puntos = 0;
+                                eva.Porcentaje = 0;
+                                eva.Nota = 0;
+                                eva.Estado = "Ninguno";
+                                eva.Periodo = i;
+                                await servicioEvaluacionesOffline.PostOffline(eva);
+                            }
+                        }
+                        // Se actualiza la lista de asignaciones
+                        asignaciones.Add(asignNueva);
+                        AdaptadorAsignaciones.ActualizarDatos();
+
+                        Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+
+
+                    }
+                    else
+                    {
+                        // Se restablecen los botones
+                        ActivarDesactivarBotones(true);
+                        Toast.MakeText(context, "No hay bases de datos local.", ToastLength.Short).Show();
+                    }
+                        
+                }
             }
         }
         private bool EntradaValida()
@@ -295,48 +365,59 @@ namespace SAEEAPP
         private async void Editar(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(context);
-            var conectado = vc.IsOnline();
-            if (conectado)
+            if (EntradaValida())
             {
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Guardando, un momento...", ToastLength.Short).Show();
 
-                if (EntradaValida())
+                AsignacionesServices servAsignaciones;
+                asignacionTemp.Profesor = asignacion.Profesor;
+                asignacionTemp.Curso = asignacion.Curso;
+                asignacionTemp.Grupo = asignacion.Grupo;
+                asignacionTemp.Nombre = etNombre.Text;
+                asignacionTemp.Descripcion = etDescripcion.Text;
+                asignacionTemp.Fecha = Convert.ToDateTime(etFecha.Text);
+                asignacionTemp.Puntos = Decimal.Parse(etPuntos.Text);
+                asignacionTemp.Porcentaje = Decimal.Parse(etPorcentaje.Text);
+                bool resultado;
+                var conectado = vc.IsOnline();
+                if (conectado)
                 {
-                    // Se bloquean los botones
-                    ActivarDesactivarBotones(false);
-                    Toast.MakeText(context, "Guardando, un momento", ToastLength.Short).Show();
-
-                    AsignacionesServices servAsignaciones= new AsignacionesServices();
-                    asignacionTemp.Profesor = asignacion.Profesor;
-                    asignacionTemp.Curso = asignacion.Curso;
-                    asignacionTemp.Grupo = asignacion.Grupo;
-                    asignacionTemp.Nombre = etNombre.Text;
-                    asignacionTemp.Descripcion = etDescripcion.Text;
-                    asignacionTemp.Fecha = Convert.ToDateTime(etFecha.Text);
-                    asignacionTemp.Puntos = Decimal.Parse(etPuntos.Text);
-                    asignacionTemp.Porcentaje = Decimal.Parse(etPorcentaje.Text);
-                    bool resultado = await servAsignaciones.UpdateAsignacionAsync(asignacionTemp);
-                    if (resultado)
+                    servAsignaciones = new AsignacionesServices();
+                    resultado = await servAsignaciones.UpdateAsignacionAsync(asignacionTemp);
+                }
+                else
+                {
+                    //AQUI OFFLINE
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    if (!(profesor == null))
                     {
-                        asignacion = asignacionTemp;
-                        // Se actualiza la lista de cursos
-                        AdaptadorAsignaciones.ActualizarDatos();
-
-                        Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                        alertDialogAndroid.Dismiss();
+                        servAsignaciones = new AsignacionesServices(profesor.Id);
+                        resultado = await servAsignaciones.UpdateAsignacionOffline(asignacionTemp);
                     }
                     else
                     {
-                        // Se restablecen los botones
-                        ActivarDesactivarBotones(true);
-                        Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                        resultado = false;
                     }
                 }
+                if (resultado)
+                {
+                    asignacion = asignacionTemp;
+                    // Se actualiza la lista de aisgnaciones
+                    AdaptadorAsignaciones.ActualizarDatos();
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al guardar.", ToastLength.Short).Show();
+                }
             }
-            else
-            {
-                ActivarDesactivarBotones(true);
-                Toast.MakeText(context, "Necesita conexión a internet", ToastLength.Short).Show();
-            }
+
         }
         public void Show()
         {

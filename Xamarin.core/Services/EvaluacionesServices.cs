@@ -37,6 +37,7 @@ namespace Xamarin.core.Services
             try
             {
                 await db.Database.MigrateAsync();
+                evaluacion.Profesor = idProfesor;
                 db.Evaluaciones.Add(evaluacion);
                 await db.SaveChangesAsync();
                 return evaluacion;
@@ -59,12 +60,12 @@ namespace Xamarin.core.Services
                         Id = evaluacion.Id,
                         Puntos = evaluacion.Puntos,
                         Porcentaje = evaluacion.Porcentaje,
-                        Asignacion =evaluacion.Asignacion,
+                        Asignacion = evaluacion.Asignacion,
                         Estado = evaluacion.Estado,
-                        Estudiante= evaluacion.Estudiante,
-                        Nota=evaluacion.Nota,
-                        Periodo=evaluacion.Periodo,
-                        Profesor=evaluacion.Profesor
+                        Estudiante = evaluacion.Estudiante,
+                        Nota = evaluacion.Nota,
+                        Periodo = evaluacion.Periodo,
+                        Profesor = evaluacion.Profesor
                     };
 
                     db.Evaluaciones.Add(evaluacionNuevo);
@@ -128,6 +129,12 @@ namespace Xamarin.core.Services
             }
             return true;
 
+        }
+        public async Task<List<Evaluaciones>> GetEvaluacionesXAsignacionesOffline(int asignacion){
+
+            await db.Database.MigrateAsync();
+            var EA = db.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Profesor == idProfesor).ToList();
+            return EA;
         }
 
 

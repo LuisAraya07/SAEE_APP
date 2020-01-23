@@ -206,12 +206,29 @@ namespace SAEEAPP
                     menuOpciones.CerrarApp();
                     break;
                 case Resource.Id.Sincronizar:
-                    menuOpciones.Sincronizar();
+                    EnviarSync();
                     break;
                 default:
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        public void EnviarSync()
+        {
+            var vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            //Verificamos que haya conexión
+            if (conectado)
+            {
+                Intent usuario = new Intent(this, typeof(SyncActivity));
+                StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Short).Show();
+            }
+
         }
 
 

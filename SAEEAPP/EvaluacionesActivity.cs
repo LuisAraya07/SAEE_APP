@@ -55,10 +55,26 @@ namespace SAEEAPP
             if (conectado)
             {
                 cursos = await cursoServicios.GetAsync();
-                foreach (Cursos cu in cursos)
+            }
+            else
+            {
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
                 {
-                    cursosNombres.Add(cu.Nombre);
+                    var cursosServiciosOffline = new CursosServices(profesor.Id);
+                    cursos = await cursosServiciosOffline.GetOffline();
                 }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+            }
+            
+            foreach (Cursos cu in cursos)
+            {
+                cursosNombres.Add(cu.Nombre);
             }
             /****************************************************************************************************************************************************/
             spCurso = FindViewById<Spinner>(Resource.Id.spCurso);
@@ -91,12 +107,35 @@ namespace SAEEAPP
         {
             evaluaciones = new List<Evaluaciones>();
             var estudianteeva = new List<EstudianteEvaluacion>();
+            
+            List<Estudiantes> estudiantes = null;
+            List<Evaluaciones> evaTemp = null;
             VerificarConexion vc = new VerificarConexion(this);
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                var estudiantes = await servicioEstudiantes.GetAsync();
-                var evaTemp = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(asignacionid);
+                 estudiantes = await servicioEstudiantes.GetAsync();
+                 evaTemp = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(asignacionid);
+            }
+            else
+            {
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    var estudiantesServiciosOffline = new EstudiantesServices(profesor.Id);
+                    var evaluacionesServiciosOffline = new EvaluacionesServices(profesor.Id);
+                    estudiantes = await estudiantesServiciosOffline.GetOffline();
+                    evaTemp = await evaluacionesServiciosOffline.GetEvaluacionesXAsignacionesOffline(asignacionid);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+            }
+            if(!(evaTemp == null || estudiantes == null))
+            {
                 foreach (Evaluaciones ev in evaTemp)
                 {
                     if (ev.Periodo == periodo)
@@ -125,8 +164,10 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+                Toast.MakeText(this, "Error de datos.", ToastLength.Short).Show();
             }
+            
+
         }
         public async void getgruposCurso(int id)
         {
@@ -134,33 +175,57 @@ namespace SAEEAPP
             gruposNombres = new List<string>();
             var serviciogrupos = new GruposServices();
             VerificarConexion vc = new VerificarConexion(this);
+            List<Grupos> gruposn = null;
+            List<CursosGrupos> gruposporcursoid = null;
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                var gruposn = await serviciogrupos.GetAsync();
-            var gruposporcursoid = await cursoServicios.GetCursosGruposAsync(id);
-            foreach (CursosGrupos cu in gruposporcursoid)
-            {
-                foreach (Grupos gru in gruposn)
-                {
-                    if (cu.IdGrupo == gru.Id)
-                    {
-                        gruposporcurso.Add(gru);
-                        gruposNombres.Add(gru.Grupo);
-                    }
-                }
-            }
-            spGrupo = FindViewById<Spinner>(Resource.Id.spGrupo);
-            spGrupo.Prompt = "Elija Grupo";
-            spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
-            var dataAdapter = new ArrayAdapter(this, Resource.Layout.SpinnerItem, gruposNombres);
-            dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spGrupo.Adapter = dataAdapter;
+                 gruposn = await serviciogrupos.GetAsync();
+                 gruposporcursoid = await cursoServicios.GetCursosGruposAsync(id);
             }
             else
             {
-                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    var cursosServiciosOffline = new CursosServices(profesor.Id);
+                    var gruposServiciosOffline = new GruposServices(profesor.Id);
+                    gruposn = await gruposServiciosOffline.GetOffline();
+                    gruposporcursoid = await cursosServiciosOffline.GetCursosGruposOffline(id);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
             }
+            if (!(gruposn == null || gruposporcursoid == null))
+            {
+                foreach (CursosGrupos cu in gruposporcursoid)
+                {
+                    foreach (Grupos gru in gruposn)
+                    {
+                        if (cu.IdGrupo == gru.Id)
+                        {
+                            gruposporcurso.Add(gru);
+                            gruposNombres.Add(gru.Grupo);
+                        }
+                    }
+                }
+                spGrupo = FindViewById<Spinner>(Resource.Id.spGrupo);
+                spGrupo.Prompt = "Elija Grupo";
+                spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
+                var dataAdapter = new ArrayAdapter(this, Resource.Layout.SpinnerItem, gruposNombres);
+                dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                spGrupo.Adapter = dataAdapter;
+            }
+            else
+            {
+                Toast.MakeText(this, "Error de datos.", ToastLength.Short).Show();
+            }
+                
+            
         }
         private void spTipo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -174,29 +239,50 @@ namespace SAEEAPP
             asignacionesNombres = new List<string>();
             asignaciones = new List<Asignaciones>();
             VerificarConexion vc = new VerificarConexion(this);
+            List<Asignaciones> asigsTemp = null;
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                var asigsTemp = await servicioAsignaciones.GetAsync();
-            foreach(Asignaciones asig in asigsTemp)
-            {
-                if (asig.Tipo.Equals(rubro) && asig.Curso == cursoid && asig.Grupo == grupoid)
-                {
-                    asignaciones.Add(asig);
-                    asignacionesNombres.Add(asig.Nombre);
-                }
-            }
-            spAsignacion = FindViewById<Spinner>(Resource.Id.spAsignacion);
-            spAsignacion.Prompt = "Elija Asignación";
-            spAsignacion.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spAsignacion_ItemSelected);
-            var dataAdapter = new ArrayAdapter(this, Resource.Layout.SpinnerItem, asignacionesNombres);
-            dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spAsignacion.Adapter = dataAdapter;
+                asigsTemp = await servicioAsignaciones.GetAsync();
             }
             else
             {
-                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    var asignacionesServiciosOffline = new AsignacionesServices(profesor.Id);
+                    asigsTemp = await asignacionesServiciosOffline.GetOffline();
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
             }
+            if(!(asigsTemp == null))
+            {
+                foreach (Asignaciones asig in asigsTemp)
+                {
+                    if (asig.Tipo.Equals(rubro) && asig.Curso == cursoid && asig.Grupo == grupoid)
+                    {
+                        asignaciones.Add(asig);
+                        asignacionesNombres.Add(asig.Nombre);
+                    }
+                }
+                spAsignacion = FindViewById<Spinner>(Resource.Id.spAsignacion);
+                spAsignacion.Prompt = "Elija Asignación";
+                spAsignacion.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spAsignacion_ItemSelected);
+                var dataAdapter = new ArrayAdapter(this, Resource.Layout.SpinnerItem, asignacionesNombres);
+                dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                spAsignacion.Adapter = dataAdapter;
+
+            }
+            else
+            {
+                Toast.MakeText(this, "Error de datos.", ToastLength.Short).Show();
+            }
+            
         }
         private void spGrupo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -226,7 +312,7 @@ namespace SAEEAPP
             {
                 periodos.Add(i);
             }
-            spPeriodo.Prompt = "Elija Periodo";
+            spPeriodo.Prompt = "Elija Período";
             spPeriodo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spPeriodo_ItemSelected);
             var dataAdapter = new ArrayAdapter(this, Resource.Layout.SpinnerItem, periodos);
             dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
@@ -251,12 +337,29 @@ namespace SAEEAPP
                     menuOpciones.CerrarApp();
                     break;
                 case Resource.Id.Sincronizar:
-                    menuOpciones.Sincronizar();
+                    EnviarSync();
                     break;
                 default:
                     break;
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        public void EnviarSync()
+        {
+            var vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            //Verificamos que haya conexión
+            if (conectado)
+            {
+                Intent usuario = new Intent(this, typeof(SyncActivity));
+                StartActivity(usuario);
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Short).Show();
+            }
+
         }
     }
 }
