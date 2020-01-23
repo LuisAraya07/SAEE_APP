@@ -71,6 +71,7 @@
     <Compile Include="Adaptadores\CursosListAdapter.cs" />
     <Compile Include="AgregarEditarAsignacionesActivity.cs" />
     <Compile Include="InicioActivity.cs" />
+    <Compile Include="NotasAgregarActivity.cs" />
     <Compile Include="NotasActivity.cs" />
     <Compile Include="AsignacionesActivity.cs" />
     <Compile Include="EvaluacionesActivity.cs" />
@@ -385,6 +386,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_inicio.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Dialogo_Notas_Modificar.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

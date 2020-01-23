@@ -46,5 +46,17 @@
         android:layout_marginTop="10dp"
         android:textColor="#FFF"
         android:id="@+id/tvNota" />
-
+    <Button
+        android:textColor="#3282b8"
+        android:background="@drawable/button_options"
+        android:minWidth="25px"
+        android:text="Evaluar"
+        android:layout_width="62sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="37.9dp"
+        android:layout_marginTop="29dp"
+        android:layout_height="40sp"
+        android:textSize="12sp"
+        android:id="@+id/btnOpcionesC"
+        android:layout_marginLeft="22.1dp" />
 </RelativeLayout>

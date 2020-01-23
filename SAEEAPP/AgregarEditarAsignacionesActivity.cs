@@ -67,26 +67,34 @@ namespace SAEEAPP
             gruposNombres = new List<string>();
             var serviciogruposCursos = new CursosServices();
             var serviciogrupos = new GruposServices();
-            var gruposn = await serviciogrupos.GetAsync();
-            var gruposporcursoid = await serviciogruposCursos.GetCursosGruposAsync(id);
-            foreach(CursosGrupos cu in gruposporcursoid)
+            VerificarConexion vc = new VerificarConexion(context);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                foreach(Grupos gru in gruposn)
+                var gruposn = await serviciogrupos.GetAsync();
+                var gruposporcursoid = await serviciogruposCursos.GetCursosGruposAsync(id);
+                foreach (CursosGrupos cu in gruposporcursoid)
                 {
-                    if(cu.IdGrupo == gru.Id)
+                    foreach (Grupos gru in gruposn)
                     {
-                        gruposporcurso.Add(gru);
-                        gruposNombres.Add(gru.Grupo);
+                        if (cu.IdGrupo == gru.Id)
+                        {
+                            gruposporcurso.Add(gru);
+                            gruposNombres.Add(gru.Grupo);
+                        }
                     }
                 }
+                spGrupo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spGrupo);
+                spGrupo.Prompt = "Elija Grupo";
+                spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
+                var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem, gruposNombres);
+                dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                spGrupo.Adapter = dataAdapter;
             }
-            spGrupo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spGrupo);
-            spGrupo.Prompt = "Elija Grupo";
-            spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
-            var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem, gruposNombres);
-            dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            spGrupo.Adapter = dataAdapter;
-
+            else
+            {
+                Toast.MakeText(context, "Necesita conexión a internet", ToastLength.Short).Show();
+            }
         }
         public AgregarEditarAsignacionesActivity(Activity context, AsignacionesAdaptador adapter, List<Asignaciones> asignaciones,List<Cursos> cursos)
         {
@@ -157,6 +165,7 @@ namespace SAEEAPP
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
             etDescripcion = VistaAgregar.FindViewById<EditText>(Resource.Id.etDescripcion);
             etFecha = VistaAgregar.FindViewById<EditText>(Resource.Id.etFecha);
+            etFecha.Click += DateSelect_OnClick;
             etPuntos = VistaAgregar.FindViewById<EditText>(Resource.Id.etPuntos);
             etPorcentaje = VistaAgregar.FindViewById<EditText>(Resource.Id.etPorcentaje);
             alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
@@ -166,6 +175,17 @@ namespace SAEEAPP
             .SetTitle(titulo);
             alertDialogAndroid = alertDialogBuilder.Create();
         }
+        #region DateOperation
+        [Obsolete]
+        void DateSelect_OnClick(object sender, EventArgs eventArgs)
+        {
+            DatePickerFragment frag = DatePickerFragment.NewInstance(delegate (DateTime time)
+            {
+                etFecha.Text = time.ToString().Split(' ')[0];
+            });
+            frag.Show(context.FragmentManager, DatePickerFragment.TAG);
+        }
+        #endregion
         private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())

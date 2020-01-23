@@ -3,6 +3,7 @@ using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using SAEEAPP.Listeners;
+using System;
 using System.Collections.Generic;
 using Xamarin.core.Models;
 
@@ -56,8 +57,20 @@ namespace SAEEAPP.Adaptadores
         }
         private void DefinirBotones(View row, EstudianteEvaluacion estudiante)
         {
-          //  Button btNota = row.FindViewById<Button>(Resource.Id.btNotaEvaluar);
+            Button btnOpcionesC = row.FindViewById<Button>(Resource.Id.btnOpcionesC);
+            btnOpcionesC.Click += delegate {
+                NotasAgregarActivity notas = new NotasAgregarActivity(_context, _estudiantes, estudiante, _asignacion,this);
+                notas.Show();
+            };
            // btNota.SetOnClickListener(new CursosListener(_context, _estudiantes, estudiante, this, btnOpciones));
         }
+        public void ActualizarDatos()
+        {
+            NotifyDataSetChanged();
+        }
+        /*  public void ModificarNotas(object sender, EventArgs e)
+          {
+              NotasAgregarActivity notas = new NotasAgregarActivity(_context, _estudiante, _asignacion);
+          }*/
     }
 }
