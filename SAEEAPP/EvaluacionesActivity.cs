@@ -8,6 +8,7 @@ using Android.Widget;
 using SAEEAPP.Adaptadores;
 using System;
 using System.Collections.Generic;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -49,10 +50,15 @@ namespace SAEEAPP
             servicioEstudiantes = new EstudiantesServices();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_evaluaciones);
-            cursos = await cursoServicios.GetAsync();
-            foreach (Cursos cu in cursos)
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                cursosNombres.Add(cu.Nombre);
+                cursos = await cursoServicios.GetAsync();
+                foreach (Cursos cu in cursos)
+                {
+                    cursosNombres.Add(cu.Nombre);
+                }
             }
             /****************************************************************************************************************************************************/
             spCurso = FindViewById<Spinner>(Resource.Id.spCurso);
@@ -85,40 +91,53 @@ namespace SAEEAPP
         {
             evaluaciones = new List<Evaluaciones>();
             var estudianteeva = new List<EstudianteEvaluacion>();
-            var estudiantes = await servicioEstudiantes.GetAsync();
-            var evaTemp = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(asignacionid);
-            foreach(Evaluaciones ev in evaTemp)
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
             {
-                if(ev.Periodo == periodo)
+                var estudiantes = await servicioEstudiantes.GetAsync();
+                var evaTemp = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(asignacionid);
+                foreach (Evaluaciones ev in evaTemp)
                 {
-                    evaluaciones.Add(ev);
-                    var estudiante = new Estudiantes();
-                    foreach(Estudiantes es in estudiantes)
+                    if (ev.Periodo == periodo)
                     {
-                        if(es.Id == ev.Estudiante)
+                        evaluaciones.Add(ev);
+                        var estudiante = new Estudiantes();
+                        foreach (Estudiantes es in estudiantes)
                         {
-                            estudiante = es;
+                            if (es.Id == ev.Estudiante)
+                            {
+                                estudiante = es;
+                            }
                         }
+                        EstudianteEvaluacion estu = new EstudianteEvaluacion();
+                        estu.evaluacion = ev;
+                        estu.Cedula = estudiante.Cedula;
+                        estu.Nombre = estudiante.Nombre + " " + estudiante.PrimerApellido + " " + estudiante.SegundoApellido;
+                        estu.Puntos = ev.Puntos;
+                        estu.Porcentaje = ev.Porcentaje;
+                        estu.Nota = ev.Nota;
+                        estudianteeva.Add(estu);
                     }
-                    EstudianteEvaluacion estu = new EstudianteEvaluacion();
-                    estu.evaluacion = ev;
-                    estu.Cedula = estudiante.Cedula;
-                    estu.Nombre = estudiante.Nombre + " " + estudiante.PrimerApellido + " " + estudiante.SegundoApellido;
-                    estu.Puntos = ev.Puntos;
-                    estu.Porcentaje = ev.Porcentaje;
-                    estu.Nota = ev.Nota;
-                    estudianteeva.Add(estu);
                 }
+                NotasActivity notas = new NotasActivity(this, estudianteeva, asignacion);
+                notas.Show();
             }
-            NotasActivity notas = new NotasActivity(this,estudianteeva, asignacion);
-            notas.Show();
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+            }
         }
         public async void getgruposCurso(int id)
         {
             gruposporcurso = new List<Grupos>();
             gruposNombres = new List<string>();
             var serviciogrupos = new GruposServices();
-            var gruposn = await serviciogrupos.GetAsync();
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                var gruposn = await serviciogrupos.GetAsync();
             var gruposporcursoid = await cursoServicios.GetCursosGruposAsync(id);
             foreach (CursosGrupos cu in gruposporcursoid)
             {
@@ -137,7 +156,11 @@ namespace SAEEAPP
             var dataAdapter = new ArrayAdapter(this, Android.Resource.Layout.SimpleSpinnerItem, gruposNombres);
             dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spGrupo.Adapter = dataAdapter;
-
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+            }
         }
         private void spTipo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -150,7 +173,11 @@ namespace SAEEAPP
         {
             asignacionesNombres = new List<string>();
             asignaciones = new List<Asignaciones>();
-            var asigsTemp = await servicioAsignaciones.GetAsync();
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                var asigsTemp = await servicioAsignaciones.GetAsync();
             foreach(Asignaciones asig in asigsTemp)
             {
                 if (asig.Tipo.Equals(rubro) && asig.Curso == cursoid && asig.Grupo == grupoid)
@@ -165,6 +192,11 @@ namespace SAEEAPP
             var dataAdapter = new ArrayAdapter(this, Android.Resource.Layout.SimpleSpinnerItem, asignacionesNombres);
             dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spAsignacion.Adapter = dataAdapter;
+            }
+            else
+            {
+                Toast.MakeText(this, "Necesita conexión a internet", ToastLength.Short).Show();
+            }
         }
         private void spGrupo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {

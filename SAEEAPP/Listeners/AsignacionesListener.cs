@@ -87,16 +87,17 @@ namespace SAEEAPP.Listeners
         private async void Borrar(object sender, DialogClickEventArgs e)
         {
             AsignacionesServices servicioAsignaciones = new AsignacionesServices();
-            EvaluacionesServices servicioEvaluaciones = new EvaluacionesServices();
+          //  EvaluacionesServices servicioEvaluaciones = new EvaluacionesServices();
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                List<Evaluaciones> evaluaciones = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(_asignacion.Id);
-                foreach(Evaluaciones eva in evaluaciones)
+               /* List<Evaluaciones> evaluaciones = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(_asignacion.Id);
+                Toast.MakeText(_context, "LENGTH EVALUACIONEs: "+evaluaciones.Count, ToastLength.Short).Show();
+                foreach (Evaluaciones eva in evaluaciones)
                 {
                     await servicioEvaluaciones.DeleteEvaluacionAsync(eva.Id);
-                }
+                }*/
                 bool resultado = await servicioAsignaciones.DeleteAsignacionAsync(_asignacion.Id);
                 if (resultado)
                 {
