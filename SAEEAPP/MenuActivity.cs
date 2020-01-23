@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.App;
+using Android.Views;
 using Android.Widget;
 using System;
 using Xamarin.core;
@@ -178,17 +179,29 @@ namespace SAEEAPP
             VerificarConexion vc = new VerificarConexion(this);
             Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
             StartActivity(notificaciones);
-            //var conectado = vc.IsOnline();
-            //if (conectado)
-            //{
-            //    Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
-            //    StartActivity(notificaciones);
-            //}
-            //else
-            //{
-            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            //}
-            
         }
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main2, menu);
+            return true;
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            SincronizarActivity menuOpciones = new SincronizarActivity(this);
+            var itemS = item.ItemId;
+            switch (itemS)
+            {
+                case Resource.Id.CerrarSesion:
+                    menuOpciones.CerrarApp();
+                    break;
+                case Resource.Id.Sincronizar:
+                    menuOpciones.Sincronizar();
+                    break;
+                default:
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
     }
 }

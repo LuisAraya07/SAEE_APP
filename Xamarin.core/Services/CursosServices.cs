@@ -55,6 +55,7 @@ namespace Xamarin.core.Services
         {
             try
             {
+                List<CursosGrupos> ListaCG = new List<CursosGrupos>();
                 foreach (Cursos curso in listaCursos)
                 {
                     var cursoNuevo = new Cursos()
@@ -64,11 +65,12 @@ namespace Xamarin.core.Services
                         IdProfesor = curso.IdProfesor,
                         Nombre = curso.Nombre
                     };
+                    ListaCG.AddRange(cursoNuevo.CursosGrupos.ToList());
                     db.Cursos.Add(cursoNuevo);
 
                 }
                 await db.SaveChangesAsync();
-
+                await AgregarCursosGruposAllOffline(ListaCG);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -131,7 +133,14 @@ namespace Xamarin.core.Services
 
         }
 
-        
+        //Obtener CG por curso
+        public async Task<List<CursosGrupos>> GetCursosGruposAllOffline()
+        {
+            await db.Database.MigrateAsync();
+            var cursosGrupos = await db.CursosGrupos.ToListAsync();
+
+            return cursosGrupos;
+        }
         //Obtener CG por curso
         public async Task<List<CursosGrupos>> GetCursosGruposOffline(int id)
         {
@@ -209,6 +218,57 @@ namespace Xamarin.core.Services
             return true;
         }
 
+        //Para remoto
+        public async Task<bool> CambiarIdCursoCG(int idViejo, int idNuevo)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                var listaCG = await db.CursosGrupos.Where(x=>x.IdCurso == idViejo).ToListAsync();
+                foreach(CursosGrupos CG in listaCG)
+                {
+                    CG.IdCurso = idNuevo;
+                    db.Entry(CG).State = EntityState.Modified;
+                }
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        //Para remoto
+        public async Task<bool> CambiarIdGrupoAmbos(int idViejo, int idNuevo)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                var listaCG = await db.CursosGrupos.Where(x => x.IdGrupo == idViejo).ToListAsync();
+                foreach (CursosGrupos CG in listaCG)
+                {
+                    CG.IdGrupo = idNuevo;
+                    db.Entry(CG).State = EntityState.Modified;
+                }
+                await db.SaveChangesAsync();
+                var listaEG = await db.EG.Where(x => x.IdGrupo == idViejo).ToListAsync();
+                foreach (EstudiantesXgrupos eg in listaEG)
+                {
+                    eg.IdGrupo = idNuevo;
+                    db.Entry(eg).State = EntityState.Modified;
+                }
+                await db.SaveChangesAsync();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
 
         /*        Termina Offline          */

@@ -140,5 +140,10 @@ namespace Xamarin.core.Services
         {
             return await _asignacionesR.DeleteAsignacionAsync(id);
         }
+        //ELIMINA TODAS LAS ASIGNACIONES REMOTAS
+        public async Task<bool> DeleteAllAsignacionesAsync()
+        {
+            return await _asignacionesR.DeleteAllAsignacionesAsync();
+        }
     }
 }

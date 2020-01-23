@@ -57,5 +57,16 @@ namespace Xamarin.core.Data
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<Boolean> DeleteAllAsignacionesAsync()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Asignaciones/DeleteAllAsignaciones")
+            };
+            var response = await client.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

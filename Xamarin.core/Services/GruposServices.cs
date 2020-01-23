@@ -132,6 +132,13 @@ namespace Xamarin.core.Services
             var lista = db.EG.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation).ToListAsync();
             return await lista;
         }
+        //Obtengo Todos los EG
+        public async Task<List<EstudiantesXgrupos>> GetEGAllOffline()
+        {
+            await db.Database.MigrateAsync();
+            var lista = db.EG.ToListAsync();
+            return await lista;
+        }
         //Elimino el EG
         public async Task<Boolean> DeleteEGOffline(EstudiantesXgrupos EG)
         {
@@ -186,24 +193,42 @@ namespace Xamarin.core.Services
                 return true;
         }
 
-        public async Task<Boolean> PostBDRemota(List<Grupos> listaGrupos)
+        
+        public async void InsertarDatosFK(List<EstudiantesXgrupos> listaEG,List<CursosGrupos> listaCG)
         {
-            GruposRepositorio gruposRepositorio = new GruposRepositorio();
-            foreach (Grupos grupo in listaGrupos)
+            CursosServices cursosServices = new CursosServices();
+            foreach (EstudiantesXgrupos eg in listaEG)
             {
-                var grupoNuevo = new Grupos()
+                var nuevoEG = new EstudiantesXgrupos()
                 {
-                    Anio = grupo.Anio,
-                    IdProfesor = grupo.IdProfesor,
-                    Grupo =  grupo.Grupo,
-                    
+                    IdEstudiante = eg.IdEstudiante,
+                    IdGrupo = eg.IdGrupo
+                    //IRIA EL IDPROFESOR
                 };
-                var idNuevoGrupo = gruposRepositorio.PostAsync(grupoNuevo);
+                await PostEGAsync(nuevoEG);
             }
-            return true;
+            List<CursosGrupos> listaAgregar = new List<CursosGrupos>();
+            foreach (CursosGrupos CG in listaCG)
+            {
+                var nuevoCG = new CursosGrupos()
+                {
+                    IdCurso = CG.IdCurso,
+                    IdGrupo = CG.IdGrupo
+                };
+                listaAgregar.Add(nuevoCG);
+            }
+
+            await cursosServices.AgregarCursosGruposAsync(listaAgregar);
+
         }
 
-        /*                          */
+
+
+
+
+
+
+        /*          TERMINA OFFLINE                */
         public async Task<List<Grupos>> GetAsync()
         {
              return await _gruposR.GetAsync();
