@@ -115,12 +115,21 @@ namespace SAEEAPP
                     // Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Short).Show(); 
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
-                    servicioCursos = new CursosServices(profesor.Id);
-                    var cursoAgregar = await servicioCursos.PostOffline(cursoNuevo);
-                    cursos.Add(cursoAgregar);
-                    cursosAdapter.ActualizarDatos();
-                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.Dismiss();
+                    if (!(profesor == null))
+                    {
+                        servicioCursos = new CursosServices(profesor.Id);
+                        var cursoAgregar = await servicioCursos.PostOffline(cursoNuevo);
+                        cursos.Add(cursoAgregar);
+                        cursosAdapter.ActualizarDatos();
+                        Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+                    }
+                    else
+                    {
+                        Toast.MakeText(context, "No hay bases de datos local.", ToastLength.Long).Show();
+                        alertDialogAndroid.Dismiss();
+                    }
+                    
                 }
             }
         }
@@ -154,8 +163,16 @@ namespace SAEEAPP
                     //AQUI OFFLINE
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
-                    servicioCursos = new CursosServices(profesor.Id);
-                    resultado = await servicioCursos.UpdateCursoOffline(cursoTemp);
+                    if (!(profesor == null))
+                    {
+                        servicioCursos = new CursosServices(profesor.Id);
+                        resultado = await servicioCursos.UpdateCursoOffline(cursoTemp);
+                    }
+                    else
+                    {
+                        resultado = false;
+                    }
+                        
                 }
                 if (resultado)
                 {
@@ -170,7 +187,7 @@ namespace SAEEAPP
                 {
                     // Se restablecen los botones
                     ActivarDesactivarBotones(true);
-                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                    Toast.MakeText(context, "Error al guardar.", ToastLength.Short).Show();
                 }
             }
 

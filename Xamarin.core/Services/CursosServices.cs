@@ -8,6 +8,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Microsoft.EntityFrameworkCore;
@@ -45,8 +46,9 @@ namespace Xamarin.core.Services
                 await db.SaveChangesAsync();
                 return curso;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                Log.Error("ERROR", "AQUI: ", ex); // Error
                 return null;
             }
         }
@@ -65,7 +67,7 @@ namespace Xamarin.core.Services
                         IdProfesor = curso.IdProfesor,
                         Nombre = curso.Nombre
                     };
-                    ListaCG.AddRange(cursoNuevo.CursosGrupos.ToList());
+                    ListaCG.AddRange(curso.CursosGrupos.ToList());
                     db.Cursos.Add(cursoNuevo);
 
                 }
@@ -159,6 +161,7 @@ namespace Xamarin.core.Services
                 await db.Database.MigrateAsync();
                 foreach (CursosGrupos cg in cursosGrupos)
                 {
+
                     if (!(db.Cursos.FindAsync(cg.IdCurso) == null))
                     {
                         var cgNuevo = new CursosGrupos()
@@ -225,15 +228,18 @@ namespace Xamarin.core.Services
             {
                 await db.Database.MigrateAsync();
                 var listaCG = await db.CursosGrupos.Where(x=>x.IdCurso == idViejo).ToListAsync();
-                foreach(CursosGrupos CG in listaCG)
+                foreach (CursosGrupos CG in listaCG)
                 {
                     CG.IdCurso = idNuevo;
                     db.Entry(CG).State = EntityState.Modified;
                 }
                 await db.SaveChangesAsync();
+                
+                    
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                Log.Error("ERROR","AQUI: ",ex); // Error
                 return false;
             }
 
@@ -251,6 +257,7 @@ namespace Xamarin.core.Services
                 {
                     CG.IdGrupo = idNuevo;
                     db.Entry(CG).State = EntityState.Modified;
+
                 }
                 await db.SaveChangesAsync();
                 var listaEG = await db.EG.Where(x => x.IdGrupo == idViejo).ToListAsync();

@@ -54,8 +54,17 @@ namespace SAEEAPP
                     //AQUI OFFLINE
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
-                    CursosServices servicioOffline = new CursosServices(profesor.Id);
-                    cursos = await servicioOffline.GetOffline();
+                    if (!(profesor == null))
+                    {
+                        CursosServices servicioOffline = new CursosServices(profesor.Id);
+                        cursos = await servicioOffline.GetOffline();
+                    }
+                    else
+                    {
+                        Toast.MakeText(this,"No hay bases de datos local.",ToastLength.Long).Show();
+                        cursos = new List<Cursos>();
+                    }
+                        
                 }
                 if (cursos.Count > 0)
                 {

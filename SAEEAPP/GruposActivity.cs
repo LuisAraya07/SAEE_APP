@@ -106,11 +106,21 @@ namespace SAEEAPP
                     //Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
-                    gruposServices = new GruposServices(profesor.Id);
-                    var grupoNuevo = await gruposServices.PostOffline(grupo);
-                    VerificarLista(grupoNuevo);
-                    Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
-                    alertDialogBuilder.Dispose();
+                    if (!(profesor == null))
+                    {
+                        gruposServices = new GruposServices(profesor.Id);
+                        var grupoNuevo = await gruposServices.PostOffline(grupo);
+                        VerificarLista(grupoNuevo);
+                        Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
+                        alertDialogBuilder.Dispose();
+                    }
+                    else
+                    {
+                        Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                        alertDialogBuilder.Dispose();
+                    
+                    }
+                    
                 }
                 
 
@@ -153,8 +163,16 @@ namespace SAEEAPP
             {
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor =await ns.GetProfesorConectado();
-                grupoServicio = new GruposServices(profesor.Id);
-                listaGrupos = await grupoServicio.GetOffline();
+                if (!(profesor == null))
+                {
+                    grupoServicio = new GruposServices(profesor.Id);
+                    listaGrupos = await grupoServicio.GetOffline();
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay base de datos local.", ToastLength.Long).Show();
+                }
+                
             }
 
 

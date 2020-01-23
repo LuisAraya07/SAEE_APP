@@ -87,8 +87,16 @@ namespace SAEEAPP.Adaptadores
                 //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
-                gruposServices = new GruposServices(profesor.Id);
-                EGBorrado = await gruposServices.DeleteEGOffline(eg);
+                if (profesor == null)
+                {
+                    EGBorrado = false;
+                }
+                else
+                {
+                    gruposServices = new GruposServices(profesor.Id);
+                    EGBorrado = await gruposServices.DeleteEGOffline(eg);
+                }
+                    
             }
             if (EGBorrado)
             {
@@ -127,8 +135,16 @@ namespace SAEEAPP.Adaptadores
                 //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
-                gruposServices = new GruposServices(profesor.Id);
-                EGNuevo = await gruposServices.PostEGOffline(EGAgregar);
+                if (profesor == null)
+                {
+                    EGNuevo = null;
+                }
+                else
+                {
+                    gruposServices = new GruposServices(profesor.Id);
+                    EGNuevo = await gruposServices.PostEGOffline(EGAgregar);
+                }
+                
             }
             if (EGNuevo == null)
             {

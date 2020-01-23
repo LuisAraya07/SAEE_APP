@@ -128,13 +128,22 @@ namespace SAEEAPP
                 //Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Long).Show();
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
-                servicioEstudiantes = new EstudiantesServices(profesor.Id);
-                var estudianteNuevo = await servicioEstudiantes.PostOffline(estudiante);
-                listaEstudiantes.Add(estudianteNuevo);
-                adaptadorEstudiantes.NotifyDataSetChanged();
-                alertDialogBuilder.Dispose();
-                Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
-                alertDialogAndroid.Dismiss();
+                if (!(profesor == null))
+                {
+                    servicioEstudiantes = new EstudiantesServices(profesor.Id);
+                    var estudianteNuevo = await servicioEstudiantes.PostOffline(estudiante);
+                    listaEstudiantes.Add(estudianteNuevo);
+                    adaptadorEstudiantes.NotifyDataSetChanged();
+                    alertDialogBuilder.Dispose();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    Toast.MakeText(context, "No hay bases de datos local.", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                    
 
             }
         }
@@ -171,8 +180,16 @@ namespace SAEEAPP
                 //OFFLINE AQUI
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
-                servicioEstudiantes = new EstudiantesServices(profesor.Id);
-                resultado = await servicioEstudiantes.PutOffline(_estudiante);
+                if (!(profesor == null))
+                {
+                    servicioEstudiantes = new EstudiantesServices(profesor.Id);
+                    resultado = await servicioEstudiantes.PutOffline(_estudiante);
+                }
+                else
+                {
+                    resultado = false;
+                }
+                    
             }
             if (resultado)
             {
@@ -182,7 +199,7 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Long).Show();
+                Toast.MakeText(context, "Error al guardar.", ToastLength.Long).Show();
             }
             alertDialogAndroid.Dismiss();
 

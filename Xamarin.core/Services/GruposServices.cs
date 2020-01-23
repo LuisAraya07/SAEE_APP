@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Castle.Core;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Android.OS;
-using Microsoft.EntityFrameworkCore;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
 using Xamarin.core.Offline;
@@ -62,7 +61,7 @@ namespace Xamarin.core.Services
         {
             try
             {
-                
+
                 await db.Database.MigrateAsync();
                 //db.Grupos.AddRange(listaGrupos);
                 List<EstudiantesXgrupos> ListaEG = new List<EstudiantesXgrupos>();
@@ -78,7 +77,7 @@ namespace Xamarin.core.Services
                     };
                     ListaEG.AddRange(cg.EstudiantesXgrupos.ToList());
                     db.Grupos.Add(grupoNuevo);
-                    
+
                 }
                 await db.SaveChangesAsync();
                 await PostAllEGOffline(ListaEG);
@@ -117,7 +116,7 @@ namespace Xamarin.core.Services
                 grupo.EstudiantesXgrupos = db.EG.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation).ToList();
                 db.Grupos.Remove(grupo);
                 await db.SaveChangesAsync();
-                
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -166,7 +165,8 @@ namespace Xamarin.core.Services
         //AGREGAR EG TODOS
         public async Task<Boolean> PostAllEGOffline(List<EstudiantesXgrupos> listaEG)
         {
-            try {
+            try
+            {
                 await db.Database.MigrateAsync();
                 foreach (EstudiantesXgrupos eg in listaEG)
                 {
@@ -177,51 +177,99 @@ namespace Xamarin.core.Services
                             Id = eg.Id,
                             IdGrupo = eg.IdGrupo,
                             IdEstudiante = eg.IdEstudiante
-                         
-                        }; 
+
+                        };
                         db.EG.Add(egNuevo);
                     }
                 }
-               // db.EG.AddRange(listaEG);
+                // db.EG.AddRange(listaEG);
                 await db.SaveChangesAsync();
-                
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return false;
-                }
-                return true;
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
         }
 
-        
-        public async void InsertarDatosFK(List<EstudiantesXgrupos> listaEG,List<CursosGrupos> listaCG)
+        public async Task<bool> InsertarDatosCGFK(List<CursosGrupos> listaCG, List<Pair<int, int>> listaParesGrupos, List<Pair<int, int>> listaParesCursos)
         {
             CursosServices cursosServices = new CursosServices();
-            foreach (EstudiantesXgrupos eg in listaEG)
-            {
-                var nuevoEG = new EstudiantesXgrupos()
-                {
-                    IdEstudiante = eg.IdEstudiante,
-                    IdGrupo = eg.IdGrupo
-                    //IRIA EL IDPROFESOR
-                };
-                await PostEGAsync(nuevoEG);
-            }
             List<CursosGrupos> listaAgregar = new List<CursosGrupos>();
             foreach (CursosGrupos CG in listaCG)
             {
-                var nuevoCG = new CursosGrupos()
+                int idGrupo = CG.IdGrupo;
+                int idCurso = CG.IdCurso;
+                var nuevoCG = new CursosGrupos();
+                for (int i = 0; i < listaParesGrupos.Count; i++)
                 {
-                    IdCurso = CG.IdCurso,
-                    IdGrupo = CG.IdGrupo
-                };
-                listaAgregar.Add(nuevoCG);
+                    if (idGrupo == listaParesGrupos[i].First)
+                    {
+                        nuevoCG.IdGrupo = listaParesGrupos[i].Second;
+                        for (int k = 0; k < listaParesCursos.Count; k++)
+                        {
+                            if (idCurso == listaParesCursos[k].First)
+                            {
+                                nuevoCG.IdGrupo = listaParesCursos[k].Second;
+                                listaAgregar.Add(nuevoCG);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
+            return await cursosServices.AgregarCursosGruposAsync(listaAgregar);
 
-            await cursosServices.AgregarCursosGruposAsync(listaAgregar);
 
         }
+        public async Task<bool> InsertarDatosEGFK(List<EstudiantesXgrupos> listaEG, List<Pair<int, int>> listaParesGrupos, List<Pair<int, int>> listaParesEstudiantes)
+        {
+            foreach (EstudiantesXgrupos eg in listaEG)
+            {
+                int idGrupo = eg.IdGrupo;
+                int idEstudiante = eg.IdEstudiante;
+                var nuevoEG = new EstudiantesXgrupos();
+                for (int i = 0; i < listaParesGrupos.Count; i++)
+                {
+                    if (idGrupo == listaParesGrupos[i].First)
+                    {
+                        nuevoEG.IdGrupo = listaParesGrupos[i].Second;
+                        for (int k = 0; k < listaParesEstudiantes.Count; k++)
+                        {
+                            if (idEstudiante == listaParesEstudiantes[k].First)
+                            {
+                                nuevoEG.IdEstudiante = listaParesEstudiantes[k].Second;
+                                await PostEGAsync(nuevoEG);
+                                break;
+                            }
+                        }
+                        break;
 
+                    }
+                }
+
+            }
+            return true;
+        }
+
+
+
+        public async Task<bool> EliminarDBLocal()
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                await db.Database.EnsureDeletedAsync();
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+        }
 
 
 
@@ -231,11 +279,12 @@ namespace Xamarin.core.Services
         /*          TERMINA OFFLINE                */
         public async Task<List<Grupos>> GetAsync()
         {
-             return await _gruposR.GetAsync();
+            return await _gruposR.GetAsync();
         }
-        public async Task <List<Estudiantes>> GetGrupo(int id) {
+        public async Task<List<Estudiantes>> GetGrupo(int id)
+        {
             return await _gruposR.GetGrupoAsync(id);
-        
+
         }
         //Agregar grupo
         public async Task<HttpResponseMessage> PostAsync(Grupos grupo)
@@ -264,9 +313,10 @@ namespace Xamarin.core.Services
         {
             return await _gruposR.DeleteEGAsync(EG);
         }
-        public async Task<EstudiantesXgrupos> PostEGAsync(EstudiantesXgrupos EG) {
+        public async Task<EstudiantesXgrupos> PostEGAsync(EstudiantesXgrupos EG)
+        {
             return await _gruposR.PostEGAsync(EG);
-        
+
         }
 
         public async Task<List<EstudiantesXgrupos>> GetAllEGAsync()
