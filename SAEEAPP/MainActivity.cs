@@ -16,7 +16,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "@string/app_name",  Theme = "@style/AppTheme",MainLauncher =true)]
+    [Activity(Label = "@string/app_name",  Theme = "@style/AppTheme",MainLauncher =false)]
     public class MainActivity : AppCompatActivity
     {
         private EditText etCedula;

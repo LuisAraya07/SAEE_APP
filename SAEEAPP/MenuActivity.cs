@@ -42,18 +42,37 @@ namespace SAEEAPP
 
             Button btEvaluaciones = FindViewById<Button>(Resource.Id.btEvaluaciones);
             btEvaluaciones.Click += OnClick_Evaluaciones;
-
-
-            if (!ClienteHttp.Usuario.Profesor.Administrador)
+            InicioSesionServices inicioSesionServices = new InicioSesionServices();
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            //Verificamos que haya conexión
+            if (conectado)
             {
-                btProfesores.Visibility = ViewStates.Gone;
+                if (!ClienteHttp.Usuario.Profesor.Administrador)
+                {
+                    btProfesores.Visibility = ViewStates.Gone;
+                }
             }
+
+                
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             base.OnStart();
-            btUsuario.Text = $"{ClienteHttp.Usuario.Profesor.Nombre} {ClienteHttp.Usuario.Profesor.PrimerApellido}";
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                btUsuario.Text = $"{ClienteHttp.Usuario.Profesor.Nombre} {ClienteHttp.Usuario.Profesor.PrimerApellido}";
+            }
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                btUsuario.Text = $"{profesor.Nombre} {profesor.PrimerApellido}";
+            }
+            
         }
 
         public void OnClick_Usuario(object sender, EventArgs e)

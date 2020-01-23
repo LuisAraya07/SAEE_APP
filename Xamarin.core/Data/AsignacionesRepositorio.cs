@@ -62,7 +62,7 @@ namespace Xamarin.core.Data
         {
             var request = new HttpRequestMessage
             {
-                Method = HttpMethod.Delete,
+
                 RequestUri = new Uri($"{ValuesServices.url}/Asignaciones/DeleteAllAsignaciones")
             };
             var response = await client.SendAsync(request);

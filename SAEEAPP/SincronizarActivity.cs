@@ -26,6 +26,7 @@ namespace SAEEAPP
         List<Pair<int, int>> listaParesCursos = new List<Pair<int, int>>();
         List<Pair<int, int>> listaParesGrupos = new List<Pair<int, int>>();
         List<Pair<int, int>> listaParesEstudiantes = new List<Pair<int, int>>();
+        List<Pair<int, int>> listaParesAsignaciones = new List<Pair<int, int>>();
 
         public SincronizarActivity(Context context)
         {
@@ -49,11 +50,13 @@ namespace SAEEAPP
             if (conectado)
             {
                 Profesores profesor = await ns.GetProfesorConectado();
-                if(!(profesor == null))
+                
+                if (!(profesor == null))
                 {
                     int idProfesor = profesor.Id;
                     Toast.MakeText(context, "Sincronizando, un momento...", ToastLength.Short).Show();
-                   
+                    //Agregamos el profesor al header
+                    var response = await inicioSesionServices.IniciarSesion(profesor.Cedula, profesor.Contrasenia);
                     GruposServices GruposServicios = new GruposServices();
                     GruposServices GruposServiciosOffline = new GruposServices(profesor.Id);
 
@@ -72,7 +75,6 @@ namespace SAEEAPP
                     AsignacionesServices AsignacionesServicios = new AsignacionesServices();
                     AsignacionesServices AsignacionesServiciosOffline = new AsignacionesServices(idProfesor);
                     //Agregamos el profesor al header
-                    var response = await inicioSesionServices.IniciarSesion(profesor.Cedula, profesor.Contrasenia);
                     if (response.IsSuccessStatusCode)
                     {
                         var GruposEliminados = await GruposServicios.DeleteAllGruposAsync();
@@ -93,35 +95,36 @@ namespace SAEEAPP
                                     var insertadoEstudiantes = await InsertarDatosEstudiantes(EstudiantesServiciosOffline, EstudiantesServicios);
                                     if (insertadoEstudiantes)
                                     {
-                                        var insertadoFK = await InsertarDatosFK(CursosServiciosOffline, GruposServiciosOffline, GruposServicios);
-                                        if (insertadoFK)
+                                        var insertadoAsignaciones = await InsertarDatosAsignaciones(AsignacionesServiciosOffline, AsignacionesServicios, EvaluacionesServicios, EvaluacionesServiciosOffline);
+                                        if (insertadoAsignaciones)
                                         {
-                                            Toast.MakeText(context, "Datos sincronizados con éxito!", ToastLength.Long).Show();
-                                            var bdEliminada = await GruposServiciosOffline.EliminarDBLocal();
-                                            if (bdEliminada)
+                                            var insertadoFK = await InsertarDatosFK(CursosServiciosOffline, GruposServiciosOffline, GruposServicios);
+                                            if (insertadoFK)
                                             {
-                                                Intent mainActivity = new Intent(context, typeof(MainActivity));
-                                                context.StartActivity(mainActivity);
-                                            }
-                                            else
-                                            {
-                                                Toast.MakeText(context, "Error al eliminar Base de Datos local.", ToastLength.Long).Show();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Toast.MakeText(context, "Error al insertar los FK.", ToastLength.Long).Show();
-                                        }
-
+                                                Toast.MakeText(context, "Datos sincronizados con éxito!", ToastLength.Long).Show();
+                                                var bdEliminada = await GruposServiciosOffline.EliminarDBLocal();
+                                                if (bdEliminada)
+                                                {
+                                                    Intent mainActivity = new Intent(context, typeof(MainActivity));
+                                                    context.StartActivity(mainActivity);
+                                                }
+                                                else
+                                                {
+                                                    Toast.MakeText(context, "Error al eliminar Base de Datos local.", ToastLength.Long).Show();
+                                                }
+                                            }else
+                                                Toast.MakeText(context, "Error al insertar los FK.", ToastLength.Long).Show();
                                             
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
+                                        }else
+                                            Toast.MakeText(context, "Error al sincronizar asignaciones.", ToastLength.Long).Show();  
+                                    }else
+                                    Toast.MakeText(context, "Error al sincronizar estudiantes.", ToastLength.Long).Show();
+                                }else
+                                Toast.MakeText(context, "Error al sincronizar grupos.", ToastLength.Long).Show();
+                            }else
+                            Toast.MakeText(context, "Error al sincronizar cursos.", ToastLength.Long).Show();
+                        }else
                             Toast.MakeText(context, "No se pudieron eliminar.", ToastLength.Long).Show();
-                        }
 
                     }
                     else
@@ -140,6 +143,91 @@ namespace SAEEAPP
                 Toast.MakeText(context,"Necesita conexión a internet.",ToastLength.Long).Show();
             }
         }
+
+        private async Task<bool> InsertarDatosAsignaciones(AsignacionesServices AsignacionesServiciosOffline, AsignacionesServices AsignacionesServicios, EvaluacionesServices EvaluacionesServicios, EvaluacionesServices EvaluacionesServiciosOffline)
+        {
+            var listaAsignacionesAgregar = await AsignacionesServiciosOffline.GetOffline();
+            foreach (Asignaciones asignacion in listaAsignacionesAgregar)
+            {
+                int idAsignacion = asignacion.Id;
+                int idGrupo = asignacion.Grupo;
+                int idCurso = asignacion.Curso;
+                var nuevaAsignacion = new Asignaciones();
+                for (int i = 0; i < listaParesGrupos.Count; i++)
+                {
+                    if (idGrupo == listaParesGrupos[i].First)
+                    {
+                        nuevaAsignacion.Grupo = listaParesGrupos[i].Second;
+                        for (int k = 0; k < listaParesCursos.Count; k++)
+                        {
+                            if (idCurso == listaParesCursos[k].First)
+                            {
+                                nuevaAsignacion.Curso = listaParesCursos[k].Second;
+                                nuevaAsignacion.Descripcion = asignacion.Descripcion;
+                                nuevaAsignacion.Estado = asignacion.Estado;
+                                nuevaAsignacion.Fecha = asignacion.Fecha;
+                                nuevaAsignacion.Nombre = asignacion.Nombre;
+                                nuevaAsignacion.Porcentaje = asignacion.Porcentaje;
+                                nuevaAsignacion.Puntos = asignacion.Puntos;
+                                nuevaAsignacion.Tipo = asignacion.Tipo;
+                                var resultado = await AsignacionesServicios.PostAsync(nuevaAsignacion);
+                                if (resultado.IsSuccessStatusCode)
+                                {
+                                    // Se obtiene el elemento insertado
+                                    string resultadoString = await resultado.Content.ReadAsStringAsync();
+                                    var asignacionRemoto = JsonConvert.DeserializeObject<Asignaciones>(resultadoString);
+                                    listaParesAsignaciones.Add(new Pair<int, int>(idAsignacion, asignacionRemoto.Id));
+                                }
+                                else
+                                {
+                                    Toast.MakeText(context, "Error en sincronización Asignación.", ToastLength.Short).Show();
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            return await InsertarDatosEvaluaciones(EvaluacionesServicios, EvaluacionesServiciosOffline);
+        }
+
+        private async Task<bool> InsertarDatosEvaluaciones(EvaluacionesServices EvaluacionesServicios, EvaluacionesServices EvaluacionesServiciosOffline)
+        {
+            var listaEvaluacionesAgregar = await EvaluacionesServiciosOffline.GetOffline();
+            foreach (Evaluaciones evaluacion in listaEvaluacionesAgregar)
+            {
+                int idEvaluacion = evaluacion.Id;
+                int idAsignacion = evaluacion.Asignacion;
+                int idEstudiante = evaluacion.Estudiante;
+                var nuevaEvaluacion = new Evaluaciones();
+                for (int i = 0; i < listaParesAsignaciones.Count; i++)
+                {
+                    if (idAsignacion == listaParesAsignaciones[i].First)
+                    {
+                        nuevaEvaluacion.Asignacion = listaParesAsignaciones[i].Second;
+                        for (int k = 0; k < listaParesEstudiantes.Count; k++)
+                        {
+                            if (idEstudiante == listaParesEstudiantes[k].First)
+                            {
+                                nuevaEvaluacion.Estudiante = listaParesEstudiantes[k].Second;
+                                nuevaEvaluacion.Estado = evaluacion.Estado;
+                                nuevaEvaluacion.Nota = evaluacion.Nota;
+                                nuevaEvaluacion.Periodo = evaluacion.Periodo;
+                                nuevaEvaluacion.Porcentaje = evaluacion.Porcentaje;
+                                nuevaEvaluacion.Puntos = evaluacion.Puntos;
+                                var resultado = await EvaluacionesServicios.PostAsync(nuevaEvaluacion);
+                                if (!(resultado.IsSuccessStatusCode)) { return false; }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+
         private async Task<bool> InsertarDatosCursos(CursosServices CursosServiciosOffline, CursosServices CursosServicios)
         {
             var listaCursosAgregar = await CursosServiciosOffline.GetOffline();

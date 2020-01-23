@@ -34,7 +34,7 @@ namespace Xamarin.core.Data
 
         public async Task<List<Evaluaciones>> GetAllEvaluacionesAsync()
         {
-            var json = await client.GetStringAsync($"Evaluaciones");
+            var json = await client.GetStringAsync($"Evaluaciones/GetEvaluaciones");
             return JsonConvert.DeserializeObject<List<Evaluaciones>>(json);
         }
 

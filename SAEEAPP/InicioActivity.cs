@@ -17,7 +17,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Theme = "@style/AppTheme", MainLauncher = false)]
+    [Activity(Theme = "@style/AppTheme", MainLauncher = true)]
     public class InicioActivity : AppCompatActivity
     {
         private ProgressBar pbInicioSesion;
@@ -28,8 +28,14 @@ namespace SAEEAPP
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_inicio);
             pbInicioSesion = FindViewById<ProgressBar>(Resource.Id.pbInicioSesion);
-            int estadoBarra = 0;
             
+            
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            int estadoBarra = 0;
             new Thread(new ThreadStart(delegate
             {
                 while (estadoBarra < 100)
@@ -41,10 +47,8 @@ namespace SAEEAPP
                 pbInicioSesion.Visibility = ViewStates.Invisible;
                 VerificarUsuario();
             })).Start();
-            
-        }
 
-     
+        }
         public async void VerificarUsuario()
         {
             VerificarConexion vc = new VerificarConexion(this);
@@ -60,7 +64,7 @@ namespace SAEEAPP
                 Profesores profesor = await ns.GetProfesorConectado();
                 if (!(profesor == null))
                 {
-                    Intent siguiente = new Intent(this, typeof(MainActivity));
+                    Intent siguiente = new Intent(this, typeof(MenuActivity));
                     StartActivity(siguiente);
                 }
                 else

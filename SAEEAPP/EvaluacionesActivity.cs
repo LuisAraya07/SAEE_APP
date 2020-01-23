@@ -235,5 +235,28 @@ namespace SAEEAPP
 
             //           Toast.MakeText(context, "Curso: " + spinner.GetItemAtPosition(e.Position)+" ID: "+cursos[e.Position].Id+" GRUPOS EN CURSO : "+ gruposporcurso.Count, ToastLength.Short).Show();
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main2, menu);
+            return true;
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            SincronizarActivity menuOpciones = new SincronizarActivity(this);
+            var itemS = item.ItemId;
+            switch (itemS)
+            {
+                case Resource.Id.CerrarSesion:
+                    menuOpciones.CerrarApp();
+                    break;
+                case Resource.Id.Sincronizar:
+                    menuOpciones.Sincronizar();
+                    break;
+                default:
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
     }
 }
