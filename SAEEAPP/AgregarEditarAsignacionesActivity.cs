@@ -1,6 +1,10 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
@@ -16,7 +20,7 @@ using Xamarin.core.Services;
 namespace SAEEAPP
 {
 
-    public class AgregarEditarAsignacionesActivity
+    public class AgregarEditarAsignacionesActivity : Activity
     {
         AlertDialog.Builder alertDialogBuilder;
         AlertDialog alertDialogAndroid;
@@ -38,6 +42,16 @@ namespace SAEEAPP
         int grupoid = 0;
         int cursoid = 0;
         int periodos = 0;
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+        }
+        protected async override void OnStart()
+        {
+            base.OnStart();
+            SetContentView(Resource.Layout.Dialogo_Agregar_Asignacion);
+        }
         private void spTipo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             var spinner = sender as Spinner;
@@ -133,15 +147,34 @@ namespace SAEEAPP
                 Porcentaje = asignacion.Porcentaje
             };
         }
+        private static bool HasPermissions()
+        {
+            return (ContextCompat.CheckSelfPermission(Application.Context, Manifest.Permission.WriteCalendar) == Permission.Granted &&
+                ContextCompat.CheckSelfPermission(Application.Context, Manifest.Permission.ReadCalendar) == Permission.Granted);
+        }
+        private void RequestAppPermissions()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
+                return;
+            if (HasPermissions())
+                return;
+            ActivityCompat.RequestPermissions(context, new string[]
+                {
+                           Manifest.Permission.WriteCalendar,
+                           Manifest.Permission.ReadCalendar
+
+                }, 1000);
+        }
         private void InicializarValores(Activity context, AsignacionesAdaptador adapter,
             List<Asignaciones> asignaciones, string titulo, string textoBotonConfirmacion)
         {
-
+          
             foreach (Cursos cu in cursos)
             {
                 cursosNombres.Add(cu.Nombre);
             }
             this.context = context;
+            RequestAppPermissions();
             this.AdaptadorAsignaciones = adapter;
             this.asignaciones = asignaciones;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
@@ -186,6 +219,8 @@ namespace SAEEAPP
             frag.Show(context.FragmentManager, DatePickerFragment.TAG);
         }
         #endregion
+        
+        [Obsolete]
         private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())
@@ -215,6 +250,8 @@ namespace SAEEAPP
                     HttpResponseMessage resultado = await servicioAsignaciones.PostAsync(asignNueva);
                     if (resultado.IsSuccessStatusCode)
                     {
+                       var calendario = new CalendarioServices(context);
+                        await calendario.CreateAlarmAsync(asignNueva.Nombre, "SAEE Recordatorio", asignNueva.Fecha, asignNueva.Fecha.AddDays(1), 5);
                         // Se obtiene el elemento insertado
                         string resultadoString = await resultado.Content.ReadAsStringAsync();
                         asignNueva = JsonConvert.DeserializeObject<Asignaciones>(resultadoString);
