@@ -108,8 +108,16 @@ namespace SAEEAPP
                     //AQUI OFFLINE
                     ProfesoresServices ns = new ProfesoresServices(1);
                     Profesores profesor = await ns.GetProfesorConectado();
-                    CursosServices servicioOffline = new CursosServices(profesor.Id);
-                    borrados = await servicioOffline.BorrarCursosGruposOffline(borrar);
+                    if (!(profesor == null))
+                    {
+                        CursosServices servicioOffline = new CursosServices(profesor.Id);
+                        borrados = await servicioOffline.BorrarCursosGruposOffline(borrar);
+                    }
+                    else
+                    {
+                        borrados = false;
+                    }
+                        
 
                 }
                 cambio = true;

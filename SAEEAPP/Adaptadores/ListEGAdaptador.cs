@@ -103,12 +103,21 @@ namespace SAEEAPP.Adaptadores
                 //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
                 ProfesoresServices ns = new ProfesoresServices(1);
                 Profesores profesor = await ns.GetProfesorConectado();
-                GruposServices gruposServicios = new GruposServices(profesor.Id);
-                var eliminado = await gruposServicios.DeleteEGOffline(_EGEliminar);
-                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                _estudiantes.RemoveAt(i);
-                _EG.Remove(_EGEliminar);
-                NotifyDataSetChanged();
+                if (!(profesor == null))
+                {
+                    GruposServices gruposServicios = new GruposServices(profesor.Id);
+                    var eliminado = await gruposServicios.DeleteEGOffline(_EGEliminar);
+                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                    _estudiantes.RemoveAt(i);
+                    _EG.Remove(_EGEliminar);
+                    NotifyDataSetChanged();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "No hay bases de datos local.", ToastLength.Long).Show();
+
+                }
+
             }
         }
 

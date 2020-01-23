@@ -7,6 +7,8 @@ using Android.Widget;
 using System;
 using Xamarin.core;
 using Xamarin.core.Data;
+using Xamarin.core.Models;
+using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
@@ -44,7 +46,7 @@ namespace SAEEAPP
 
             if (!ClienteHttp.Usuario.Profesor.Administrador)
             {
-                btProfesores.Visibility = Android.Views.ViewStates.Gone;
+                btProfesores.Visibility = ViewStates.Gone;
             }
         }
 
@@ -72,7 +74,7 @@ namespace SAEEAPP
 
 
         //NUEVO ASIGNACIONES
-        public void OnClick_Asignaciones(object sender, EventArgs e)
+        public async void OnClick_Asignaciones(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
             var conectado = vc.IsOnline();
@@ -83,12 +85,24 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+                //AQUI OFFLINE
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    Intent asignacion = new Intent(this, typeof(AsignacionesActivity));
+                    StartActivity(asignacion);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+                    
             }
 
         }
 
-        public void OnClick_Evaluaciones(object sender, EventArgs e)
+        public async void OnClick_Evaluaciones(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
             var conectado = vc.IsOnline();
@@ -99,45 +113,75 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    Intent asignacion = new Intent(this, typeof(EvaluacionesActivity));
+                    StartActivity(asignacion);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+                    
             }
 
         }
 
-        public void OnClick_Cursos(object sender, EventArgs e)
+        public async void OnClick_Cursos(object sender, EventArgs e)
         {
-            VerificarConexion vc = new VerificarConexion(this);
-            Intent cursos = new Intent(this, typeof(CursosActivity));
-            StartActivity(cursos);
-            //var conectado = vc.IsOnline();
-            //if (conectado)
-            //{
-            //    Intent cursos = new Intent(this, typeof(CursosActivity));
-            //    StartActivity(cursos);
-            //}
-            //else
-            //{
-            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            //}
             
+            VerificarConexion vc = new VerificarConexion(this);
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent cursos = new Intent(this, typeof(CursosActivity));
+                StartActivity(cursos);
+            }
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    Intent cursos = new Intent(this, typeof(CursosActivity));
+                    StartActivity(cursos);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+
+            }
+
         }
 
-        public void OnClick_Grupos(object sender, EventArgs e)
+        public async void OnClick_Grupos(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            Intent grupos = new Intent(this, typeof(GruposActivity));
-            StartActivity(grupos);
-            //var conectado = vc.IsOnline();
-            //if (conectado)
-            //{
-            //    Intent grupos = new Intent(this, typeof(GruposActivity));
-            //    StartActivity(grupos);
-            //}
-            //else
-            //{
-            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            //}
-            
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent grupos = new Intent(this, typeof(GruposActivity));
+                StartActivity(grupos);
+            }
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    Intent grupos = new Intent(this, typeof(GruposActivity));
+                    StartActivity(grupos);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+
+            }
+
         }
 
         public void OnClick_Profesores(object sender, EventArgs e)
@@ -156,22 +200,31 @@ namespace SAEEAPP
             
         }
 
-        public void OnClick_Estudiantes(object sender, EventArgs e)
+        public async void OnClick_Estudiantes(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
-            StartActivity(estudiantes);
-            //var conectado = vc.IsOnline();
-            //if (conectado)
-            //{
-            //    Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
-            //    StartActivity(estudiantes);
-            //}
-            //else
-            //{
-            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            //}
-            
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+                StartActivity(estudiantes);
+            }
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                if (!(profesor == null))
+                {
+                    Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+                    StartActivity(estudiantes);
+                }
+                else
+                {
+                    Toast.MakeText(this, "No hay bases de datos local.", ToastLength.Long).Show();
+                }
+
+            }
+
         }
 
         public void OnClick_Notificaciones(object sender, EventArgs e)

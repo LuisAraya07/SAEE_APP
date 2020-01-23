@@ -60,6 +60,20 @@ namespace Xamarin.core.Services
             var profesor = await db.Profesores.FirstOrDefaultAsync();
             return profesor;
         }
+
+        public async Task<bool> VerificarProfesorConectado(Profesores profesorConectado)
+        {
+            await db.Database.MigrateAsync();
+            var profesor = await db.Profesores.FirstOrDefaultAsync();
+            if (profesor == null)
+            {
+                return false;
+            }
+            if(profesor.Id == profesorConectado.Id)
+            {
+                return true;
+            }return false;
+        }
         //Editar profesores No debería servir
         public async Task<bool> UpdateProfesorOffline(Profesores profesor)
         {
