@@ -14,11 +14,17 @@ using SAEEP.ManejoNotificaciones;
 using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
+using Xamarin.core.Services;
 using Xamarin.core.OfflineServices;
+using Android.Support.V4.App;
+using System.Threading.Tasks;
+using Android;
+using Android.Support.V4.Content;
+using Android.Content.PM;
 
 namespace SAEEAPP
 {
-    public class AENotificacionesActivity
+    public class AENotificacionesActivity: Activity
     {
         AlertDialog.Builder alertDialogBuilder;
         AlertDialog alertDialogAndroid;
@@ -30,10 +36,21 @@ namespace SAEEAPP
         private EditText _dateDisplay;
         private EditText _timeDisplay;
         private EditText _txtNote;
-      //  NumberPicker _numberPicker;
+        //  NumberPicker _numberPicker;
         Spinner spinner;
         int valorSpinner = 0;
         private readonly bool editando;
+
+        protected override  void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+        }
+        protected async override void OnStart()
+        {
+            base.OnStart();
+            SetContentView(Resource.Layout.Dialogo_Agregar_Notificaciones);
+        }
 
         public AENotificacionesActivity(Activity context, ListNotificacionesAdaptor notificacionesAdapter, List<Notificaciones> notificaciones) {
             InicializarValores(context, notificacionesAdapter, notificaciones, "    Agregando Notificación", "Agregar");
@@ -54,12 +71,13 @@ namespace SAEEAPP
             this.notificacion = notificacion;
             notificacionSinEditar = notificacion;
         }
-        private void InicializarValores(Activity context, ListNotificacionesAdaptor notificacionesAdapter,
+        private void InicializarValores(Activity context1, ListNotificacionesAdaptor notificacionesAdapter,
             List<Notificaciones> notificaciones, string titulo, string textoBotonConfirmacion)
         {
-            this.context = context;
+            context = context1;
             this.notificacionesAdapter = notificacionesAdapter;
             this.notificaciones = notificaciones;
+            
             LayoutInflater layoutInflater = LayoutInflater.From(context);
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Notificaciones, null);
             _dateDisplay = VistaAgregar.FindViewById<EditText>(Resource.Id.date_display);
@@ -84,6 +102,8 @@ namespace SAEEAPP
         {
             alertDialogAndroid.Dismiss();
         }
+
+        [Obsolete]
         private void AgregarAsync(object sender, EventArgs e)
         {
             notificacion.Note = _txtNote.Text + " - Para la fecha: " + notificacion.Date;
@@ -232,7 +252,6 @@ namespace SAEEAPP
             //Toast.MakeText(context, toast, ToastLength.Long).Show();
             valorSpinner = Convert.ToInt32(spinner.GetItemAtPosition(e.Position).ToString());
         }
-
 
     }
 }

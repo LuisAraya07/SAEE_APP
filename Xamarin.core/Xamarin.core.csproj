@@ -75,6 +75,7 @@
     <Compile Include="Offline\DatabaseContextSistema.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CalendarioServices.cs" />
     <Compile Include="Services\EvaluacionesServices.cs" />
     <Compile Include="Services\AsignacionesServices.cs" />
     <Compile Include="Services\CursosServices.cs" />
@@ -116,6 +117,9 @@
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v4">
+      <Version>28.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
   </ItemGroup>
