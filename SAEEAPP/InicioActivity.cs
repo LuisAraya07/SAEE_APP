@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -23,14 +24,28 @@ namespace SAEEAPP
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.activity_main);
+            SetContentView(Resource.Layout.activity_inicio);
             pbInicioSesion = FindViewById<ProgressBar>(Resource.Id.pbInicioSesion);
+            int estadoBarra = 0;
+            
+            new Thread(new ThreadStart(delegate
+            {
+                while (estadoBarra < 100)
+                {
+                    estadoBarra += 10;
+                    pbInicioSesion.Progress = estadoBarra;
+                    Thread.Sleep(400);
+                }
+                pbInicioSesion.Visibility = ViewStates.Invisible;
+                VerificarUsuario();
+            })).Start();
+            
         }
 
-        protected async override void OnStart()
+     
+        public async void VerificarUsuario()
         {
             VerificarConexion vc = new VerificarConexion(this);
             var conectado = vc.IsOnline();
@@ -54,7 +69,7 @@ namespace SAEEAPP
                     StartActivity(siguiente);
                 }
             }
-            base.OnStart();
+            
         }
     }
 }
