@@ -5908,7 +5908,10 @@ namespace SAEEAPP
 			public const int select_dialog_singlechoice_material = 2131492956;
 			
 			// aapt resource value: 0x7F0C005D
-			public const int support_simple_spinner_dropdown_item = 2131492957;
+			public const int SpinnerItem = 2131492957;
+			
+			// aapt resource value: 0x7F0C005E
+			public const int support_simple_spinner_dropdown_item = 2131492958;
 			
 			static Layout()
 			{

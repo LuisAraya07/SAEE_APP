@@ -87,7 +87,7 @@ namespace SAEEAPP
                 spGrupo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spGrupo);
                 spGrupo.Prompt = "Elija Grupo";
                 spGrupo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spGrupo_ItemSelected);
-                var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem, gruposNombres);
+                var dataAdapter = new ArrayAdapter(context,Resource.Layout.SpinnerItem, gruposNombres);
                 dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
                 spGrupo.Adapter = dataAdapter;
             }
@@ -150,7 +150,7 @@ namespace SAEEAPP
             spTipo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spTipo);
             spTipo.Prompt = "Elija Rubro";
             spTipo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spTipo_ItemSelected);
-            var adapter1 = ArrayAdapter.CreateFromResource(context, Resource.Array.listaRubros, Android.Resource.Layout.SimpleSpinnerItem);
+            var adapter1 = ArrayAdapter.CreateFromResource(context, Resource.Array.listaRubros, Resource.Layout.SpinnerItem);
             adapter1.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spTipo.Adapter = adapter1;
 
@@ -158,7 +158,7 @@ namespace SAEEAPP
             spCurso = VistaAgregar.FindViewById<Spinner>(Resource.Id.spCurso);
             spCurso.Prompt = "Elija Curso";
             spCurso.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spCurso_ItemSelected);
-            var dataAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleSpinnerItem,cursosNombres);
+            var dataAdapter = new ArrayAdapter(context, Resource.Layout.SpinnerItem,cursosNombres);
             dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spCurso.Adapter = dataAdapter;
 
