@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
@@ -24,13 +25,16 @@ namespace SAEEAPP
         CursosServices cursoServicios;
         EvaluacionesServices servicioEvaluaciones;
         AsignacionesServices servicioAsignaciones;
+        EstudiantesServices servicioEstudiantes;
         List<Grupos> gruposporcurso;
         List<Asignaciones> asignaciones;
         List<int> periodos;
         List<string> asignacionesNombres;
         List<Evaluaciones> evaluaciones;
+        Asignaciones asignacion;
         protected override async void OnCreate(Bundle savedInstanceState)
         {
+            asignacion = new Asignaciones();
             periodos = new List<int>();
             cursos = new List<Cursos>();
             asignacionesNombres = new List<string>();
@@ -42,6 +46,7 @@ namespace SAEEAPP
             evaluaciones = new List<Evaluaciones>();
             servicioEvaluaciones = new EvaluacionesServices();
             servicioAsignaciones = new AsignacionesServices();
+            servicioEstudiantes = new EstudiantesServices();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_evaluaciones);
             cursos = await cursoServicios.GetAsync();
@@ -79,15 +84,34 @@ namespace SAEEAPP
         public async void VerNotas(object sender, EventArgs e)
         {
             evaluaciones = new List<Evaluaciones>();
+            var estudianteeva = new List<EstudianteEvaluacion>();
+            var estudiantes = await servicioEstudiantes.GetAsync();
             var evaTemp = await servicioEvaluaciones.GetEvaluacionesxAsignacionAsync(asignacionid);
             foreach(Evaluaciones ev in evaTemp)
             {
                 if(ev.Periodo == periodo)
                 {
                     evaluaciones.Add(ev);
+                    var estudiante = new Estudiantes();
+                    foreach(Estudiantes es in estudiantes)
+                    {
+                        if(es.Id == ev.Estudiante)
+                        {
+                            estudiante = es;
+                        }
+                    }
+                    EstudianteEvaluacion estu = new EstudianteEvaluacion();
+                    estu.evaluacion = ev;
+                    estu.Cedula = estudiante.Cedula;
+                    estu.Nombre = estudiante.Nombre + " " + estudiante.PrimerApellido + " " + estudiante.SegundoApellido;
+                    estu.Puntos = ev.Puntos;
+                    estu.Porcentaje = ev.Porcentaje;
+                    estu.Nota = ev.Nota;
+                    estudianteeva.Add(estu);
                 }
             }
-            Toast.MakeText(this, "Size: " + evaluaciones.Count, ToastLength.Short).Show();
+            NotasActivity notas = new NotasActivity(this,estudianteeva, asignacion);
+            notas.Show();
         }
         public async void getgruposCurso(int id)
         {
@@ -152,6 +176,7 @@ namespace SAEEAPP
         {
             var spinner = sender as Spinner;
             asignacionid = asignaciones[e.Position].Id;
+            asignacion = asignaciones[e.Position];
             //  Toast.MakeText(context, "You choose:" + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
         }
         private void spPeriodo_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)

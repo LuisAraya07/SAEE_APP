@@ -45,8 +45,8 @@ namespace SAEEAPP
 
         public async void OnClick_Ingresar(object sender, EventArgs e)
         {
-            etCedula.Text = "701110111";
-            etContrasenia.Text = "12";
+            etCedula.Text = "702550708";
+            etContrasenia.Text = "123";
             if (EntradaValida())
             {
                 // Se bloquean los controles y se activa el progress bar
