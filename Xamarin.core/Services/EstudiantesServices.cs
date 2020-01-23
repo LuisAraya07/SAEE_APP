@@ -113,7 +113,27 @@ namespace Xamarin.core.Services
             }
             return true;
         }
+        //Cambiar idEstudiantes en EstudiantesXGrupos
+        public async Task<bool> CambiarIdEstudianteEG(int idViejo, int idNuevo)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+                var listaEG = await db.EG.Where(x => x.IdEstudiante == idViejo).ToListAsync();
+                foreach (EstudiantesXgrupos eg in listaEG)
+                {
+                    eg.IdEstudiante = idNuevo;
+                    db.Entry(eg).State = EntityState.Modified;
+                }
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
 
+            return true;
+        }
 
 
 

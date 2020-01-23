@@ -105,5 +105,23 @@ namespace SAEEAPP
             MenuItemCompat.SetOnActionExpandListener(item, new SearchViewExpandListener(adaptadorEstudiantes));
             return true;
         }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            SincronizarActivity menuOpciones = new SincronizarActivity(this);
+            var itemS = item.ItemId;
+            switch (itemS)
+            {
+                case Resource.Id.CerrarSesion:
+                    menuOpciones.CerrarApp();
+                    break;
+                case Resource.Id.Sincronizar:
+                    menuOpciones.Sincronizar();
+                    break;
+                default:
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
     }
 }

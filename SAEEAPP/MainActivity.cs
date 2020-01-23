@@ -165,8 +165,8 @@ namespace SAEEAPP
             await cursosServicioOffline.PostAllOffline(listaCursos);
 
             //Agregar CursosGrupos
-            var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
-            await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
+            //var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
+            //await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
             ////var listaProfesores = await profesoresServicio.GetAsync();
 
             //Agregar EG

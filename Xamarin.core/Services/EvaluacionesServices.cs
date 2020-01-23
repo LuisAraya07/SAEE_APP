@@ -140,5 +140,10 @@ namespace Xamarin.core.Services
         {
             return await _evaluacionesR.DeleteEvaluacionAsync(id);
         }
+        //Eliminar todas las evaluaciones dle profesor remotas
+        public async Task<bool> DeleteAllEvaluacionAsync()
+        {
+            return await _evaluacionesR.DeleteAllEvaluacionAsync();
+        }
     }
 }
