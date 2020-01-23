@@ -62,7 +62,7 @@ namespace SAEEAPP
             VerificarConexion vc = new VerificarConexion(context);
             // Se desactivan los botones
             ActivarDesactivarBotones(false);
-            Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
+            Toast.MakeText(context, "Guardando, un momento...", ToastLength.Short).Show();
 
             CursosServices servicioCursos = new CursosServices();
             List<CursosGrupos> agregarPreparados = new List<CursosGrupos>();
@@ -168,7 +168,7 @@ namespace SAEEAPP
             VerificarConexion vc = new VerificarConexion(context);
             // Se desactivan los botones
             ActivarDesactivarBotones(false);
-            Toast.MakeText(context, "Cargando, espere", ToastLength.Short).Show();
+            Toast.MakeText(context, "Cargando, un momento...", ToastLength.Short).Show();
             List<Grupos> listaGrupos = new List<Grupos>();
             GruposServices servicioGrupos;
             var conectado = vc.IsOnline();

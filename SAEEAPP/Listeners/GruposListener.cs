@@ -242,7 +242,7 @@ namespace SAEEAPP.Listeners
 
         private async void MostrarLVAgregarAsync(List<Estudiantes> listaAgregados, List<EstudiantesXgrupos> listaEG)
         {
-            Toast.MakeText(_context, "Obteniendo los estudiantes, espere", ToastLength.Short).Show();
+            Toast.MakeText(_context, "Obteniendo los estudiantes, un momento...", ToastLength.Short).Show();
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
             EstudiantesServices estudiantesServicios;

@@ -75,7 +75,7 @@ namespace SAEEAPP
                         //Bloquear botones
                         ActivarDesactivarBotones(false);
                         // Guardar información...
-                        Toast.MakeText(this, "Guardando, espere...", ToastLength.Short).Show();
+                        Toast.MakeText(this, "Guardando, un momento...", ToastLength.Short).Show();
                         // Se utiliza esta clase en caso de que falle, para restaurar los valores
                         profesor.Nombre = etNombre.Text;
                         profesor.PrimerApellido = etPrimerApellido.Text;

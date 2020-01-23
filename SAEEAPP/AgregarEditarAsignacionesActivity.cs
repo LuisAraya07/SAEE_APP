@@ -192,7 +192,7 @@ namespace SAEEAPP
             {
                 // Se bloquean los botones
                 ActivarDesactivarBotones(false);
-                Toast.MakeText(context, "Agregando, espere", ToastLength.Short).Show();
+                Toast.MakeText(context, "Agregando, un momento", ToastLength.Short).Show();
 
                 AsignacionesServices servicioAsignaciones = new AsignacionesServices();
                 Asignaciones asignNueva = new Asignaciones()
@@ -303,7 +303,7 @@ namespace SAEEAPP
                 {
                     // Se bloquean los botones
                     ActivarDesactivarBotones(false);
-                    Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
+                    Toast.MakeText(context, "Guardando, un momento", ToastLength.Short).Show();
 
                     AsignacionesServices servAsignaciones= new AsignacionesServices();
                     asignacionTemp.Profesor = asignacion.Profesor;

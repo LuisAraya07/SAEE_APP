@@ -73,7 +73,6 @@ namespace Xamarin.core.Services
                         Anio = cg.Anio,
                         IdProfesor = cg.IdProfesor,
                         Grupo = cg.Grupo
-                        //EstudiantesXgrupos = cg.EstudiantesXgrupos
                     };
                     ListaEG.AddRange(cg.EstudiantesXgrupos.ToList());
                     db.Grupos.Add(grupoNuevo);
@@ -113,7 +112,7 @@ namespace Xamarin.core.Services
             try
             {
                 await db.Database.MigrateAsync();
-                grupo.EstudiantesXgrupos = db.EG.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation).ToList();
+                grupo.EstudiantesXgrupos = db.EG.Where(x => x.IdGrupo == grupo.Id).ToList();
                 db.Grupos.Remove(grupo);
                 await db.SaveChangesAsync();
 
@@ -211,7 +210,7 @@ namespace Xamarin.core.Services
                         {
                             if (idCurso == listaParesCursos[k].First)
                             {
-                                nuevoCG.IdGrupo = listaParesCursos[k].Second;
+                                nuevoCG.IdCurso = listaParesCursos[k].Second;
                                 listaAgregar.Add(nuevoCG);
                                 break;
                             }

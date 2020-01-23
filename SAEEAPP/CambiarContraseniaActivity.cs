@@ -62,7 +62,7 @@ namespace SAEEAPP
             {
                 // Se bloquean los botones
                 ActivarDesactivarBotones(false);
-                Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
+                Toast.MakeText(context, "Guardando, un momento...", ToastLength.Short).Show();
 
                 ProfesoresServices servicioProfesores = new ProfesoresServices();
                 profesorTemp.Contrasenia = etContraseniaNueva.Text;

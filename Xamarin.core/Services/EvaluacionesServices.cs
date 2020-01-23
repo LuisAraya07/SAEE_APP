@@ -46,13 +46,30 @@ namespace Xamarin.core.Services
                 return evaluacion;
             }
         }
-        //Agregar todas las asignaciones
+        //Agregar todas las Evaluaciones
         public async Task<Boolean> PostAllOffline(List<Evaluaciones> listaEvaluaciones)
         {
             try
             {
                 await db.Database.MigrateAsync();
-                db.Evaluaciones.AddRange(listaEvaluaciones);
+                foreach (Evaluaciones evaluacion in listaEvaluaciones)
+                {
+                    var evaluacionNuevo = new Evaluaciones()
+                    {
+                        Id = evaluacion.Id,
+                        Puntos = evaluacion.Puntos,
+                        Porcentaje = evaluacion.Porcentaje,
+                        Asignacion =evaluacion.Asignacion,
+                        Estado = evaluacion.Estado,
+                        Estudiante= evaluacion.Estudiante,
+                        Nota=evaluacion.Nota,
+                        Periodo=evaluacion.Periodo,
+                        Profesor=evaluacion.Profesor
+                    };
+
+                    db.Evaluaciones.Add(evaluacionNuevo);
+
+                }
                 await db.SaveChangesAsync();
 
             }
@@ -144,6 +161,12 @@ namespace Xamarin.core.Services
         public async Task<bool> DeleteAllEvaluacionAsync()
         {
             return await _evaluacionesR.DeleteAllEvaluacionAsync();
+        }
+
+
+        public async Task<List<Evaluaciones>> GetAllEvaluacionesAsync()
+        {
+            return await _evaluacionesR.GetAllEvaluacionesAsync();
         }
     }
 }

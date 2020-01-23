@@ -65,7 +65,7 @@ namespace SAEEAPP
                 {
                     // Se bloquean los botones
                     ActivarDesactivarBotones(false);
-                    Toast.MakeText(_context, "Guardando, espere", ToastLength.Short).Show();
+                    Toast.MakeText(_context, "Guardando, un momento...", ToastLength.Short).Show();
 
                     EvaluacionesServices serevac = new EvaluacionesServices();
                     estudianteTemp = new EstudianteEvaluacion();

@@ -52,9 +52,28 @@ namespace Xamarin.core.Services
             try
             {
                 await db.Database.MigrateAsync();
-                db.Asignaciones.AddRange(listaAsignaciones);
-                await db.SaveChangesAsync();
+                foreach (Asignaciones asignacion in listaAsignaciones)
+                {
+                    var asignacionNuevo = new Asignaciones()
+                    {
+                        Id = asignacion.Id,
+                        Profesor = asignacion.Profesor,
+                        Curso = asignacion.Curso,
+                        Descripcion = asignacion.Descripcion,
+                        Estado = asignacion.Estado,
+                        Fecha = asignacion.Fecha,
+                        Grupo = asignacion.Grupo,
+                        Nombre = asignacion.Nombre,
+                        Porcentaje =asignacion.Porcentaje,
+                        Puntos=asignacion.Puntos,
+                        Tipo = asignacion.Tipo
+                    };
+                    
+                    db.Asignaciones.Add(asignacionNuevo);
 
+                }
+                await db.SaveChangesAsync();
+                
             }
             catch (DbUpdateConcurrencyException)
             {

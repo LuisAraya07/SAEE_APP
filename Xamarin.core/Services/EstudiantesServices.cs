@@ -104,6 +104,9 @@ namespace Xamarin.core.Services
             try
             {
                 await db.Database.MigrateAsync();
+                var listaAsignaciones = db.Evaluaciones.Where(x => x.Estudiante == estudiante.Id).ToList();
+                db.Evaluaciones.RemoveRange(listaAsignaciones);
+                await db.SaveChangesAsync();
                 db.Estudiantes.Remove(estudiante);
                 await db.SaveChangesAsync();
             }

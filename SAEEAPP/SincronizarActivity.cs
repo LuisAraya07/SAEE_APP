@@ -52,7 +52,7 @@ namespace SAEEAPP
                 if(!(profesor == null))
                 {
                     int idProfesor = profesor.Id;
-                    Toast.MakeText(context, "Sincronizando, espere...", ToastLength.Short).Show();
+                    Toast.MakeText(context, "Sincronizando, un momento...", ToastLength.Short).Show();
                    
                     GruposServices GruposServicios = new GruposServices();
                     GruposServices GruposServiciosOffline = new GruposServices(profesor.Id);
@@ -157,14 +157,7 @@ namespace SAEEAPP
                     // Se obtiene el elemento insertado
                     string resultadoString = await resultado.Content.ReadAsStringAsync();
                     var cursoRemoto = JsonConvert.DeserializeObject<Cursos>(resultadoString);
-                    listaParesCursos.Add(new Pair<int,int>(idCurso,cursoRemoto.Id));
-                    //cursoRemoto.IdProfesorNavigation = null;
-                    //var estaCurso = listaCursosAgregar.Where(x => x.Id == cursoRemoto.Id).FirstOrDefault();
-                    //if (estaCurso == null)
-                    //{
-                    //    await CursosServiciosOffline.PostOffline(cursoRemoto);
-                    //}
-                    //await CursosServiciosOffline.CambiarIdCursoCG(idCurso, cursoRemoto.Id);
+                    listaParesCursos.Add(new Pair<int, int>(idCurso, cursoRemoto.Id));
                 }
                 else
                 {
@@ -195,12 +188,6 @@ namespace SAEEAPP
                     //Cabiamos el id en EstudiantesGrupos y CursosGrupos
                     grupoRemoto.IdProfesorNavigation = null;
                     listaParesGrupos.Add(new Pair<int, int>(idGrupo, grupoRemoto.Id));
-                    //var agregado = listaGruposAgregar.Where(x => x.Id == grupoRemoto.Id).FirstOrDefault();
-                    //if (agregado == null)
-                    //{
-                    //    await GruposServiciosOffline.PostOffline(grupoRemoto);
-                    //}
-                    //await CursosServiciosOffline.CambiarIdGrupoAmbos(idGrupo, grupoRemoto.Id);
                 }
                 else
                 {
@@ -235,14 +222,6 @@ namespace SAEEAPP
                     //Cabiamos el id en EstudiantesGrupos y CursosGrupos
                     estudianteRemoto.IdProfesorNavigation = null;
                     listaParesEstudiantes.Add(new Pair<int, int>(idEstudiante, estudianteRemoto.Id));
-
-                    //var agregado = listaEstudiantesAgregar.Where(x => x.Id == estudianteRemoto.Id).FirstOrDefault();
-                    //if (agregado == null)
-                    //{
-                    //    await EstudiantesServiciosOffline.PostOffline(estudianteRemoto);
-                    //}
-
-                    //await EstudiantesServiciosOffline.CambiarIdEstudianteEG(idEstudiante, estudianteRemoto.Id);
                 }
                 else
                 {

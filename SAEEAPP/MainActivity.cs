@@ -127,7 +127,7 @@ namespace SAEEAPP
             //Verifico si le dio check
             if (cbOffline.Checked)
             {
-                Toast.MakeText(this, "Sincronizando Datos, espere...", ToastLength.Long).Show();
+                Toast.MakeText(this, "Sincronizando Datos, un momento...", ToastLength.Long).Show();
                 //Cargamos todos los datos
                 //Aquí agregamos al profesor conectado
                 var rs = await CargarBDLocal(profesor);
@@ -149,6 +149,14 @@ namespace SAEEAPP
             EstudiantesServices estudiantesServicio = new EstudiantesServices();
             EstudiantesServices estudiantesServicioOffline = new EstudiantesServices(idProfesor);
 
+
+            AsignacionesServices asignacionesServicio = new AsignacionesServices();
+            AsignacionesServices asignacionesServicioOffline = new AsignacionesServices(idProfesor);
+
+
+            EvaluacionesServices evaluacionesServicio = new EvaluacionesServices();
+            EvaluacionesServices evaluacionesServicioOffline = new EvaluacionesServices(idProfesor);
+
             //Guardamos el profesor en local
             await profesoresServicioOffline.PostOffline(profesor);
 
@@ -164,14 +172,14 @@ namespace SAEEAPP
             var listaCursos = await cursosServicio.GetAsync();
             await cursosServicioOffline.PostAllOffline(listaCursos);
 
-            //Agregar CursosGrupos
-            //var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
-            //await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
-            ////var listaProfesores = await profesoresServicio.GetAsync();
+            //Agregar Asignaciones
+            var listaAsignaciones = await asignacionesServicio.GetAsync();
+            await asignacionesServicioOffline.PostAllOffline(listaAsignaciones);
 
-            //Agregar EG
-            //   var listaEG = await gruposServicio.GetAllEGAsync();
-            // await gruposServicioOffline.PostAllEGOffline(listaEG);
+
+            //Agregar Evaluaciones
+            var listaEvaluaciones = await evaluacionesServicio.GetAllEvaluacionesAsync();
+            await evaluacionesServicioOffline.PostAllOffline(listaEvaluaciones);
             return true;
         }
 
