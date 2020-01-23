@@ -157,6 +157,7 @@ namespace SAEEAPP
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
             etDescripcion = VistaAgregar.FindViewById<EditText>(Resource.Id.etDescripcion);
             etFecha = VistaAgregar.FindViewById<EditText>(Resource.Id.etFecha);
+            etFecha.Click += DateSelect_OnClick;
             etPuntos = VistaAgregar.FindViewById<EditText>(Resource.Id.etPuntos);
             etPorcentaje = VistaAgregar.FindViewById<EditText>(Resource.Id.etPorcentaje);
             alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
@@ -166,6 +167,17 @@ namespace SAEEAPP
             .SetTitle(titulo);
             alertDialogAndroid = alertDialogBuilder.Create();
         }
+        #region DateOperation
+        [Obsolete]
+        void DateSelect_OnClick(object sender, EventArgs eventArgs)
+        {
+            DatePickerFragment frag = DatePickerFragment.NewInstance(delegate (DateTime time)
+            {
+                etFecha.Text = time.ToString().Split(' ')[0];
+            });
+            frag.Show(context.FragmentManager, DatePickerFragment.TAG);
+        }
+        #endregion
         private async void Agregar(object sender, EventArgs e)
         {
             if (EntradaValida())

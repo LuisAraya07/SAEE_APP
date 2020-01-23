@@ -24,15 +24,17 @@ namespace SAEEAPP
         Asignaciones _asignacion;
         View VistaAgregar;
         EditText etPuntos, etPorcentaje, etNota;
+        EstudianteEvaluacion estudianteTemp;
         NotasAdaptador _adapter;
-        public NotasAgregarActivity(Activity context,EstudianteEvaluacion estudiante, Asignaciones asignacion,NotasAdaptador adapter)
+        List<EstudianteEvaluacion> _estudiantes;
+        public NotasAgregarActivity(Activity context,List<EstudianteEvaluacion> estudiantes, EstudianteEvaluacion estudiante, Asignaciones asignacion,NotasAdaptador adapter)
         {
             _context = context;
             _estudiante = estudiante;
             _asignacion = asignacion;
             _adapter = adapter;
-           
-            LayoutInflater layoutInflater = LayoutInflater.From(context);
+            _estudiantes = estudiantes;
+             LayoutInflater layoutInflater = LayoutInflater.From(context);
             VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Notas_Modificar, null);
             etPuntos = VistaAgregar.FindViewById<EditText>(Resource.Id.etPuntos);
             etPorcentaje = VistaAgregar.FindViewById<EditText>(Resource.Id.etPorcentaje);
@@ -66,18 +68,34 @@ namespace SAEEAPP
                     Toast.MakeText(_context, "Guardando, espere", ToastLength.Short).Show();
 
                     EvaluacionesServices serevac = new EvaluacionesServices();
+                    estudianteTemp = new EstudianteEvaluacion();
+
                     Evaluaciones eva = _estudiante.evaluacion;
                     eva.Puntos = Decimal.Parse(etPuntos.Text);
                     eva.Porcentaje = Decimal.Parse(etPorcentaje.Text);
                     eva.Nota = int.Parse(etNota.Text);
-                    bool resultado = await serevac.UpdateEvaluacionAsync(eva);
+
+                    estudianteTemp.Cedula = _estudiante.Cedula;
+                    estudianteTemp.Nombre = _estudiante.Nombre;
+                    estudianteTemp.evaluacion = eva;
+                    estudianteTemp.Puntos = Decimal.Parse(etPuntos.Text);
+                    estudianteTemp.Porcentaje = Decimal.Parse(etPorcentaje.Text);
+                    estudianteTemp.Nota = int.Parse(etNota.Text);
+                    estudianteTemp.Estado = _estudiante.Estado;
+                    bool resultado = await serevac.UpdateEvaluacionAsync(estudianteTemp.evaluacion);
                     if (resultado)
                     {
+                        int index = _estudiantes.IndexOf(_estudiante);
+                        _estudiantes.Remove(_estudiante);
+                        _estudiante = estudianteTemp;
+                        _estudiantes.Insert(index,_estudiante);
+
+                       
+                        Toast.MakeText(_context, "Guardado correctamente", ToastLength.Long).Show();
+                        alertDialogAndroid.SetCancelable(true);
+                        alertDialogAndroid.Dismiss();
                         // Se actualiza la lista de cursos
                         _adapter.ActualizarDatos();
-
-                        Toast.MakeText(_context, "Guardado correctamente", ToastLength.Long).Show();
-                        alertDialogAndroid.Dismiss();
                     }
                     else
                     {

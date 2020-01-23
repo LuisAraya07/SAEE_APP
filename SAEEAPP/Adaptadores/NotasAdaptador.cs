@@ -59,7 +59,7 @@ namespace SAEEAPP.Adaptadores
         {
             Button btnOpcionesC = row.FindViewById<Button>(Resource.Id.btnOpcionesC);
             btnOpcionesC.Click += delegate {
-                NotasAgregarActivity notas = new NotasAgregarActivity(_context, estudiante, _asignacion,this);
+                NotasAgregarActivity notas = new NotasAgregarActivity(_context, _estudiantes, estudiante, _asignacion,this);
                 notas.Show();
             };
            // btNota.SetOnClickListener(new CursosListener(_context, _estudiantes, estudiante, this, btnOpciones));
