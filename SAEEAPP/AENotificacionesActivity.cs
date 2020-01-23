@@ -68,7 +68,7 @@ namespace SAEEAPP
             spinner = VistaAgregar.FindViewById<Spinner>(Resource.Id.spinner1);
             spinner.Prompt= "Días";
             spinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(Spinner_ItemSelected);
-            var adapter = ArrayAdapter.CreateFromResource(context, Resource.Array.listaDias, Android.Resource.Layout.SimpleSpinnerItem);
+            var adapter = ArrayAdapter.CreateFromResource(context, Resource.Array.listaDias,Resource.Layout.SpinnerItem);
             adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spinner.Adapter = adapter;
             //AlertDialogStyle
