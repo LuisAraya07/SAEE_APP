@@ -131,6 +131,8 @@ namespace SAEEAPP
             etNombre.Text = asignacion.Nombre;
             etDescripcion.Text = asignacion.Descripcion;
             etFecha.Text = asignacion.Fecha.ToShortDateString();
+            etPuntos.Text = asignacion.Puntos.ToString();
+            etPorcentaje.Text = asignacion.Porcentaje.ToString();
             this.asignacion = asignacion;
             asignacionTemp = new Asignaciones()
             {
@@ -251,7 +253,7 @@ namespace SAEEAPP
                     if (resultado.IsSuccessStatusCode)
                     {
                        var calendario = new CalendarioServices(context);
-                        await calendario.CreateAlarmAsync(asignNueva.Nombre, "SAEE Recordatorio", asignNueva.Fecha, asignNueva.Fecha.AddDays(1), 5);
+                        await calendario.CreateAlarmAsync(asignNueva.Nombre, "SAEE Recordatorio", asignNueva.Fecha, asignNueva.Fecha.AddDays(1),10);
                         // Se obtiene el elemento insertado
                         string resultadoString = await resultado.Content.ReadAsStringAsync();
                         asignNueva = JsonConvert.DeserializeObject<Asignaciones>(resultadoString);
