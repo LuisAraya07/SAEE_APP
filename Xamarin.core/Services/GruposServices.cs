@@ -38,14 +38,15 @@ namespace Xamarin.core.Services
         public async Task<List<Grupos>> GetOffline()
         {
             await db.Database.MigrateAsync();
-            var grupos = await db.Grupos.Where(x => x.IdProfesor == idProfesor).ToListAsync();
-            return grupos ?? new List<Grupos>();
+            var grupos = await db.Grupos.Where(x => x.IdProfesor == idProfesor).Include(grupo => grupo.EstudiantesXgrupos).ToListAsync();
+            return grupos;
         }
         //Agregar grupo
         public async Task<Grupos> PostOffline(Grupos grupo)
         {
             try
             {
+                grupo.IdProfesor = idProfesor;
                 await db.Database.MigrateAsync();
                 db.Grupos.Add(grupo);
                 await db.SaveChangesAsync();
@@ -64,14 +65,23 @@ namespace Xamarin.core.Services
                 
                 await db.Database.MigrateAsync();
                 //db.Grupos.AddRange(listaGrupos);
-                
+                List<EstudiantesXgrupos> ListaEG = new List<EstudiantesXgrupos>();
                 foreach (Grupos cg in listaGrupos)
                 {
-                 
-                    db.Grupos.Add(cg);
+                    var grupoNuevo = new Grupos()
+                    {
+                        Id = cg.Id,
+                        Anio = cg.Anio,
+                        IdProfesor = cg.IdProfesor,
+                        Grupo = cg.Grupo
+                        //EstudiantesXgrupos = cg.EstudiantesXgrupos
+                    };
+                    ListaEG.AddRange(cg.EstudiantesXgrupos.ToList());
+                    db.Grupos.Add(grupoNuevo);
+                    
                 }
                 await db.SaveChangesAsync();
-                
+                await PostAllEGOffline(ListaEG);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -149,9 +159,23 @@ namespace Xamarin.core.Services
         //AGREGAR EG TODOS
         public async Task<Boolean> PostAllEGOffline(List<EstudiantesXgrupos> listaEG)
         {
-            try { 
+            try {
                 await db.Database.MigrateAsync();
-                db.EG.AddRange(listaEG);
+                foreach (EstudiantesXgrupos eg in listaEG)
+                {
+                    if (!(db.Grupos.FindAsync(eg.IdGrupo) == null))
+                    {
+                        var egNuevo = new EstudiantesXgrupos()
+                        {
+                            Id = eg.Id,
+                            IdGrupo = eg.IdGrupo,
+                            IdEstudiante = eg.IdEstudiante
+                         
+                        }; 
+                        db.EG.Add(egNuevo);
+                    }
+                }
+               // db.EG.AddRange(listaEG);
                 await db.SaveChangesAsync();
                 
                 }
@@ -184,7 +208,6 @@ namespace Xamarin.core.Services
         {
              return await _gruposR.GetAsync();
         }
-
         public async Task <List<Estudiantes>> GetGrupo(int id) {
             return await _gruposR.GetGrupoAsync(id);
         
@@ -202,6 +225,11 @@ namespace Xamarin.core.Services
         public async Task<bool> DeleteGruposAsync(Grupos grupo)
         {
             return await _gruposR.DeleteGrupoAsync(grupo);
+        }
+        //ELIMINAMOS TODOS LOS GRUPOS
+        public async Task<Boolean> DeleteAllGruposAsync()
+        {
+            return await _gruposR.DeleteAllGruposAsync();
         }
         public async Task<List<EstudiantesXgrupos>> GetEGAsync(int id)
         {

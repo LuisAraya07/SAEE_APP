@@ -15,7 +15,7 @@ namespace Xamarin.core.Models
 {
     public partial class EstudiantesXgrupos
     {
-        [Key("Id")]
+       // [Key("Id")]
         public int Id { get; set; }
         public int IdProfesor { get; set; }
         public int IdGrupo { get; set; }

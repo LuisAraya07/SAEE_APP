@@ -55,11 +55,11 @@ namespace SAEEAPP
             }
             else
             {
-                Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Long).Show();
-                //NotificacionesServices ns = new NotificacionesServices();
-                //var idProfesor = ns.GetProfesorConectado().Id;
-                //estudiantesServicio = new EstudiantesServices(idProfesor);
-                //listaEstudiantes = await estudiantesServicio.GetOffline();
+                // Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                estudiantesServicio = new EstudiantesServices(profesor.Id);
+                listaEstudiantes = await estudiantesServicio.GetOffline();
             }
             
             if (listaEstudiantes.Count == 0)

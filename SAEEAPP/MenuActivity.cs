@@ -57,15 +57,16 @@ namespace SAEEAPP
         {
             VerificarConexion vc = new VerificarConexion(this);
             var conectado = vc.IsOnline();
-            if (conectado) {
+            if (conectado)
+            {
                 Intent usuario = new Intent(this, typeof(UsuarioActivity));
                 StartActivity(usuario);
             }
             else
             {
-                Toast.MakeText(this,"Necesita conexión a internet.",ToastLength.Long).Show();
+                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
             }
-                
+
         }
 
 
@@ -105,32 +106,36 @@ namespace SAEEAPP
         public void OnClick_Cursos(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                Intent cursos = new Intent(this, typeof(CursosActivity));
-                StartActivity(cursos);
-            }
-            else
-            {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            Intent cursos = new Intent(this, typeof(CursosActivity));
+            StartActivity(cursos);
+            //var conectado = vc.IsOnline();
+            //if (conectado)
+            //{
+            //    Intent cursos = new Intent(this, typeof(CursosActivity));
+            //    StartActivity(cursos);
+            //}
+            //else
+            //{
+            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            //}
             
         }
 
         public void OnClick_Grupos(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                Intent grupos = new Intent(this, typeof(GruposActivity));
-                StartActivity(grupos);
-            }
-            else
-            {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            Intent grupos = new Intent(this, typeof(GruposActivity));
+            StartActivity(grupos);
+            //var conectado = vc.IsOnline();
+            //if (conectado)
+            //{
+            //    Intent grupos = new Intent(this, typeof(GruposActivity));
+            //    StartActivity(grupos);
+            //}
+            //else
+            //{
+            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            //}
             
         }
 
@@ -153,32 +158,36 @@ namespace SAEEAPP
         public void OnClick_Estudiantes(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
-                StartActivity(estudiantes);
-            }
-            else
-            {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+            StartActivity(estudiantes);
+            //var conectado = vc.IsOnline();
+            //if (conectado)
+            //{
+            //    Intent estudiantes = new Intent(this, typeof(EstudiantesActivity));
+            //    StartActivity(estudiantes);
+            //}
+            //else
+            //{
+            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            //}
             
         }
 
         public void OnClick_Notificaciones(object sender, EventArgs e)
         {
             VerificarConexion vc = new VerificarConexion(this);
-            var conectado = vc.IsOnline();
-            if (conectado)
-            {
-                Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
-                StartActivity(notificaciones);
-            }
-            else
-            {
-                Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-            }
+            Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
+            StartActivity(notificaciones);
+            //var conectado = vc.IsOnline();
+            //if (conectado)
+            //{
+            //    Intent notificaciones = new Intent(this, typeof(NotificacionesActivity));
+            //    StartActivity(notificaciones);
+            //}
+            //else
+            //{
+            //    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+            //}
             
         }
     }

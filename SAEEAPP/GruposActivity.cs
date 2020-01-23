@@ -103,14 +103,14 @@ namespace SAEEAPP
 
                 }
                 else {
-                    Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
-                    //NotificacionesServices ns = new NotificacionesServices();
-                    //var idProfesor = ns.GetProfesorConectado().Id;
-                    //gruposServices = new GruposServices(idProfesor);
-                    //var grupoNuevo = await gruposServices.PostOffline(grupo);
-                    //VerificarLista(grupoNuevo);
-                    //Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
-                    //alertDialogBuilder.Dispose();
+                    //Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    gruposServices = new GruposServices(profesor.Id);
+                    var grupoNuevo = await gruposServices.PostOffline(grupo);
+                    VerificarLista(grupoNuevo);
+                    Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
+                    alertDialogBuilder.Dispose();
                 }
                 
 
@@ -149,15 +149,15 @@ namespace SAEEAPP
                 grupoServicio = new GruposServices();
                 listaGrupos = await grupoServicio.GetAsync();
             }
-            //else
-            //{
-            //    NotificacionesServices ns = new NotificacionesServices();
-            //    var idProfesor = ns.GetProfesorConectado().Id;
-            //    grupoServicio = new GruposServices(idProfesor);
-            //    listaGrupos = await grupoServicio.GetOffline();
-            //}
-             
-            
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor =await ns.GetProfesorConectado();
+                grupoServicio = new GruposServices(profesor.Id);
+                listaGrupos = await grupoServicio.GetOffline();
+            }
+
+
             if (listaGrupos.Count == 0)
             {
                 tvCargando.Text = "No hay datos";
@@ -173,8 +173,30 @@ namespace SAEEAPP
             }
             fab.Visibility = ViewStates.Visible;
         }
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main2, menu);
+            return true;
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            SincronizarActivity menuOpciones = new SincronizarActivity(this);
+            var itemS = item.ItemId;
+            switch (itemS)
+            {
+                case Resource.Id.CerrarSesion:
+                    menuOpciones.CerrarApp();
+                    break;
+                case Resource.Id.Sincronizar:
+                    menuOpciones.Sincronizar();
+                    break;
+                default:
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
 
-       
+
 
 
     }

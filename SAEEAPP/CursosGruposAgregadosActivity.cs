@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.core;
 using Xamarin.core.Models;
 using Xamarin.core.Services;
 
@@ -58,6 +59,7 @@ namespace SAEEAPP
 
         private async void Guardar(object sender, EventArgs e)
         {
+            VerificarConexion vc = new VerificarConexion(context);
             // Se desactivan los botones
             ActivarDesactivarBotones(false);
             Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
@@ -77,12 +79,39 @@ namespace SAEEAPP
 
             if (agregar.Count > 0)
             {
-                agregados = await servicioCursos.AgregarCursosGruposAsync(agregarPreparados);
+                
+                var conectado = vc.IsOnline();
+                if (conectado)
+                {
+                    agregados = await servicioCursos.AgregarCursosGruposAsync(agregarPreparados);
+                }
+                else
+                {
+                    //AQUI OFFLINE
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    CursosServices servicioOffline = new CursosServices(profesor.Id);
+                    agregados = await servicioOffline.AgregarCursosGruposOffline(agregarPreparados);
+
+                }
                 cambio = true;
             }
             if (borrar.Count > 0)
             {
-                borrados = await servicioCursos.BorrarCursosGruposAsync(borrar);
+                var conectado = vc.IsOnline();
+                if (conectado)
+                {
+                    borrados = await servicioCursos.BorrarCursosGruposAsync(borrar);
+                }
+                else
+                {
+                    //AQUI OFFLINE
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    CursosServices servicioOffline = new CursosServices(profesor.Id);
+                    borrados = await servicioOffline.BorrarCursosGruposOffline(borrar);
+
+                }
                 cambio = true;
             }
 
@@ -91,7 +120,20 @@ namespace SAEEAPP
                 // Se actualiza la lista de cursos
                 if (cambio)
                 {
-                    cursosGrupos = await servicioCursos.GetCursosGruposAsync(curso.Id);
+                    var conectado = vc.IsOnline();
+                    if (conectado)
+                    {
+                        cursosGrupos = await servicioCursos.GetCursosGruposAsync(curso.Id);
+                    }
+                    else
+                    {
+                        //AQUI OFFLINE
+                        ProfesoresServices ns = new ProfesoresServices(1);
+                        Profesores profesor = await ns.GetProfesorConectado();
+                        CursosServices servicioOffline = new CursosServices(profesor.Id);
+                        cursosGrupos = await servicioOffline.GetCursosGruposOffline(curso.Id);
+                    }
+
                 }
                 curso.CursosGrupos = cursosGrupos;
                 cursosAdapter.ActualizarDatos();
@@ -115,12 +157,26 @@ namespace SAEEAPP
 
         private async void Agregar(object sender, EventArgs e)
         {
+            VerificarConexion vc = new VerificarConexion(context);
             // Se desactivan los botones
             ActivarDesactivarBotones(false);
             Toast.MakeText(context, "Cargando, espere", ToastLength.Short).Show();
-
-            GruposServices servicioGrupos = new GruposServices();
-            var grupos = (await servicioGrupos.GetAsync()).
+            List<Grupos> listaGrupos = new List<Grupos>();
+            GruposServices servicioGrupos;
+            var conectado = vc.IsOnline();
+            if (conectado)
+            {
+                servicioGrupos = new GruposServices();
+                listaGrupos = await servicioGrupos.GetAsync();
+            }
+            else
+            {
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                servicioGrupos = new GruposServices(profesor.Id);
+                listaGrupos = await servicioGrupos.GetOffline();
+            }
+                var grupos = (listaGrupos).
                 Where(g => !cursosGrupos.Exists(cg => cg.IdGrupo == g.Id)).ToList();
             CursosGruposAgregarActivity cursosGruposAgregarActivity =
                 new CursosGruposAgregarActivity(context, cursosGruposAgregadosAdapter, curso, cursosGrupos, agregar, borrar, grupos);

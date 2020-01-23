@@ -68,36 +68,55 @@ namespace SAEEAPP.Listeners
 
         private void OnClick_Eliminar()
         {
+            Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
+            alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
+              .SetCancelable(false)
+              .SetTitle("¿Está seguro?")
+              .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
+              .SetPositiveButton("Sí", delegate
+              {
+                  EliminarEstudiante(estudiante);
+              })
+              .SetNegativeButton("No", delegate
+              {
+                  alertDialogBuilder.Dispose();
+
+              })
+              .Show();
+
+        }
+        private async void EliminarEstudiante(Estudiantes estudiante)
+        {
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
             if (conectado)
             {
-                Android.Support.V7.App.AlertDialog.Builder alertDialogBuilder = new Android.Support.V7.App.AlertDialog.Builder(_context, Resource.Style.AlertDialogStyle);
-                alertDialogBuilder.SetIcon(Resource.Drawable.trash_can_outline)
-                  .SetCancelable(false)
-                  .SetTitle("¿Está seguro?")
-                  .SetMessage("Quiere eliminar al estudiante: " + $"{estudiante.Nombre} {estudiante.PrimerApellido} {estudiante.SegundoApellido}")
-                  .SetPositiveButton("Sí", async delegate
-                  {
-                      EstudiantesServices gruposServices = new EstudiantesServices();
-                      await gruposServices.DeleteEstudiantesAsync(estudiante);
-                      Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
-                      _estudiantes.Remove(estudiante);
-                      listEstudiantesAdaptador.ActualizarDatos();
-                  })
-                  .SetNegativeButton("No", delegate
-                  {
-                      alertDialogBuilder.Dispose();
-
-                  })
-                  .Show();
+                EstudiantesServices estudiantesServices = new EstudiantesServices();
+                await estudiantesServices.DeleteEstudiantesAsync(estudiante);
+                Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                _estudiantes.Remove(estudiante);
+                listEstudiantesAdaptador.ActualizarDatos();
             }
             else
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                // Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                EstudiantesServices estudiantesServices = new EstudiantesServices(profesor.Id);
+                var respuesta = await estudiantesServices.DeleteEstudiantesOffline(estudiante);
+                if (respuesta)
+                {
+                    _estudiantes.Remove(estudiante);
+                    listEstudiantesAdaptador.ActualizarDatos();
+                    Toast.MakeText(_context, "Se ha eliminado con éxito.", ToastLength.Long).Show();
+                }
+                else
+                {
+                    Toast.MakeText(_context, "No se ha podido eliminar.", ToastLength.Long).Show();
+                }
+               
             }
         }
-
         private void OnClick_Editar()
         {
             AgregarEstudianteActivity agregarEditarEstudianteActivity =

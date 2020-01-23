@@ -48,6 +48,7 @@ namespace SAEEAPP
                 CantidadPeriodos = curso.CantidadPeriodos,
                 CursosGrupos = curso.CursosGrupos,
                 IdProfesor = curso.IdProfesor,
+                //Aqui puede dar problemas offline
                 IdProfesorNavigation = curso.IdProfesorNavigation
             };
         }
@@ -78,7 +79,7 @@ namespace SAEEAPP
                 ActivarDesactivarBotones(false);
                 Toast.MakeText(context, "Agregando, espere", ToastLength.Short).Show();
 
-                CursosServices servicioCursos = new CursosServices();
+                CursosServices servicioCursos;
                 Cursos cursoNuevo = new Cursos()
                 {
                     IdProfesor = 1,// En el api se asigna el correcto
@@ -89,6 +90,7 @@ namespace SAEEAPP
                 var conectado = vc.IsOnline();
                 if (conectado)
                 {
+                    servicioCursos = new CursosServices();
                     HttpResponseMessage resultado = await servicioCursos.PostAsync(cursoNuevo);
                     if (resultado.IsSuccessStatusCode)
                     {
@@ -98,7 +100,6 @@ namespace SAEEAPP
                         // Se actualiza la lista de cursos
                         cursos.Add(cursoNuevo);
                         cursosAdapter.ActualizarDatos();
-
                         Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                         alertDialogAndroid.Dismiss();
                     }
@@ -108,7 +109,19 @@ namespace SAEEAPP
                         ActivarDesactivarBotones(true);
                         Toast.MakeText(context, "Error al agregar, intente nuevamente", ToastLength.Short).Show();
                     }
-                }else Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Short).Show();
+                }
+                else {
+                    //AQUI OFFLINE
+                    // Toast.MakeText(context, "Necesita conexión a internet.", ToastLength.Short).Show(); 
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    servicioCursos = new CursosServices(profesor.Id);
+                    var cursoAgregar = await servicioCursos.PostOffline(cursoNuevo);
+                    cursos.Add(cursoAgregar);
+                    cursosAdapter.ActualizarDatos();
+                    Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
             }
         }
 
@@ -121,42 +134,46 @@ namespace SAEEAPP
         {
             VerificarConexion vc = new VerificarConexion(context);
             var conectado = vc.IsOnline();
-            if (conectado)
+            if (EntradaValida())
             {
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
 
-                if (EntradaValida())
+                CursosServices servicioCursos;
+                cursoTemp.Nombre = etNombre.Text;
+                cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
+                bool resultado;
+                if (conectado)
                 {
-                    // Se bloquean los botones
-                    ActivarDesactivarBotones(false);
-                    Toast.MakeText(context, "Guardando, espere", ToastLength.Short).Show();
-
-                    CursosServices servicioCursos = new CursosServices();
-                    cursoTemp.Nombre = etNombre.Text;
-                    cursoTemp.CantidadPeriodos = int.Parse(etCantidadPeriodos.Text);
-                    bool resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
-
-                    if (resultado)
-                    {
-                        curso.Nombre = cursoTemp.Nombre;
-                        curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
-                        // Se actualiza la lista de cursos
-                        cursosAdapter.ActualizarDatos();
-
-                        Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
-                        alertDialogAndroid.Dismiss();
-                    }
-                    else
-                    {
-                        // Se restablecen los botones
-                        ActivarDesactivarBotones(true);
-                        Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
-                    }
+                    servicioCursos = new CursosServices();
+                    resultado = await servicioCursos.UpdateCursoAsync(cursoTemp);
+                }
+                else
+                {
+                    //AQUI OFFLINE
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    servicioCursos = new CursosServices(profesor.Id);
+                    resultado = await servicioCursos.UpdateCursoOffline(cursoTemp);
+                }
+                if (resultado)
+                {
+                    curso.Nombre = cursoTemp.Nombre;
+                    curso.CantidadPeriodos = cursoTemp.CantidadPeriodos;
+                    // Se actualiza la lista de cursos
+                    cursosAdapter.ActualizarDatos();
+                    Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.Dismiss();
+                }
+                else
+                {
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
                 }
             }
-            else {
-                ActivarDesactivarBotones(true);
-                Toast.MakeText(context, "Necesita conexión a internet", ToastLength.Short).Show();
-            }
+
         }
 
         private bool EntradaValida()

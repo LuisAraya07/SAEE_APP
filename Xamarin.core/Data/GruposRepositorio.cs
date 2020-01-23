@@ -34,6 +34,7 @@ namespace Xamarin.core.Data
             var json = await client.GetStringAsync($"Grupos/GetGrupos");
             return JsonConvert.DeserializeObject<List<Grupos>>(json);
         }
+      
 
         public async Task<List<Estudiantes>> GetGrupoAsync(int id)
         {
@@ -51,6 +52,17 @@ namespace Xamarin.core.Data
         {
             var json = await client.GetStringAsync($"Grupos/GetEGOffline");
             return await Task.Run(() => JsonConvert.DeserializeObject<List<EstudiantesXgrupos>>(json));
+        }
+
+        public async Task<Boolean> DeleteAllGruposAsync()
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"{ValuesServices.url}/Grupos/DeleteAllGrupos")
+            };
+            var response = await client.SendAsync(request);
+            return response.IsSuccessStatusCode;
         }
 
         //Agregar Grupo

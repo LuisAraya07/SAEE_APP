@@ -40,6 +40,9 @@ namespace Xamarin.core.Services
         public async Task<Profesores> PostOffline(Profesores profesores)
         {
             await db.Database.MigrateAsync();
+            var listaProfesores = db.Profesores.ToList();
+            db.Profesores.RemoveRange(listaProfesores);
+            await db.SaveChangesAsync();
             db.Profesores.Add(profesores);
             await db.SaveChangesAsync();
             return profesores;
@@ -49,6 +52,13 @@ namespace Xamarin.core.Services
         {
             await db.Database.MigrateAsync();
             return await db.Profesores.ToListAsync();
+        }
+        //Obtener Profesor Conectado
+        public async Task<Profesores> GetProfesorConectado()
+        {
+            await db.Database.MigrateAsync();
+            var profesor = await db.Profesores.FirstOrDefaultAsync();
+            return profesor;
         }
         //Editar profesores No debería servir
         public async Task<bool> UpdateProfesorOffline(Profesores profesor)

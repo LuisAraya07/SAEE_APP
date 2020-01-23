@@ -7,6 +7,7 @@ using Android.Widget;
 using Newtonsoft.Json;
 using SAEEP.ManejoNotificaciones;
 using System;
+using System.Threading.Tasks;
 using Xamarin.core;
 using Xamarin.core.Data;
 using Xamarin.core.Models;
@@ -63,12 +64,15 @@ namespace SAEEAPP
                     var response = await inicioSesionServices.IniciarSesion(etCedula.Text, etContrasenia.Text);
                     if (response.IsSuccessStatusCode)
                     {
-
-                        ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
+                        var finalizadoNotificaciones = await ModificarNotificaciones(ClienteHttp.Usuario.Profesor);
                         //Se abre el menu
-                        Intent siguiente = new Intent(this, typeof(MenuActivity));
-                        StartActivity(siguiente);
-                        Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Long).Show();
+                        if (finalizadoNotificaciones)
+                        {
+                            Intent siguiente = new Intent(this, typeof(MenuActivity));
+                            StartActivity(siguiente);
+                            Toast.MakeText(this, $"¡Bienvenido {ClienteHttp.Usuario.Profesor.Nombre}!", ToastLength.Long).Show();
+
+                        }
 
                     }
                     else
@@ -88,18 +92,11 @@ namespace SAEEAPP
             }
         }
         //Se eliminar temporalmente las notificaciones que no son del profesor ingresado
-        private async void ModificarNotificaciones(Profesores profesor)
+        private async Task<Boolean> ModificarNotificaciones(Profesores profesor)
         {
 
             var notificacionIns = new NotificacionesServices();
-            //Verifico si le dio check
-            if (cbOffline.Checked)
-            {
-                //Cargamos todos los datos
-                //Aquí agregamos al profesor conectado
-                notificacionIns.PostProfesorConectado(profesor);
-                CargarBDLocal(profesor);
-            }
+            
             //Id del profesor
             var listNotasAgregar = await notificacionIns.GetNotificaciones(profesor.Id);
             var listNotasEliminar = await notificacionIns.GetNotificacionesEliminar(profesor.Id);
@@ -127,33 +124,55 @@ namespace SAEEAPP
                     notificacionIns.PutNotificaciones(nota);
                 }
             }
+            //Verifico si le dio check
+            if (cbOffline.Checked)
+            {
+                Toast.MakeText(this, "Sincronizando Datos, espere...", ToastLength.Long).Show();
+                //Cargamos todos los datos
+                //Aquí agregamos al profesor conectado
+                var rs = await CargarBDLocal(profesor);
+                if (rs) return true;
+                Toast.MakeText(this, "No todas las funcionalidades están disponibles.", ToastLength.Short).Show();
+
+            }
+            return true;
         }
 
-        private async void CargarBDLocal(Profesores profesor)
+        private async Task<Boolean> CargarBDLocal(Profesores profesor)
         {
             var idProfesor = profesor.Id;
             GruposServices gruposServicio = new GruposServices();
             GruposServices gruposServicioOffline = new GruposServices(idProfesor);
             CursosServices cursosServicio = new CursosServices();
             CursosServices cursosServicioOffline = new CursosServices(idProfesor);
-            ProfesoresServices profesoresServicio = new ProfesoresServices();
+            ProfesoresServices profesoresServicioOffline = new ProfesoresServices(idProfesor);
             EstudiantesServices estudiantesServicio = new EstudiantesServices();
             EstudiantesServices estudiantesServicioOffline = new EstudiantesServices(idProfesor);
+
+            //Guardamos el profesor en local
+            await profesoresServicioOffline.PostOffline(profesor);
+
+            //Agregar Estudiantes
+            var listaEstudiantes = await estudiantesServicio.GetAsync();
+            await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
+
+            //Agregar grupos
             var listaGrupos = await gruposServicio.GetAsync();
             await gruposServicioOffline.PostAllOffline(listaGrupos);
-            var listaGruposOffline = await gruposServicioOffline.GetOffline();
-            //var listaEG = await gruposServicio.GetAllEGAsync();
-            //await gruposServicioOffline.PostAllEGOffline(listaEG);
-            //var listaCursos = await cursosServicio.GetAsync();
-            //await cursosServicioOffline.PostAllOffline(listaCursos);
-            //var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
-            //await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
+
+            //Agregar cursos
+            var listaCursos = await cursosServicio.GetAsync();
+            await cursosServicioOffline.PostAllOffline(listaCursos);
+
+            //Agregar CursosGrupos
+            var listaCursosGrupos = await cursosServicio.GetCursosGruposAllAsync();
+            await cursosServicioOffline.AgregarCursosGruposAllOffline(listaCursosGrupos);
             ////var listaProfesores = await profesoresServicio.GetAsync();
-            //var listaEstudiantes = await estudiantesServicio.GetAsync();
-            //await estudiantesServicioOffline.PostAllOffline(listaEstudiantes);
 
-
-
+            //Agregar EG
+            //   var listaEG = await gruposServicio.GetAllEGAsync();
+            // await gruposServicioOffline.PostAllEGOffline(listaEG);
+            return true;
         }
 
         private bool EntradaValida()

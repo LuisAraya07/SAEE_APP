@@ -75,24 +75,33 @@ namespace SAEEAPP.Adaptadores
         {
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
-            if (conectado) { 
-                GruposServices gruposServices = new GruposServices();
-                var EGBorrado = await gruposServices.DeleteEGAsync(eg);
-                if (EGBorrado)
-                {
-                    Toast.MakeText(_context, "Eliminado.", ToastLength.Short).Show();
-                    _EG.Remove(eg);
-
-                }
-                else
-                {
-                    Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
-                }
+            Boolean EGBorrado;
+            GruposServices gruposServices;
+            if (conectado) {
+                gruposServices = new GruposServices();
+                EGBorrado = await gruposServices.DeleteEGAsync(eg);
             }
             else
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                //AQUI OFFLINE
+                //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Long).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                gruposServices = new GruposServices(profesor.Id);
+                EGBorrado = await gruposServices.DeleteEGOffline(eg);
             }
+            if (EGBorrado)
+            {
+                Toast.MakeText(_context, "Eliminado.", ToastLength.Short).Show();
+                _EG.Remove(eg);
+
+            }
+            else
+            {
+                Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+            }
+
+
         }
         public async void AgregarEstudiante(Estudiantes estudiante)
         {
@@ -105,25 +114,32 @@ namespace SAEEAPP.Adaptadores
             };
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
+            EstudiantesXgrupos EGNuevo;
+            GruposServices gruposServices;
             if (conectado)
             {
-                GruposServices gruposServices = new GruposServices();
-                var EGNuevo = await gruposServices.PostEGAsync(EGAgregar);
-                if (EGNuevo == null)
-                {
-                    Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
-                }
-                else
-                {
-                    Toast.MakeText(_context, "Agregado.", ToastLength.Short).Show();
-                    _EG.Add(EGNuevo);
-                }
+                gruposServices = new GruposServices();
+                EGNuevo = await gruposServices.PostEGAsync(EGAgregar);
             }
             else
             {
-                Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
-
+                //AQUI OFFLINE
+                //Toast.MakeText(_context, "Necesita conexión a internet.", ToastLength.Short).Show();
+                ProfesoresServices ns = new ProfesoresServices(1);
+                Profesores profesor = await ns.GetProfesorConectado();
+                gruposServices = new GruposServices(profesor.Id);
+                EGNuevo = await gruposServices.PostEGOffline(EGAgregar);
             }
+            if (EGNuevo == null)
+            {
+                Toast.MakeText(_context, "Error.", ToastLength.Short).Show();
+            }
+            else
+            {
+                Toast.MakeText(_context, "Agregado.", ToastLength.Short).Show();
+                _EG.Add(EGNuevo);
+            }
+
 
         }
 
