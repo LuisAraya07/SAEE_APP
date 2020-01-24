@@ -48,7 +48,7 @@ namespace Xamarin.core.Services
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                Log.Error("ERROR", "AQUI: ", ex); // Error
+               
                 return null;
             }
         }
