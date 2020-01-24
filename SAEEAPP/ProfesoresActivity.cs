@@ -19,7 +19,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Administración de profesores", Theme = "@style/AppTheme")]
+    [Activity(Label = "Profesores", Theme = "@style/AppTheme")]
     public class ProfesoresActivity : AppCompatActivity
     {
         List<Profesores> profesores = null;

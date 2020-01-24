@@ -83,6 +83,7 @@ namespace Xamarin.core.Data
 
         public async Task<bool> DeleteGrupoAsync(Grupos grupo)
         {
+            grupo.IdProfesorNavigation = null;
             var serializedGrupo = JsonConvert.SerializeObject(grupo);
             var request = new HttpRequestMessage
             {

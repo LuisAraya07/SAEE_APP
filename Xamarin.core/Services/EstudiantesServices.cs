@@ -107,7 +107,10 @@ namespace Xamarin.core.Services
                 var listaAsignaciones = db.Evaluaciones.Where(x => x.Estudiante == estudiante.Id).ToList();
                 db.Evaluaciones.RemoveRange(listaAsignaciones);
                 await db.SaveChangesAsync();
-                db.Estudiantes.Remove(estudiante);
+                Estudiantes estudianteEliminar = db.Estudiantes.Where(x => x.Id == estudiante.Id).Include(EG => EG.EstudiantesXgrupos)
+                    .FirstOrDefault();
+
+                db.Estudiantes.Remove(estudianteEliminar);
                 await db.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException)

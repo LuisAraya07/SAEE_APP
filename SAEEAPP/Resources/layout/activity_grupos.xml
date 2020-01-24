@@ -25,6 +25,8 @@
         android:id="@+id/pbCargandoGrupos" />
     <ListView
         android:id="@+id/listView"
+        android:minWidth="25px"
+        android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -35,12 +37,11 @@
         android:layout_marginRight="0dp"
         android:cacheColorHint="#4A97D3"
         android:divider="@color/colorPrimaryDark"
-        android:background="@color/fondo"
+        
         android:dividerHeight="1dp"
         android:headerDividersEnabled="true"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:layout_marginBottom="74dp"
-        android:visibility="invisible" />
+        android:layout_marginBottom="74dp" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

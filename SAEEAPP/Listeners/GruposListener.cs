@@ -29,7 +29,7 @@ namespace SAEEAPP.Listeners
             _grupos = grupos;
             this.grupo = grupo;
             this.listGruposAdaptador = listGruposAdaptador;
-            this._btnOpciones = btnOpciones;
+            _btnOpciones = btnOpciones;
         }
 
         public void OnClick(View v)

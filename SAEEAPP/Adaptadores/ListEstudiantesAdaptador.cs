@@ -17,11 +17,13 @@ namespace SAEEAPP.Adaptadores
         private readonly Activity _context;
         private List<Estudiantes> _estudiantes;
         private List<Estudiantes> datosOriginales;
-
-        public ListEstudiantesAdaptador(Activity context, List<Estudiantes> estudiantes)
+        private readonly TextView _tvCargando;
+        public ListEstudiantesAdaptador(Activity context, List<Estudiantes> estudiantes,TextView tvCargando)
         {
             _context = context;
             _estudiantes = estudiantes;
+            _tvCargando = tvCargando;
+            _tvCargando.Text = "No hay datos";
             Filter = new EstudiantesFilter(this);
         }
 
@@ -69,6 +71,7 @@ namespace SAEEAPP.Adaptadores
        
         public void ActualizarDatos()
         {
+            _tvCargando.Visibility = (_estudiantes.Count > 0) ? ViewStates.Invisible : ViewStates.Visible;
             NotifyDataSetChanged();
         }
 

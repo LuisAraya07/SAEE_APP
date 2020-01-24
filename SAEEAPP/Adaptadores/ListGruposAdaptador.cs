@@ -16,12 +16,13 @@ namespace SAEEAPP.Adaptadores
 
         private readonly Activity _context;
         private readonly List<Grupos> _grupos;
-
-        public ListGruposAdaptador(Activity context, List<Grupos> grupos)
+        private readonly TextView _tvCargando;
+        public ListGruposAdaptador(Activity context, List<Grupos> grupos,TextView tvCargando)
         {
             _context = context;
             _grupos = grupos;
-
+            _tvCargando = tvCargando;
+            _tvCargando.Text = "No hay datos";
         }
 
 
@@ -63,6 +64,7 @@ namespace SAEEAPP.Adaptadores
         }
         public void ActualizarDatos()
         {
+            _tvCargando.Visibility = (_grupos.Count > 0) ? ViewStates.Invisible : ViewStates.Visible;
             NotifyDataSetChanged();
         }
         

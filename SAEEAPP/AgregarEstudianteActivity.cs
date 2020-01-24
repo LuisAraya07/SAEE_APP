@@ -113,7 +113,7 @@ namespace SAEEAPP
                     string resultadoString = await resultado.Content.ReadAsStringAsync();
                     var estudianteNuevo = JsonConvert.DeserializeObject<Estudiantes>(resultadoString);
                     listaEstudiantes.Add(estudianteNuevo);
-                    adaptadorEstudiantes.NotifyDataSetChanged();
+                    adaptadorEstudiantes.ActualizarDatos();
                     alertDialogBuilder.Dispose();
                     Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                     alertDialogAndroid.Dismiss();
@@ -133,7 +133,7 @@ namespace SAEEAPP
                     servicioEstudiantes = new EstudiantesServices(profesor.Id);
                     var estudianteNuevo = await servicioEstudiantes.PostOffline(estudiante);
                     listaEstudiantes.Add(estudianteNuevo);
-                    adaptadorEstudiantes.NotifyDataSetChanged();
+                    adaptadorEstudiantes.ActualizarDatos();
                     alertDialogBuilder.Dispose();
                     Toast.MakeText(context, "Agregado correctamente", ToastLength.Long).Show();
                     alertDialogAndroid.Dismiss();

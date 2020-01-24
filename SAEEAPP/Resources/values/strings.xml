@@ -9,7 +9,7 @@
     <string name="btCancelar">Cancelar</string>
     <string name="etIngreseGrupo">Grupo</string>
     <string name="logo">logo</string>
-    <string name="grupo">Administración de Grupos</string>
+    <string name="grupo">Grupos</string>
     <string name="estudiante">Estudiantes</string>
     <string name="agregarEstudiante">Agregar Estudiante</string>
     <string name="agregarGrupo">Agregar Grupo</string>
@@ -21,7 +21,7 @@
     <string name="seccionGrupos">Grupos</string>
     <string name="opciones">Opciones</string>
     <string name="anio">Año</string>
-    <string name="seccionEstudiantes">Administración de Estudiantes</string>
+    <string name="seccionEstudiantes">Estudiantes</string>
     <string-array name="listaDias">
       <item> 0 </item>
       <item> 1 </item>

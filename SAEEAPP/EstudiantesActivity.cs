@@ -63,20 +63,15 @@ namespace SAEEAPP
                 listaEstudiantes = await estudiantesServicio.GetOffline();
             }
             
-            if (listaEstudiantes.Count == 0)
+            if (listaEstudiantes.Count > 0)
             {
-                tvCargando.Text = "No hay datos";
-                pbCargandoEstudiantes.Visibility = ViewStates.Gone;
-            }
-            else
-            {
-                adaptadorEstudiantes = new ListEstudiantesAdaptador(this, listaEstudiantes);
-                tvCargando.Visibility = ViewStates.Gone;
-                pbCargandoEstudiantes.Visibility = ViewStates.Gone;
-                lvEstudiantes.Adapter = adaptadorEstudiantes;
-                lvEstudiantes.Visibility = ViewStates.Visible;
 
+                tvCargando.Visibility = ViewStates.Invisible;
             }
+            adaptadorEstudiantes = new ListEstudiantesAdaptador(this, listaEstudiantes, tvCargando);
+            
+            pbCargandoEstudiantes.Visibility = ViewStates.Gone;
+            lvEstudiantes.Adapter = adaptadorEstudiantes;
             fab.Visibility = ViewStates.Visible;
             // buscarEstudiante.QueryTextChange += (s, e) => adaptadorEstudiantes.Filter.InvokeFilter(e.NewText);
         }

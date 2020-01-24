@@ -14,7 +14,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Administración de cursos", Theme = "@style/AppTheme")]
+    [Activity(Label = "Cursos", Theme = "@style/AppTheme")]
     public class CursosActivity : AppCompatActivity
     {
         List<Cursos> cursos = null;

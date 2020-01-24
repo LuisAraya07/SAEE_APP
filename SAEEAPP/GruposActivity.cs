@@ -91,7 +91,8 @@ namespace SAEEAPP
                     {
                         string resultadoString = await resultado.Content.ReadAsStringAsync();
                         var grupoNuevo = JsonConvert.DeserializeObject<Grupos>(resultadoString);
-                        VerificarLista(grupoNuevo);
+                        listaGrupos.Add(grupoNuevo);
+                        adaptadorGrupos.ActualizarDatos();
                         Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
                         alertDialogBuilder.Dispose();
 
@@ -110,7 +111,8 @@ namespace SAEEAPP
                     {
                         gruposServices = new GruposServices(profesor.Id);
                         var grupoNuevo = await gruposServices.PostOffline(grupo);
-                        VerificarLista(grupoNuevo);
+                        listaGrupos.Add(grupoNuevo);
+                        adaptadorGrupos.ActualizarDatos();
                         Toast.MakeText(this, "Se ha agregado con éxito.", ToastLength.Long).Show();
                         alertDialogBuilder.Dispose();
                     }
@@ -131,23 +133,7 @@ namespace SAEEAPP
             }
 
         }
-        public void VerificarLista(Grupos grupoNuevo)
-        {
-            if (listaGrupos.Count == 0)
-            {
-                TextView tvCargando = FindViewById<TextView>(Resource.Id.tvCargandoG);
-                adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
-                tvCargando.Visibility = ViewStates.Gone;
-                grupoListView.Adapter = adaptadorGrupos;
-            }
-            else
-            {
-                listaGrupos.Add(grupoNuevo);
-                adaptadorGrupos.NotifyDataSetChanged();
-            }
-
-
-        }
+       
         protected override async void OnStart()
         {
             base.OnStart();
@@ -176,19 +162,14 @@ namespace SAEEAPP
             }
 
 
-            if (listaGrupos.Count == 0)
+            if (listaGrupos.Count > 0)
             {
-                tvCargando.Text = "No hay datos";
-                pbCargandoGrupos.Visibility = ViewStates.Gone;
+
+                tvCargando.Visibility = ViewStates.Invisible;
             }
-            else
-            {
-                adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos);
-                tvCargando.Visibility = ViewStates.Gone;
-                pbCargandoGrupos.Visibility = ViewStates.Gone;
-                grupoListView.Visibility = ViewStates.Visible;
-                grupoListView.Adapter = adaptadorGrupos;
-            }
+            adaptadorGrupos = new ListGruposAdaptador(this, listaGrupos, tvCargando);
+            pbCargandoGrupos.Visibility = ViewStates.Gone;
+            grupoListView.Adapter = adaptadorGrupos;
             fab.Visibility = ViewStates.Visible;
         }
         public override bool OnCreateOptionsMenu(IMenu menu)

@@ -17,7 +17,7 @@ using Xamarin.core.Services;
 
 namespace SAEEAPP
 {
-    [Activity(Label = "Administrar perfil", Theme = "@style/AppTheme")]
+    [Activity(Label = "Perfil", Theme = "@style/AppTheme")]
     public class UsuarioActivity : AppCompatActivity
     {
         EditText etCedula, etNombre, etPrimerApellido, etSegundoApellido, etCorreo;
