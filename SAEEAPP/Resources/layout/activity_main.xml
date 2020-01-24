@@ -74,16 +74,16 @@
             android:backgroundTint="#FFF"
             android:textColorHint="#FFF"/>
     </android.support.design.widget.TextInputLayout>
-   <CheckBox
+    <CheckBox
         android:id="@+id/checkBox1"
         android:text ="Guardar los datos para trabajar sin internet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFF"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
+        android:scaleX="1.0"
+        android:scaleY="1.0"
         android:buttonTint ="#FFF"
-        android:layout_marginLeft="51.9dp"
+        android:layout_marginLeft="25.4dp"
         android:layout_below="@id/textInputLayoutPasswordLogin" />
     <Button
         android:textColor="#3282b8"
