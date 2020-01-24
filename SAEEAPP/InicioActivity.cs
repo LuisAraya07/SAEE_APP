@@ -44,7 +44,7 @@ namespace SAEEAPP
                     pbInicioSesion.Progress = estadoBarra;
                     Thread.Sleep(400);
                 }
-                pbInicioSesion.Visibility = ViewStates.Invisible;
+               
                 VerificarUsuario();
             })).Start();
 

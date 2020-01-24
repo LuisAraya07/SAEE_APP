@@ -67,7 +67,27 @@
                 android:backgroundTint="#FFF"
                 android:id="@+id/etNota" />
         </android.support.design.widget.TextInputLayout>
-
+        <TextView
+            android:text="Estado"
+            android:layout_width="match_parent"
+            android:layout_height="30.5dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvEstado"
+            android:textColor="#FFF"
+        />
+        <Spinner
+            android:spinnerMode="dialog"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="#FFF"
+            android:textColor="#FFF"
+            android:backgroundTint="#FFF"
+            android:id="@+id/spEstado" />
     </LinearLayout>
 
 </ScrollView>

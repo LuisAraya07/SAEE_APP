@@ -47,7 +47,7 @@ namespace SAEEAPP
                     
 
                 }
-                progressBar.Visibility = ViewStates.Invisible;
+                
                 VolverMain(sincronizado,menuOpciones);
 
             })).Start();

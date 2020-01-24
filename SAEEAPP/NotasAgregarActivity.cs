@@ -26,6 +26,9 @@ namespace SAEEAPP
         EditText etPuntos, etPorcentaje, etNota;
         EstudianteEvaluacion estudianteTemp;
         NotasAdaptador _adapter;
+        Spinner spEstado;
+        TextView tvEstado;
+        string estadoAsis = "";
         List<EstudianteEvaluacion> _estudiantes;
         public NotasAgregarActivity(Activity context,List<EstudianteEvaluacion> estudiantes, EstudianteEvaluacion estudiante, Asignaciones asignacion,NotasAdaptador adapter)
         {
@@ -39,7 +42,33 @@ namespace SAEEAPP
             etPuntos = VistaAgregar.FindViewById<EditText>(Resource.Id.etPuntos);
             etPorcentaje = VistaAgregar.FindViewById<EditText>(Resource.Id.etPorcentaje);
             etNota = VistaAgregar.FindViewById<EditText>(Resource.Id.etNota);
+            tvEstado = VistaAgregar.FindViewById<TextView>(Resource.Id.tvEstado);
+            tvEstado.Visibility = ViewStates.Invisible;
+            spEstado = VistaAgregar.FindViewById<Spinner>(Resource.Id.spEstado);
+            spEstado.Visibility = ViewStates.Invisible;
+            if (_asignacion.Tipo.Equals("Asistencia"))
+            {
+                List<string> listaEstados = new List<string>();
+                listaEstados.Add("Presente");
+                listaEstados.Add("Escape");
+                listaEstados.Add("Justificada");
+                listaEstados.Add("Injustificada");
+                listaEstados.Add("Tardía");
+                spEstado.Visibility = ViewStates.Visible;
+                tvEstado.Visibility = ViewStates.Visible;
+                spEstado.Prompt = "Elija Estado";
+                spEstado.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spEstado_ItemSelected);
+                var dataAdapter = new ArrayAdapter(context, Resource.Layout.SpinnerItem, listaEstados);
+                dataAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                spEstado.Adapter = dataAdapter;
+                if (listaEstados.Contains(_asignacion.Estado))
+                {
+                    int index = listaEstados.IndexOf(_asignacion.Estado);
+                    spEstado.SetSelection(index);
+                }
 
+
+            }
             etPuntos.Text = _estudiante.Puntos.ToString();
             etPorcentaje.Text = _estudiante.Porcentaje.ToString();
             etNota.Text = _estudiante.Nota.ToString();
@@ -50,6 +79,13 @@ namespace SAEEAPP
             .SetTitle("Notas : " + estudiante.Cedula);
             alertDialogAndroid = alertDialogBuilder.Create();
         }
+        private void spEstado_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            var spinner = sender as Spinner;
+            estadoAsis = spinner.GetItemAtPosition(e.Position).ToString();
+            //  Toast.MakeText(context, "You choose:" + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
+        }
+
         private void Cancelar(object sender, EventArgs e)
         {
             alertDialogAndroid.Dismiss();
@@ -71,7 +107,10 @@ namespace SAEEAPP
                 eva.Puntos = Decimal.Parse(etPuntos.Text);
                 eva.Porcentaje = Decimal.Parse(etPorcentaje.Text);
                 eva.Nota = int.Parse(etNota.Text);
-
+                if (_asignacion.Tipo.Equals("Asistencia"))
+                {
+                    eva.Estado = estadoAsis;
+                }
                 estudianteTemp.Cedula = _estudiante.Cedula;
                 estudianteTemp.Nombre = _estudiante.Nombre;
                 estudianteTemp.evaluacion = eva;
