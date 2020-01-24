@@ -140,7 +140,8 @@ namespace SAEEAPP
             this.cursos = cursos;
             gruposNombres = new List<string>();
             cursosNombres = new List<string>();
-            InicializarValores(context, adapter, asignaciones, "Agregando asignación", "Agregar");
+            this.AdaptadorAsignaciones = adapter;
+            InicializarValores(context, asignaciones, "Agregando asignación", "Agregar");
             editando = false;
             asignacionTemp = null;
         }
@@ -150,14 +151,16 @@ namespace SAEEAPP
             this.cursos = cursos;
             gruposNombres = new List<string>();
             cursosNombres = new List<string>();
-            InicializarValores(context, adapter, asignaciones, "Editando asignación", "Guardar");
+            this.AdaptadorAsignaciones = adapter;
+            InicializarValores(context, asignaciones, "Editando asignación", "Guardar");
             editando = true;
+            this.asignacion = asignacion;
             etNombre.Text = asignacion.Nombre;
             etDescripcion.Text = asignacion.Descripcion;
             etFecha.Text = asignacion.Fecha.ToShortDateString();
             etPuntos.Text = asignacion.Puntos.ToString();
             etPorcentaje.Text = asignacion.Porcentaje.ToString();
-            this.asignacion = asignacion;
+            
             asignacionTemp = new Asignaciones()
             {
                 Id = asignacion.Id,
@@ -191,7 +194,7 @@ namespace SAEEAPP
 
                 }, 1000);
         }
-        private void InicializarValores(Activity context, AsignacionesAdaptador adapter,
+        private void InicializarValores(Activity context,
             List<Asignaciones> asignaciones, string titulo, string textoBotonConfirmacion)
         {
           
@@ -201,11 +204,9 @@ namespace SAEEAPP
             }
             this.context = context;
             RequestAppPermissions();
-            this.AdaptadorAsignaciones = adapter;
             this.asignaciones = asignaciones;
             LayoutInflater layoutInflater = LayoutInflater.From(context);
             VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Asignacion, null);
-
             spTipo = VistaAgregar.FindViewById<Spinner>(Resource.Id.spTipo);
             spTipo.Prompt = "Elija Rubro";
             spTipo.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spTipo_ItemSelected);
@@ -443,7 +444,11 @@ namespace SAEEAPP
                 }
                 if (resultado)
                 {
-                    asignacion = asignacionTemp;
+                    asignacion.Nombre = asignacionTemp.Nombre;
+                    asignacion.Descripcion = asignacionTemp.Descripcion;
+                    asignacion.Fecha = asignacionTemp.Fecha; 
+                    asignacion.Puntos = asignacionTemp.Puntos;
+                    asignacion.Porcentaje = asignacionTemp.Porcentaje;
                     // Se actualiza la lista de aisgnaciones
                     AdaptadorAsignaciones.ActualizarDatos();
                     Toast.MakeText(context, "Guardado correctamente", ToastLength.Long).Show();
