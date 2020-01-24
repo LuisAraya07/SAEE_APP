@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
@@ -28,16 +29,16 @@ namespace SAEEAPP
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter, List<Cursos> cursos)
         {
-            InicializarValores(context, cursosAdapter, cursos, "Agregando curso", "Agregar");
             editando = false;
+            InicializarValores(context, cursosAdapter, cursos, "Agregando curso", "Agregar");
             cursoTemp = null;
         }
 
         public AgregarEditarCursosActivity(Activity context, CursosListAdapter cursosAdapter,
             List<Cursos> cursos, Cursos curso)
         {
-            InicializarValores(context, cursosAdapter, cursos, "Editando curso", "Guardar");
             editando = true;
+            InicializarValores(context, cursosAdapter, cursos, "Editando curso", "Guardar");
             etNombre.Text = curso.Nombre;
             etCantidadPeriodos.Text = curso.CantidadPeriodos.ToString();
             this.curso = curso;
@@ -63,6 +64,15 @@ namespace SAEEAPP
             View VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Agregar_Curso, null);
             etNombre = VistaAgregar.FindViewById<EditText>(Resource.Id.etNombre);
             etCantidadPeriodos = VistaAgregar.FindViewById<EditText>(Resource.Id.etCantidadPeriodos);
+            var tilCantidadPeriodos = VistaAgregar.FindViewById<TextInputLayout>(Resource.Id.tilCantidadPeriodos);
+            if (editando)
+            {
+                etCantidadPeriodos.Enabled = false;
+            }
+            else
+            {
+                tilCantidadPeriodos.Hint += "(No se puede editar posteriormente)";
+            }
             alertDialogBuilder = new AlertDialog.Builder(context, Resource.Style.AlertDialogStyle)
             .SetView(VistaAgregar)
             .SetPositiveButton(textoBotonConfirmacion, (EventHandler<DialogClickEventArgs>)null)
