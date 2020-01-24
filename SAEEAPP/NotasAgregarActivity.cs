@@ -34,12 +34,12 @@ namespace SAEEAPP
             _asignacion = asignacion;
             _adapter = adapter;
             _estudiantes = estudiantes;
-             LayoutInflater layoutInflater = LayoutInflater.From(context);
+            LayoutInflater layoutInflater = LayoutInflater.From(context);
             VistaAgregar = layoutInflater.Inflate(Resource.Layout.Dialogo_Notas_Modificar, null);
             etPuntos = VistaAgregar.FindViewById<EditText>(Resource.Id.etPuntos);
             etPorcentaje = VistaAgregar.FindViewById<EditText>(Resource.Id.etPorcentaje);
             etNota = VistaAgregar.FindViewById<EditText>(Resource.Id.etNota);
-                                                                                                                                                            
+
             etPuntos.Text = _estudiante.Puntos.ToString();
             etPorcentaje.Text = _estudiante.Porcentaje.ToString();
             etNota.Text = _estudiante.Nota.ToString();
@@ -47,7 +47,7 @@ namespace SAEEAPP
             .SetView(VistaAgregar)
             .SetPositiveButton("Guardar", (EventHandler<DialogClickEventArgs>)null)
             .SetNegativeButton("Cerrar", (EventHandler<DialogClickEventArgs>)null)
-            .SetTitle("Notas : "+estudiante.Cedula);
+            .SetTitle("Notas : " + estudiante.Cedula);
             alertDialogAndroid = alertDialogBuilder.Create();
         }
         private void Cancelar(object sender, EventArgs e)
@@ -58,58 +58,72 @@ namespace SAEEAPP
         {
             VerificarConexion vc = new VerificarConexion(_context);
             var conectado = vc.IsOnline();
-            if (conectado)
+            if (EntradaValida())
             {
+                // Se bloquean los botones
+                ActivarDesactivarBotones(false);
+                Toast.MakeText(_context, "Guardando, un momento...", ToastLength.Short).Show();
 
-                if (EntradaValida())
+                EvaluacionesServices serevac;
+                estudianteTemp = new EstudianteEvaluacion();
+
+                Evaluaciones eva = _estudiante.evaluacion;
+                eva.Puntos = Decimal.Parse(etPuntos.Text);
+                eva.Porcentaje = Decimal.Parse(etPorcentaje.Text);
+                eva.Nota = int.Parse(etNota.Text);
+
+                estudianteTemp.Cedula = _estudiante.Cedula;
+                estudianteTemp.Nombre = _estudiante.Nombre;
+                estudianteTemp.evaluacion = eva;
+                estudianteTemp.Puntos = Decimal.Parse(etPuntos.Text);
+                estudianteTemp.Porcentaje = Decimal.Parse(etPorcentaje.Text);
+                estudianteTemp.Nota = int.Parse(etNota.Text);
+                estudianteTemp.Estado = _estudiante.Estado;
+                bool resultado;
+                if (conectado)
                 {
-                    // Se bloquean los botones
-                    ActivarDesactivarBotones(false);
-                    Toast.MakeText(_context, "Guardando, un momento...", ToastLength.Short).Show();
+                    serevac = new EvaluacionesServices();
+                    resultado = await serevac.UpdateEvaluacionAsync(estudianteTemp.evaluacion);
 
-                    EvaluacionesServices serevac = new EvaluacionesServices();
-                    estudianteTemp = new EstudianteEvaluacion();
-
-                    Evaluaciones eva = _estudiante.evaluacion;
-                    eva.Puntos = Decimal.Parse(etPuntos.Text);
-                    eva.Porcentaje = Decimal.Parse(etPorcentaje.Text);
-                    eva.Nota = int.Parse(etNota.Text);
-
-                    estudianteTemp.Cedula = _estudiante.Cedula;
-                    estudianteTemp.Nombre = _estudiante.Nombre;
-                    estudianteTemp.evaluacion = eva;
-                    estudianteTemp.Puntos = Decimal.Parse(etPuntos.Text);
-                    estudianteTemp.Porcentaje = Decimal.Parse(etPorcentaje.Text);
-                    estudianteTemp.Nota = int.Parse(etNota.Text);
-                    estudianteTemp.Estado = _estudiante.Estado;
-                    bool resultado = await serevac.UpdateEvaluacionAsync(estudianteTemp.evaluacion);
-                    if (resultado)
+                }
+                else
+                {
+                    //Toast.MakeText(this, "Necesita conexión a internet.", ToastLength.Long).Show();
+                    ProfesoresServices ns = new ProfesoresServices(1);
+                    Profesores profesor = await ns.GetProfesorConectado();
+                    if (!(profesor == null))
                     {
-                        int index = _estudiantes.IndexOf(_estudiante);
-                        _estudiantes.Remove(_estudiante);
-                        _estudiante = estudianteTemp;
-                        _estudiantes.Insert(index,_estudiante);
-
-                       
-                        Toast.MakeText(_context, "Guardado correctamente", ToastLength.Long).Show();
-                        alertDialogAndroid.SetCancelable(true);
-                        alertDialogAndroid.Dismiss();
-                        // Se actualiza la lista de cursos
-                        _adapter.ActualizarDatos();
+                        serevac = new EvaluacionesServices(profesor.Id);
+                        resultado = await serevac.UpdateEvaluacionOffline(estudianteTemp.evaluacion);
                     }
                     else
                     {
-                        // Se restablecen los botones
-                        ActivarDesactivarBotones(true);
-                        Toast.MakeText(_context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                        resultado = false;
                     }
                 }
+
+                if (resultado)
+                {
+                    int index = _estudiantes.IndexOf(_estudiante);
+                    _estudiantes.Remove(_estudiante);
+                    _estudiante = estudianteTemp;
+                    _estudiantes.Insert(index, _estudiante);
+
+
+                    Toast.MakeText(_context, "Guardado correctamente", ToastLength.Long).Show();
+                    alertDialogAndroid.SetCancelable(true);
+                    alertDialogAndroid.Dismiss();
+                    // Se actualiza la lista de cursos
+                    _adapter.ActualizarDatos();
+                }
+                else
+                {
+                    // Se restablecen los botones
+                    ActivarDesactivarBotones(true);
+                    Toast.MakeText(_context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                }
             }
-            else
-            {
-                ActivarDesactivarBotones(true);
-                Toast.MakeText(_context, "Necesita conexión a internet", ToastLength.Short).Show();
-            }
+
 
         }
         private bool EntradaValida()
