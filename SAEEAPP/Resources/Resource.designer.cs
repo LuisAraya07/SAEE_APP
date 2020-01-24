@@ -5498,94 +5498,97 @@ namespace SAEEAPP
 			public const int tvCurso = 2131296573;
 			
 			// aapt resource value: 0x7F09013E
-			public const int tvDate = 2131296574;
+			public const int tvCursoTxt = 2131296574;
 			
 			// aapt resource value: 0x7F09013F
-			public const int tvDescripcion = 2131296575;
+			public const int tvDate = 2131296575;
 			
 			// aapt resource value: 0x7F090140
-			public const int tvDiasAntes = 2131296576;
+			public const int tvDescripcion = 2131296576;
 			
 			// aapt resource value: 0x7F090141
-			public const int tvEstado = 2131296577;
+			public const int tvDiasAntes = 2131296577;
 			
 			// aapt resource value: 0x7F090142
-			public const int tvFecha = 2131296578;
+			public const int tvEstado = 2131296578;
 			
 			// aapt resource value: 0x7F090143
-			public const int tvGrupo = 2131296579;
+			public const int tvFecha = 2131296579;
 			
 			// aapt resource value: 0x7F090144
-			public const int tvHora = 2131296580;
+			public const int tvGrupo = 2131296580;
 			
 			// aapt resource value: 0x7F090145
-			public const int tvMensaje = 2131296581;
+			public const int tvHora = 2131296581;
 			
 			// aapt resource value: 0x7F090146
-			public const int tvNombre = 2131296582;
+			public const int tvMensaje = 2131296582;
 			
 			// aapt resource value: 0x7F090147
-			public const int tvNota = 2131296583;
+			public const int tvNombre = 2131296583;
 			
 			// aapt resource value: 0x7F090148
-			public const int tvPeriodo = 2131296584;
+			public const int tvNota = 2131296584;
 			
 			// aapt resource value: 0x7F090149
-			public const int tvPorcentaje = 2131296585;
+			public const int tvPeriodo = 2131296585;
 			
 			// aapt resource value: 0x7F09014A
-			public const int tvPorcentaje1 = 2131296586;
+			public const int tvPorcentaje = 2131296586;
 			
 			// aapt resource value: 0x7F09014B
-			public const int tvPuntos = 2131296587;
+			public const int tvPorcentaje1 = 2131296587;
 			
 			// aapt resource value: 0x7F09014C
-			public const int tvRecordatorio = 2131296588;
+			public const int tvPuntos = 2131296588;
 			
 			// aapt resource value: 0x7F09014D
-			public const int tvRubro = 2131296589;
+			public const int tvRecordatorio = 2131296589;
 			
 			// aapt resource value: 0x7F09014E
-			public const int tvTime = 2131296590;
+			public const int tvRubro = 2131296590;
 			
 			// aapt resource value: 0x7F09014F
-			public const int tvTipo = 2131296591;
+			public const int tvTime = 2131296591;
 			
 			// aapt resource value: 0x7F090150
-			public const int txtNote = 2131296592;
+			public const int tvTipo = 2131296592;
 			
 			// aapt resource value: 0x7F090151
-			public const int txtProgress = 2131296593;
+			public const int txtNote = 2131296593;
 			
 			// aapt resource value: 0x7F090152
-			public const int txt_label = 2131296594;
+			public const int txtProgress = 2131296594;
 			
 			// aapt resource value: 0x7F090153
-			public const int uniform = 2131296595;
+			public const int txt_label = 2131296595;
 			
 			// aapt resource value: 0x7F090154
-			public const int unlabeled = 2131296596;
+			public const int uniform = 2131296596;
 			
 			// aapt resource value: 0x7F090155
-			public const int up = 2131296597;
+			public const int unlabeled = 2131296597;
 			
 			// aapt resource value: 0x7F090156
-			public const int useLogo = 2131296598;
+			public const int up = 2131296598;
 			
 			// aapt resource value: 0x7F090157
-			public const int view_offset_helper = 2131296599;
+			public const int useLogo = 2131296599;
 			
 			// aapt resource value: 0x7F090158
-			public const int visible = 2131296600;
+			public const int view_offset_helper = 2131296600;
 			
 			// aapt resource value: 0x7F090159
-			public const int webview = 2131296601;
+			public const int visible = 2131296601;
 			
 			// aapt resource value: 0x7F09015A
-			public const int withText = 2131296602;
+			public const int webview = 2131296602;
 			
 			// aapt resource value: 0x7F09015B
-			public const int wrap_content = 2131296603;
+			public const int withText = 2131296603;
+			
+			// aapt resource value: 0x7F09015C
+			public const int wrap_content = 2131296604;
 			
 			static Id()
 			{

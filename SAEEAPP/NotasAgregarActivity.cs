@@ -150,16 +150,17 @@ namespace SAEEAPP
 
 
                     Toast.MakeText(_context, "Guardado correctamente", ToastLength.Long).Show();
-                    alertDialogAndroid.SetCancelable(true);
-                    alertDialogAndroid.Dismiss();
+                    
                     // Se actualiza la lista de cursos
                     _adapter.ActualizarDatos();
+                    alertDialogAndroid.Dismiss();
                 }
                 else
                 {
                     // Se restablecen los botones
                     ActivarDesactivarBotones(true);
                     Toast.MakeText(_context, "Error al guardar, intente nuevamente", ToastLength.Short).Show();
+                    alertDialogAndroid.Dismiss();
                 }
             }
 

@@ -27,7 +27,7 @@
             android:layout_height="40.0dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="0.0dp"
             android:textColorHint="#FFF"
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
@@ -39,7 +39,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/tvCurso"
+            android:id="@+id/tvCursoTxt"
             android:textColor="#FFF"
         />
         <Spinner
@@ -48,13 +48,13 @@
             android:layout_height="40.0dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="7.0dp"
             android:textColorHint="#FFF"
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
             android:id="@+id/spGrupo" />
         <TextView
-            android:text="Periodo"
+            android:text="Período"
             android:layout_width="match_parent"
             android:layout_height="30.5dp"
             android:layout_marginLeft="25dp"
@@ -69,7 +69,7 @@
             android:layout_height="40.0dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="12.0dp"
             android:textColorHint="#FFF"
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
@@ -90,7 +90,7 @@
             android:layout_height="40.0dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="12.0dp"
             android:textColorHint="#FFF"
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
@@ -111,7 +111,7 @@
             android:layout_height="40.0dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="8.2dp"
             android:textColorHint="#FFF"
             android:textColor="#FFF"
             android:backgroundTint="#FFF"
@@ -120,15 +120,15 @@
             android:textColor="#3282b8"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="0.0dp"
             android:background="@drawable/button_border_edit"
             android:text="Ver Notas"
             android:layout_width="match_parent"
-            android:layout_height="50sp"
+            android:layout_height="40sp"
             android:minWidth="25px"
             android:minHeight="25px"
             android:id="@+id/btVerNotas"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="12.8dp" />
     </LinearLayout>
 
 </RelativeLayout>

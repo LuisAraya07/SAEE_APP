@@ -36,6 +36,7 @@ namespace Xamarin.core.Services
         {
             try
             {
+                asignacion.Id = idProfesor;
                 await db.Database.MigrateAsync();
                 db.Asignaciones.Add(asignacion);
                 await db.SaveChangesAsync();
