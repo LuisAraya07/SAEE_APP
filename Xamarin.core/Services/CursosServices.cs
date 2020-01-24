@@ -112,12 +112,32 @@ namespace Xamarin.core.Services
             }
             return true;
         }
+
+        public async Task<Boolean> DeleteAsignacionesC(Asignaciones asignacion)
+        {
+            List<Evaluaciones> evaluaciones = await db.Evaluaciones.Where(x => x.Asignacion == asignacion.Id).ToListAsync();
+            foreach (var i in evaluaciones)
+            {
+                db.Evaluaciones.Remove(i);
+                await db.SaveChangesAsync();
+            }
+            return true;
+        }
         //Eliminar curso
         public async Task<bool> DeleteCursoOffline(int id)
         {
             try
             {
                 await db.Database.MigrateAsync();
+
+                var listaAsignaciones = db.Asignaciones.Where(x => x.Curso == id).ToList();
+                foreach (Asignaciones asignacion in listaAsignaciones)
+                {
+                    await DeleteAsignacionesC(asignacion);
+                }
+                db.RemoveRange(listaAsignaciones);
+                await db.SaveChangesAsync();
+
                 var cursos = await db.Cursos.Include(curso => curso.CursosGrupos)
                    .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
                    .Where(curso => curso.Id == id).FirstOrDefaultAsync();
