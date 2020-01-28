@@ -14,6 +14,6 @@ namespace Xamarin.core.Services
 {
     class ValuesServices
     {
-        public static readonly string url = "https://saeeweb.azurewebsites.net/api/";
+        public static readonly string url = "https://saeeweb1.azurewebsites.net/api/";
     }
 }
